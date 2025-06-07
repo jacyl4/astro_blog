@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'GeistMono Nerd Font';
+  src: url('/fonts/GeistMonoNerdFont-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 确保 Shiki 生成的代码块使用此字体 */
+.shiki {
+  font-family: 'GeistMono Nerd Font', monospace;
+}

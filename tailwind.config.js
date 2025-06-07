@@ -4,7 +4,13 @@ export default {
     './src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        mono: ['"GeistMono Nerd Font"', 'monospace'],
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
