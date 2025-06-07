@@ -78,7 +78,7 @@ export async function getPostsByCategory(category: string): Promise<BlogPost[]> 
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   const allPosts = await getAllPosts(); // 获取所有文章以进行 slug 匹配
-  const post = allPosts.find(post => post.slug === slugify(slug)); // 使用 slug 匹配
+  const post = allPosts.find(post => post.slug === slug); // 直接使用 slug 匹配
 
   if (post) {
     console.log(`[BlogService - getPostBySlug] Found post for slug: "${slug}"`);
