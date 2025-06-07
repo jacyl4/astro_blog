@@ -1,0 +1,71 @@
+---
+// 文章详情页，展示单篇博客内容
+import MainLayout from '../../layouts/MainLayout.astro';
+import { getPostBySlug, getAllPosts } from '../../services/BlogService';
+import { slugify } from '../../utils/stringUtils';
+import { getSiteLink } from '../../utils/urlUtils';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  // 过滤掉没有有效 slug 的帖子，并统一 slugify(title)
+  const validPosts = posts.filter(post => post.title && post.title.trim() !== '');
+  return validPosts.map((post) => ({
+    params: { slug: slugify(post.title) },
+    props: { post },
+  }));
+}
+
+// 在组件代码中获取帖子
+const { slug } = Astro.params;
+console.log(`[[slug].astro] Received slug from Astro.params: "${slug}"`); // DEBUG LOG
+
+const post = await getPostBySlug(slug);
+console.log(`[[slug].astro] Result from getPostBySlug for "${slug}":`, post ? post.title : 'null'); // DEBUG LOG
+
+// 确保帖子存在
+if (!post) {
+  console.log(`[[slug].astro] Post not found for slug "${slug}", redirecting to /404`); // DEBUG LOG
+  return Astro.redirect('/404');
+}
+---
+
+<MainLayout title={`${post.title} - 我的博客`}>
+  <article class="max-w-3xl mx-auto">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
+      <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <time datetime={post.date.toISOString()}>
+          {post.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        <span class="mx-2">•</span>
+        <a href={getSiteLink(`categories/${slugify(post.category)}`)} class="text-blue-600 dark:text-blue-400 hover:underline">
+          {post.category}
+        </a>
+      </div>
+    </header>
+    
+    <div class="prose dark:prose-invert max-w-none">
+      <div set:html={post.content} />
+    </div>
+    
+    {post.tags && post.tags.length > 0 && (
+      <div class="mt-8 pt-6 border-t dark:border-gray-700">
+        <h2 class="text-lg font-semibold mb-3">标签</h2>
+        <div class="flex flex-wrap gap-2">
+          {post.tags.map((tag: string) => (
+            <a 
+              href={getSiteLink(`tags/${slugify(tag)}`)}
+              class="p-2 bg-gray-200 dark:bg-gray-700 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+    
+    <div class="mt-10 pt-6 border-t dark:border-gray-700">
+      <a href={getSiteLink('')} class="text-blue-600 dark:text-blue-400 hover:underline">&larr; 返回首页</a>
+    </div>
+  </article>
+</MainLayout>

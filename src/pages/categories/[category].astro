@@ -1,0 +1,47 @@
+---
+// 分类详情页，展示某分类下所有文章
+import MainLayout from '../../layouts/MainLayout.astro';
+import BlogPostCard from '../../components/BlogPostCard.astro';
+import { getAllCategories, getPostsByCategory } from '../../services/BlogService';
+import type { BlogPost } from '../../interfaces/BlogPost';
+
+export async function getStaticPaths() {
+  const categories = await getAllCategories();
+  
+  // 过滤掉无效的类别
+  const validCategories = categories.filter(cat => cat.slug && cat.slug.trim() !== '');
+  
+  return validCategories.map((category) => ({
+    params: { category: category.slug },
+    props: { categoryName: category.name },
+  }));
+}
+
+const { categoryName } = Astro.props;
+const posts = await getPostsByCategory(categoryName);
+---
+
+<MainLayout title={`${categoryName} - 分类 - 我的博客`}>
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">{categoryName}</h1>
+    <p class="text-gray-600 dark:text-gray-400">
+      该分类共有 {posts.length} 篇文章
+    </p>
+  </header>
+  
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {posts.map((post: BlogPost) => (
+      <BlogPostCard post={post} />
+    ))}
+  </div>
+  
+  {posts.length === 0 && (
+    <div class="text-center py-12">
+      <p class="text-xl text-gray-600 dark:text-gray-400">该分类下暂无文章</p>
+    </div>
+  )}
+  
+  <div class="mt-10 pt-6 border-t dark:border-gray-700">
+    <a href="/categories" class="text-blue-600 dark:text-blue-400 hover:underline">&larr; 返回分类列表</a>
+  </div>
+</MainLayout>

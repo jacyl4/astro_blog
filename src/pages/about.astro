@@ -1,0 +1,41 @@
+---
+// 关于页面，介绍博客和作者信息
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="关于 - 我的博客">
+  <div>
+    <h1>关于我的博客</h1>
+    
+    <div>
+      <p>
+        这是一个使用Astro构建的个人博客网站。博客内容主要来自@posts目录下的Markdown文件。
+      </p>
+      
+      <h2>技术栈</h2>
+      <ul>
+        <li><a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> - 快速、灵活的静态站点生成器</li>
+        <li>TypeScript - 为JavaScript添加静态类型</li>
+      </ul>
+      
+      <h2>项目结构</h2>
+      <p>
+        本项目遵循以下设计原则：
+      </p>
+      <ul>
+        <li>单一职责原则 (Single Responsibility Principle)</li>
+        <li>开放封闭原则 (Open/Closed Principle)</li>
+        <li>里氏替换原则 (Liskov Substitution Principle)</li>
+        <li>依赖倒置原则 (Dependency Inversion Principle)</li>
+        <li>接口隔离原则 (Interface Segregation Principle)</li>
+        <li>迪米特法则 (Law of Demeter)</li>
+        <li>组合复用原则 (Composite Reuse Principle)</li>
+        <li>高内聚低耦合原则 (High Cohesion and Low Coupling)</li>
+      </ul>
+    </div>
+    
+    <div>
+      <a href="/">&larr; 返回首页</a>
+    </div>
+  </div>
+</MainLayout>

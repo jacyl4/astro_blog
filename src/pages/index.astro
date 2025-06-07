@@ -1,0 +1,25 @@
+---
+// 博客首页，展示所有文章列表
+import MainLayout from '../layouts/MainLayout.astro';
+import BlogPostCard from '../components/BlogPostCard.astro';
+import { getAllPosts } from '../services/BlogService';
+import type { BlogPost } from '../interfaces/BlogPost';
+
+const posts = await getAllPosts();
+---
+
+<MainLayout title="首页 - 我的博客">
+  <h1>文章列表</h1>
+  
+  <div>
+    {posts.map((post: BlogPost) => (
+      <BlogPostCard post={post} />
+    ))}
+  </div>
+  
+  {posts.length === 0 && (
+    <div>
+      <p>{/* 暂无文章 */}</p>
+    </div>
+  )}
+</MainLayout>

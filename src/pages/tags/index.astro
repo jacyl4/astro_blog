@@ -1,0 +1,37 @@
+---
+// 标签列表页，展示所有标签及文章数
+import MainLayout from '../../layouts/MainLayout.astro';
+import { getAllTags } from '../../services/BlogService';
+
+const tags = await getAllTags();
+---
+
+<MainLayout title="标签 - 我的博客">
+  <div>
+    <h1>所有标签</h1>
+    
+    {tags.length > 0 ? (
+      <div>
+        {tags.map(tag => (
+          <a 
+            href={`/tags/${tag.slug}`}
+            class=""
+          >
+            <span>{tag.name}</span>
+            <span class="">
+              {tag.count}
+            </span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div>
+        <p>{/* 暂无标签 */}</p>
+      </div>
+    )}
+    
+    <div>
+      <a href="/">&larr; 返回首页</a>
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,27 @@
+---
+// 博客文章卡片组件，展示标题、摘要、分类等
+import type { BlogPost } from '../interfaces/BlogPost';
+import { slugify } from '../utils/stringUtils';
+import { getSiteLink } from '../utils/urlUtils';
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="article-card">
+  <a href={getSiteLink(`posts/${post.slug}/`)}>
+    <h2>{post.title}</h2>
+  </a>
+  <div>{/* 作者和日期等信息 */}</div>
+  <a 
+    href={getSiteLink(`categories/${slugify(post.category)}/`)}
+    class=""
+  >
+    {post.category}
+  </a>
+  <p>{post.excerpt}</p>
+  <a href={getSiteLink(`posts/${post.slug}/`)}>{/* 阅读更多 */}</a>
+</article>

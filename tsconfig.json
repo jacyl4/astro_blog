@@ -1,0 +1,6 @@
+// TypeScript 配置，继承 Astro 官方严格模式
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
