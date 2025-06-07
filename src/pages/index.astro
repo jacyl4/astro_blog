@@ -3,7 +3,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import BlogPostCard from '../components/BlogPostCard.astro';
 import { getAllPosts } from '../services/BlogService';
-import type { BlogPost } from '../interfaces/BlogPost';
+import type { BlogPost } from '../services/BlogService'; // 从 BlogService 导入更新后的 BlogPost 类型
 
 const posts = await getAllPosts();
 ---
@@ -19,7 +19,7 @@ const posts = await getAllPosts();
   
   {posts.length === 0 && (
     <div>
-      <p>{/* 暂无文章 */}</p>
+      <p>暂无文章。</p>
     </div>
   )}
 </MainLayout>

@@ -5,13 +5,14 @@
 ## 技术栈
 
 - [Astro](https://astro.build) - 静态站点生成器
+- [Tailwind CSS](https://tailwindcss.com/) - 实用至上型 CSS 框架
 - TypeScript - 增强类型安全
 
 ## 项目结构
 
 ```text
 astro_blog/
-├── @posts/         # 博客内容 Markdown 文件，按分类存放
+├── src/content/blog/   # 博客内容 Markdown 文件，按分类存放
 ├── public/             # 静态资源（如图片、favicon 等）
 ├── src/
 │   ├── components/     # 可复用 UI 组件
@@ -58,10 +59,10 @@ npm run preview
 
 ## 添加内容
 
-要添加新的博客文章，只需在 @posts 目录下相应的类别文件夹中创建新的 Markdown 文件即可。
+要添加新的博客文章，只需在 `src/content/blog/` 目录下相应的类别文件夹中创建新的 Markdown 文件即可。
 
 ```text
-@posts/
+src/content/blog/
 ├── HomeLab/           # HomeLab 类别的文章
 ├── Programming/       # 编程类别的文章
 └── Other/             # 其他类别的文章

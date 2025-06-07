@@ -1,3 +1,10 @@
+---
+title: "在 Nginx 编译时集成 Lua 功能并依赖 APT 源中的 LuaJIT：一份详细指南"
+pubDate: 2025-06-08
+category: "Nginx"
+tags: ["Nginx", "Lua", "LuaJIT", "APT"]
+description: "本报告旨在提供一个全面的指南，详细阐述如何在编译 Nginx 时集成 Lua 功能，并特别关注如何有效地利用 APT 源中的 LuaJIT 作为其依赖。"
+---
 1. 引言：Nginx、Lua 与 LuaJIT 的协同力量
 
 Nginx 以其高性能和高并发处理能力而闻名，而 Lua 作为一种轻量级、可嵌入的脚本语言，为 Nginx 提供了强大的扩展性。通过 ngx_http_lua_module (或其 stream 模块版本 ngx_stream_lua_module)，可以在 Nginx 的请求处理流程中嵌入 Lua 脚本，实现动态路由、访问控制、请求/响应修改、与外部服务交互等复杂逻辑，而无需编写 C 模块。

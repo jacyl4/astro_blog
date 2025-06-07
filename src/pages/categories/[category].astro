@@ -3,7 +3,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
 import { getAllCategories, getPostsByCategory } from '../../services/BlogService';
-import type { BlogPost } from '../../interfaces/BlogPost';
+import type { BlogPost } from '../../services/BlogService'; // 从 BlogService 导入更新后的 BlogPost 类型
 
 export async function getStaticPaths() {
   const categories = await getAllCategories();
