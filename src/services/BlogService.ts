@@ -42,6 +42,22 @@ function extractExcerpt(content: string, maxLength: number = 500): string {
   return plainText.substring(0, maxLength) + '...';
 }
 
+// 提取 markdown 摘要（保留格式，截断并渲染增强HTML）
+function extractExcerptHtml(content: string, title: string, maxLength: number = 500): string {
+  // 去除开头一级/二级标题（如 # 标题 或 ## 副标题）
+  let formatted = formatMarkdownContent(content, title)
+    .replace(/^#{1,2} .+\n+/m, '');
+  // 截断（按字符数）
+  if (formatted.length > maxLength) {
+    formatted = formatted.substring(0, maxLength) + '\n...';
+  }
+  // 转 HTML
+  let html = marked.parse(formatted) as string;
+  // 增强 HTML（如代码行号、图片懒加载等）
+  html = enhanceHtml(html);
+  return html;
+}
+
 // 格式化 markdown 内容，自动补全标题/代码块/列表等
 function formatMarkdownContent(content: string, title: string): string {
   // 如果内容没有标题，添加一个基于文件名的标题
@@ -142,6 +158,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
             slug,
             category,
             excerpt: extractExcerpt(content),
+            excerptHtml: extractExcerptHtml(content, title),
             tags: extractTags(content)
           });
         }
@@ -163,6 +180,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         slug,
         category: '',
         excerpt: extractExcerpt(content),
+        excerptHtml: extractExcerptHtml(content, title),
         tags: extractTags(content)
       });
     }
@@ -187,17 +205,14 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   
   if (post) {
     try {
-      // 1. 格式化Markdown内容
-      const formattedContent = formatMarkdownContent(post.content, post.title);
-      
+      // 1. 格式化Markdown内容（去除开头一级/二级标题，正文页面不再重复）
+      let formattedContent = formatMarkdownContent(post.content, post.title)
+        .replace(/^#{1,2} .+\n+/m, '');
       // 2. 将Markdown转换为HTML
       const htmlContent = marked.parse(formattedContent) as string;
-      
       // 3. 应用额外的HTML增强
       const enhancedHtml = enhanceHtml(htmlContent);
-      
       post.content = enhancedHtml;
-      
       console.log(`[BlogService - getPostBySlug] Successfully processed Markdown for: ${post.title}`);
     } catch (error) {
       console.error(`[BlogService - getPostBySlug] Error processing Markdown for "${post.title}":`, error);

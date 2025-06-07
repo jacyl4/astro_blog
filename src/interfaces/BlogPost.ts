@@ -6,6 +6,7 @@ export interface BlogPost {
   slug: string;
   category: string;
   excerpt?: string;
+  excerptHtml?: string; // 支持 HTML 格式的摘要
   tags?: string[];
 }
 

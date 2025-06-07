@@ -3,6 +3,7 @@
 import type { BlogPost } from '../interfaces/BlogPost';
 import { slugify } from '../utils/stringUtils';
 import { getSiteLink } from '../utils/urlUtils';
+import Markdown from './Markdown.astro';
 
 interface Props {
   post: BlogPost;
@@ -22,6 +23,9 @@ const { post } = Astro.props;
   >
     {post.category}
   </a>
-  <p>{post.excerpt}</p>
+  {post.excerptHtml
+    ? <div class="prose dark:prose-invert max-w-none" set:html={post.excerptHtml} />
+    : <Markdown content={post.excerpt ?? ''} />
+  }
   <a href={getSiteLink(`posts/${post.slug}/`)}>{/* 阅读更多 */}</a>
 </article>
