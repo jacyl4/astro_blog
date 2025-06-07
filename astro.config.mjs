@@ -15,7 +15,7 @@ export default defineConfig({
     format: 'directory'
   },
 
-  trailingSlash: 'always',
+  trailingSlash: 'never',
 
   markdown: {
     syntaxHighlight: 'shiki', // 切换到 Shiki
