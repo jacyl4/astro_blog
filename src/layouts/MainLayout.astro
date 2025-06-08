@@ -12,7 +12,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN" style="height: 100%;">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,14 +25,14 @@ const { title, description = '我的Astro博客' } = Astro.props;
       body {
         margin: 0;
         padding: 0;
-        height: 100%; /* Ensure body takes full viewport height for scrolling */
+        min-height: 100vh; /* 恢复 */
       }
       .parallax-bg {
-        position: fixed;
+        position: fixed; /* 恢复 */
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 100%; /* 恢复 */
         background-image: url('/clouds.webp'); /* 恢复为 clouds.webp */
         background-size: cover;
         background-position: center;
@@ -78,8 +78,10 @@ const { title, description = '我的Astro博客' } = Astro.props;
         </div>
 
         <!-- 底栏 -->
-        <footer class="h-[330px] bg-purple-200 p-4">
-          <p>底栏内容</p>
+        <footer class="h-[39px] bg-[#F5F5F7] p-4 flex items-center justify-end">
+          <p class="text-gray-600 text-sm">
+            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer">Powered by Astro</a>
+          </p>
         </footer>
       </div>
     </div>

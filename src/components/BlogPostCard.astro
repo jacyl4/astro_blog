@@ -13,7 +13,7 @@ const { post } = Astro.props;
 
 <article class="article-card">
   <a href={getSiteLink(`posts/${post.slug}/`)}>
-    <h2>{post.data.title}</h2>
+    <h2 class="font-bold text-xl">{post.data.title}</h2>
   </a>
   <div>{/* 作者和日期等信息 */}</div>
   {post.data.category && (

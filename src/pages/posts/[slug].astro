@@ -25,7 +25,7 @@ const formattedDate = entry.data.pubDate.toLocaleDateString('zh-CN', {
 
 <MainLayout title={entry.data.title}>
   <article>
-    <h1>{entry.data.title}</h1>
+    <h1 class="font-bold text-2xl">{entry.data.title}</h1>
     <p>发布日期: {formattedDate}</p>
     {entry.data.category && (
       <p>

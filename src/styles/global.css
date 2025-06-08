@@ -12,3 +12,22 @@
 .shiki {
   font-family: 'GeistMono Nerd Font', monospace;
 }
+
+/* 为文章正文内容中的标题应用粗体和稍微放大的样式 */
+.prose h1,
+.prose h2,
+.prose h3 {
+  font-weight: bold !important;
+}
+
+.prose h1 {
+  font-size: 2.25rem !important; /* 稍微放大 h1 */
+}
+
+.prose h2 {
+  font-size: 1.75rem !important; /* 稍微放大 h2 */
+}
+
+.prose h3 {
+  font-size: 1.3rem !important; /* 稍微放大 h3 */
+}
