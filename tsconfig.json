@@ -1,6 +1,18 @@
 // TypeScript 配置，继承 Astro 官方严格模式
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "astro",
+    "types": [
+      "node",
+      "estree",
+      "hast",
+      "mdast",
+      "nlcst",
+      "unist"
+    ]
+  },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }

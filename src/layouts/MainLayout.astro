@@ -1,6 +1,7 @@
 ---
 // 全站主布局，包含头部导航、内容插槽
 import '../styles/global.css';
+import NavigationBar from '../components/NavigationBar.astro';
 
 interface Props {
   title: string;
@@ -56,19 +57,10 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <div class="content-wrapper">
       <div class="mx-auto my-[21px] max-w-[1152px] shadow-lg bg-white rounded-lg overflow-hidden">
         <!-- 页头 -->
-        <div class="header-placeholder">
+        <div class="header-placeholder relative">
           <header>
-            <div>
-              <a href="/">我的博客</a>
-              <nav>
-                <ul>
-                  <li><a href="/">首页</a></li>
-                  <li><a href="/categories/">分类</a></li>
-                  <li><a href="/about/">关于</a></li>
-                </ul>
-              </nav>
-            </div>
           </header>
+          <NavigationBar />
         </div>
 
         <!-- 正文和侧栏区域 -->
