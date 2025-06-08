@@ -2,6 +2,7 @@
 // 全站主布局，包含头部导航、内容插槽
 import '../styles/global.css';
 import NavigationBar from '../components/NavigationBar.astro';
+import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
@@ -9,6 +10,13 @@ interface Props {
 }
 
 const { title, description = '我的Astro博客' } = Astro.props;
+
+const allPosts = await getCollection('blog');
+
+const uniqueMonths = [...new Set(allPosts.map(post => {
+  const date = new Date(post.data.pubDate);
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+}))].sort().reverse();
 ---
 
 <!DOCTYPE html>
@@ -71,7 +79,14 @@ const { title, description = '我的Astro博客' } = Astro.props;
           </main>
           <!-- 侧栏 -->
           <aside class="w-1/4 p-4">
-            <!-- 侧栏内容 -->
+            <h2 class="text-xl font-bold mb-4">Archives</h2>
+            <ul>
+              {uniqueMonths.map(month => (
+                <li class="mb-2">
+                  <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
+                </li>
+              ))}
+            </ul>
           </aside>
         </div>
 

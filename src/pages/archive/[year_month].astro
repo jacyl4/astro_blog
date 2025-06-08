@@ -1,0 +1,46 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import BlogPostCard from '../../components/BlogPostCard.astro';
+
+type Archive = {
+  [key: string]: CollectionEntry<'blog'>[];
+};
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+
+  const archives = allPosts.reduce((acc: Archive, post) => {
+    const date = new Date(post.data.pubDate);
+    const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+    if (!acc[yearMonth]) {
+      acc[yearMonth] = [];
+    }
+    acc[yearMonth].push(post);
+    return acc;
+  }, {});
+
+  return Object.keys(archives).map((yearMonth) => {
+    return {
+      params: { year_month: yearMonth },
+      props: { posts: archives[yearMonth], yearMonth: yearMonth },
+    };
+  });
+}
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  yearMonth: string;
+}
+
+const { posts, yearMonth } = Astro.props;
+---
+
+<MainLayout title={`Archive: ${yearMonth}`}>
+  <h1 class="text-3xl font-bold mb-8">Archive: {yearMonth}</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {posts.map((post: CollectionEntry<'blog'>) => (
+      <BlogPostCard post={post} />
+    ))}
+  </div>
+</MainLayout>
