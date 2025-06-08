@@ -3,20 +3,14 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { slugify } from '../utils/stringUtils';
+import type { BlogPost } from '../interfaces/BlogPost'; // 导入 BlogPost 接口
 
-// 定义 BlogPost 接口，与 Content Collections 的 Entry 兼容
-export interface BlogPost {
-  id: string; // Content Collection Entry 的 ID
-  slug: string; // Content Collection Entry 的 slug
-  body: string; // 渲染后的 HTML 内容
-  data: { // Frontmatter 数据
-    title: string;
-    pubDate: Date;
-    description?: string;
-    categories?: string[]; // 更改为数组以支持多分类
-    tags?: string[];
-  };
-  // 额外添加的字段，例如 excerptHtml
+// 定义一个完整的博客文章条目类型，包含 Content Collections 的所有字段
+export interface FullBlogPostEntry {
+  id: string;
+  slug: string;
+  body: string;
+  data: BlogPost; // 使用导入的 BlogPost 接口作为 data 的类型
   excerptHtml?: string;
 }
 
@@ -27,11 +21,11 @@ export interface BlogCategory {
 }
 
 // 缓存所有文章，避免重复读取和解析
-let cachedPosts: BlogPost[] | null = null;
+let cachedPosts: FullBlogPostEntry[] | null = null;
 let cacheTimestamp: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 缓存有效期 5 分钟 (开发模式下可以更短或禁用)
 
-export async function getAllPosts(): Promise<BlogPost[]> {
+export async function getAllPosts(): Promise<FullBlogPostEntry[]> {
   const now = Date.now();
   if (cachedPosts && (now - cacheTimestamp < CACHE_DURATION)) {
     console.log('[BlogService - getAllPosts] Returning cached posts.');
@@ -41,7 +35,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     const allEntries = await getCollection('blog');
 
-    const posts: BlogPost[] = await Promise.all(
+    const posts: FullBlogPostEntry[] = await Promise.all(
       allEntries.map(async (entry) => {
         const { Content, remarkPluginFrontmatter } = await render(entry);
         // Content Collections 默认不提供 excerpt，可以从 description 或手动截取
@@ -51,7 +45,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
           id: entry.id,
           slug: entry.slug,
           body: Content.toString(), // Content 是一个 Astro Component，需要转换为字符串
-          data: entry.data,
+          data: entry.data as BlogPost, // 将 entry.data 断言为 BlogPost 类型
           excerptHtml: excerptHtml,
         };
       })
@@ -59,7 +53,8 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
     console.log(`[BlogService - getAllPosts] Found ${posts.length} posts. Titles: ${posts.map(p => p.data.title).join(', ')}`);
     // 按日期排序，最新的在前面
-    const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+    // 按日期排序，最新的在前面。如果 createDate 不存在，则视为 0 (即非常早的日期)，排在后面。
+    const sortedPosts = posts.sort((a, b) => (b.data.createDate?.getTime() || 0) - (a.data.createDate?.getTime() || 0));
     cachedPosts = sortedPosts;
     cacheTimestamp = now;
     return sortedPosts;
@@ -71,7 +66,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   }
 }
 
-export async function getPostsByCategory(category: string): Promise<BlogPost[]> {
+export async function getPostsByCategory(category: string): Promise<FullBlogPostEntry[]> {
   const allPosts = await getAllPosts();
   return allPosts.filter(post => 
     post.data.categories && post.data.categories.some(cat => 
@@ -80,7 +75,7 @@ export async function getPostsByCategory(category: string): Promise<BlogPost[]> 
   );
 }
 
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+export async function getPostBySlug(slug: string): Promise<FullBlogPostEntry | null> {
   const allPosts = await getAllPosts(); // 获取所有文章以进行 slug 匹配
   const post = allPosts.find(post => post.slug === slug); // 直接使用 slug 匹配
 
@@ -145,7 +140,7 @@ export async function getAllTags(): Promise<{name: string, slug: string, count: 
   return tags;
 }
 
-export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
+export async function getPostsByTag(tag: string): Promise<FullBlogPostEntry[]> {
   const allPosts = await getAllPosts();
   return allPosts.filter(post => 
     post.data.tags && post.data.tags.some(t => 

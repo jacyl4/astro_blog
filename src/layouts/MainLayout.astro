@@ -13,10 +13,13 @@ const { title, description = '我的Astro博客' } = Astro.props;
 
 const allPosts = await getCollection('blog');
 
-const uniqueMonths = [...new Set(allPosts.map(post => {
-  const date = new Date(post.data.pubDate);
-  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-}))].sort().reverse();
+const uniqueMonths = [...new Set(allPosts
+  .filter(post => post.data.createDate) // 过滤掉没有 createDate 的文章
+  .map(post => {
+    const date = new Date(post.data.createDate!); // 确保 createDate 存在
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+  })
+)].sort().reverse();
 ---
 
 <!DOCTYPE html>

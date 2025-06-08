@@ -1,7 +1,7 @@
 ---
 title: "构建灵活的自托管图床：MinIO、Cloudflare R2 与 Obsidian 集成方案"
-pubDate: 2025-06-08
-category: "存储"
+createDate: 2025-06-08
+categories: ["存储"]
 tags: ["图床", "MinIO", "Cloudflare R2", "Obsidian", "对象存储"]
 description: "本文探讨了如何构建灵活的自托管图床，结合 MinIO、Cloudflare R2 和 Obsidian，实现高效的图片存储和管理。"
 ---

@@ -1,7 +1,7 @@
 ---
 title: "现代博客托管平台对比：Cloudflare Pages、GitHub Pages 与 Vercel 的深度剖析"
-pubDate: 2025-06-08
-category: "托管"
+createDate: 2025-06-08
+categories: ["托管"]
 tags: ["博客", "托管", "Cloudflare Pages", "GitHub Pages", "Vercel", "静态网站"]
 description: "本文深入剖析了现代博客托管平台，对比了 Cloudflare Pages、GitHub Pages 和 Vercel 的功能、优劣势，帮助读者选择最适合其需求的托管解决方案。"
 ---

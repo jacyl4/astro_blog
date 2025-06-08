@@ -2,30 +2,22 @@
 // 博客文章卡片组件，展示标题、摘要、分类等
 import { slugify } from '../utils/stringUtils';
 import { getSiteLink } from '../utils/urlUtils';
-import type { BlogPost } from '../services/BlogService'; // 从 BlogService 导入更新后的 BlogPost 类型
+import type { FullBlogPostEntry } from '../services/BlogService'; // 从 BlogService 导入 FullBlogPostEntry 类型
 
 interface Props {
-  post: BlogPost;
+  post: FullBlogPostEntry;
 }
 
 const { post } = Astro.props;
+
 ---
 
 <article class="article-card">
   <a href={getSiteLink(`posts/${post.slug}/`)}>
     <h2 class="font-bold text-xl">{post.data.title}</h2>
   </a>
-  <div>{/* 作者和日期等信息 */}</div>
-  {post.data.category && (
-    <a 
-      href={getSiteLink(`categories/${slugify(post.data.category)}/`)}
-      class=""
-    >
-      {post.data.category}
-    </a>
-  )}
   {post.excerptHtml && (
-    <div class="prose dark:prose-invert max-w-none" set:html={post.excerptHtml} />
+    <div class="prose dark:prose-invert max-w-none mb-4" set:html={post.excerptHtml} />
   )}
-  <a href={getSiteLink(`posts/${post.slug}/`)}>{/* 阅读更多 */}</a>
+  <a href={getSiteLink(`posts/${post.slug}/`)} class="text-blue-600 hover:underline">阅读更多 &rarr;</a>
 </article>

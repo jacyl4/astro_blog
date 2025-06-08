@@ -1,7 +1,7 @@
 ---
 title: "在 Nginx 编译时集成 Lua 功能并依赖 APT 源中的 LuaJIT：一份详细指南"
-pubDate: 2025-06-08
-category: "Nginx"
+createDate: 2025-06-08
+categories: ["Nginx"]
 tags: ["Nginx", "Lua", "LuaJIT", "APT"]
 description: "本报告旨在提供一个全面的指南，详细阐述如何在编译 Nginx 时集成 Lua 功能，并特别关注如何有效地利用 APT 源中的 LuaJIT 作为其依赖。"
 ---

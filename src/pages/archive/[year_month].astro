@@ -11,12 +11,14 @@ export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
 
   const archives = allPosts.reduce((acc: Archive, post) => {
-    const date = new Date(post.data.pubDate);
-    const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-    if (!acc[yearMonth]) {
-      acc[yearMonth] = [];
+    if (post.data.createDate) { // 确保 createDate 存在
+      const date = new Date(post.data.createDate);
+      const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+      if (!acc[yearMonth]) {
+        acc[yearMonth] = [];
+      }
+      acc[yearMonth].push(post);
     }
-    acc[yearMonth].push(post);
     return acc;
   }, {});
 

@@ -7,34 +7,38 @@ import { slugify } from '../../utils/stringUtils';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
-  return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+  return blogEntries.map((entry) => {
+    return {
+      params: { slug: entry.slug },
+      props: { entry },
+    };
+  });
 }
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 
-const formattedDate = entry.data.pubDate.toLocaleDateString('zh-CN', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
+const formattedDate: string = entry.data.createDate
+  ? entry.data.createDate.toLocaleDateString('zh-CN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : '未知日期';
 ---
 
 <MainLayout title={entry.data.title}>
   <article>
     <h1 class="font-bold text-2xl mb-4">{entry.data.title}</h1>
     <div class="post-meta text-gray-500 mb-8">
-      <div class="mb-1">发布日期: {formattedDate}</div>
+      {formattedDate && <div class="mb-1">发布日期: {formattedDate}</div>}
       {entry.data.categories && entry.data.categories.length > 0 && (
         <div class="mb-1">
           分类:
           {entry.data.categories!.map((category, index) => (
-            <a href={getSiteLink(`categories/${slugify(category)}/`)} class="category-link text-gray-500 hover:underline">
-              {category}{index < entry.data.categories!.length - 1 ? ', ' : ''}
-            </a>
+            <>
+              <a href={getSiteLink(`categories/${slugify(category)}/`)} class="category-link text-gray-500 hover:underline">{category}</a>{(index < entry.data.categories!.length - 1 ? ',' : '')}{(index < entry.data.categories!.length - 1 ? ' ' : '')}
+            </>
           ))}
         </div>
       )}
@@ -42,9 +46,9 @@ const formattedDate = entry.data.pubDate.toLocaleDateString('zh-CN', {
         <div class="mb-1">
           标签:
           {entry.data.tags!.map((tag, index) => (
-            <a href={getSiteLink(`tags/${slugify(tag)}/`)} class="tag-link text-gray-500 hover:underline">
-              {tag}{index < entry.data.tags!.length - 1 ? ', ' : ''}
-            </a>
+            <>
+              <a href={getSiteLink(`tags/${slugify(tag)}/`)} class="tag-link text-gray-500 hover:underline">{tag}</a>{(index < entry.data.tags!.length - 1 ? ',' : '')}{(index < entry.data.tags!.length - 1 ? ' ' : '')}
+            </>
           ))}
         </div>
       )}
