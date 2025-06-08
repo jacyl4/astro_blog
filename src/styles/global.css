@@ -37,3 +37,7 @@ h1 {
 .prose h3 {
   font-size: 1.3rem !important; /* 稍微放大 h3 */
 }
+
+a:hover {
+  text-decoration: underline;
+}
