@@ -13,7 +13,7 @@ export interface BlogPost {
     title: string;
     pubDate: Date;
     description?: string;
-    category?: string;
+    categories?: string[]; // 更改为数组以支持多分类
     tags?: string[];
   };
   // 额外添加的字段，例如 excerptHtml
@@ -73,7 +73,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
 export async function getPostsByCategory(category: string): Promise<BlogPost[]> {
   const allPosts = await getAllPosts();
-  return allPosts.filter(post => post.data.category?.toLowerCase() === category.toLowerCase());
+  return allPosts.filter(post => 
+    post.data.categories && post.data.categories.some(cat => 
+      cat.toLowerCase() === category.toLowerCase()
+    )
+  );
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
@@ -96,9 +100,11 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   const categoriesMap = new Map<string, number>();
   
   allPosts.forEach(post => {
-    if (post.data.category) {
-      const count = categoriesMap.get(post.data.category) || 0;
-      categoriesMap.set(post.data.category, count + 1);
+    if (post.data.categories && post.data.categories.length > 0) {
+      post.data.categories.forEach(category => {
+        const count = categoriesMap.get(category) || 0;
+        categoriesMap.set(category, count + 1);
+      });
     }
   });
   

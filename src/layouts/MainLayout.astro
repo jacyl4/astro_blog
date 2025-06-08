@@ -74,11 +74,11 @@ const uniqueMonths = [...new Set(allPosts.map(post => {
         <!-- 正文和侧栏区域 -->
         <div class="flex">
           <!-- 正文 -->
-          <main class="w-3/4 p-4 border-r border-gray-300">
+          <main class="w-3/4 p-8 border-r border-gray-300">
             <slot />
           </main>
           <!-- 侧栏 -->
-          <aside class="w-1/4 p-4">
+          <aside class="w-1/4 p-8">
             <h2 class="text-xl font-bold mb-4">Archives</h2>
             <ul>
               {uniqueMonths.map(month => (

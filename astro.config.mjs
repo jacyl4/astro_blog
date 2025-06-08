@@ -18,9 +18,9 @@ export default defineConfig({
   trailingSlash: 'always',
 
   markdown: {
-    syntaxHighlight: 'shiki', // 切换到 Shiki
+    syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'gruvbox-dark-hard'
+      theme: 'gruvbox-light-medium'
     },
     smartypants: true,
     remarkPlugins: [],

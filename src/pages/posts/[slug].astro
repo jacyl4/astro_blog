@@ -25,24 +25,31 @@ const formattedDate = entry.data.pubDate.toLocaleDateString('zh-CN', {
 
 <MainLayout title={entry.data.title}>
   <article>
-    <h1 class="font-bold text-2xl">{entry.data.title}</h1>
-    <p>发布日期: {formattedDate}</p>
-    {entry.data.category && (
-      <p>
-        分类: <a href={getSiteLink(`categories/${slugify(entry.data.category)}/`)}>{entry.data.category}</a>
-      </p>
-    )}
-    {entry.data.tags && entry.data.tags.length > 0 && (
-      <p>
-        标签:
-        {entry.data.tags.map((tag) => (
-          <a href={getSiteLink(`tags/${slugify(tag)}/`)} class="tag-link">
-            {tag}
-          </a>
-        ))}
-      </p>
-    )}
-    <div class="prose dark:prose-invert max-w-none">
+    <h1 class="font-bold text-2xl mb-4">{entry.data.title}</h1>
+    <div class="post-meta text-gray-500 mb-8">
+      <div class="mb-1">发布日期: {formattedDate}</div>
+      {entry.data.categories && entry.data.categories.length > 0 && (
+        <div class="mb-1">
+          分类:
+          {entry.data.categories!.map((category, index) => (
+            <a href={getSiteLink(`categories/${slugify(category)}/`)} class="category-link text-gray-500 hover:underline">
+              {category}{index < entry.data.categories!.length - 1 ? ', ' : ''}
+            </a>
+          ))}
+        </div>
+      )}
+      {entry.data.tags && entry.data.tags.length > 0 && (
+        <div class="mb-1">
+          标签:
+          {entry.data.tags!.map((tag, index) => (
+            <a href={getSiteLink(`tags/${slugify(tag)}/`)} class="tag-link text-gray-500 hover:underline">
+              {tag}{index < entry.data.tags!.length - 1 ? ', ' : ''}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+    <div class="prose dark:prose-invert max-w-none mb-4">
       <Content />
     </div>
   </article>

@@ -6,7 +6,7 @@ const blogCollection = defineCollection({
     title: z.string(),
     pubDate: z.coerce.date(), // 将字符串转换为 Date 对象
     description: z.string().optional(), // 对应原来的 excerpt
-    category: z.string().optional(),
+    categories: z.array(z.string()).optional(),
     tags: z.array(z.string()).optional(),
     // 如果有封面图片，可以这样定义
     // cover: image().optional(),

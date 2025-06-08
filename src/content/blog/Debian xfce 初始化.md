@@ -2,6 +2,8 @@
 title: "Debian XFCE 初始化"
 pubDate: 2025-06-08
 description: "Debian XFCE 初始化配置指南。"
+categories: ["Linux", "Debian"]
+tags: ["XFCE", "初始化", "配置", "WireGuard", "Rime"]
 ---
 自动登录
 编辑/etc/lightdm/lightdm.conf
