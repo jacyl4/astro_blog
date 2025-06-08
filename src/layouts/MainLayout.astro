@@ -66,14 +66,12 @@ const { title, description = '我的Astro博客' } = Astro.props;
         <!-- 正文和侧栏区域 -->
         <div class="flex">
           <!-- 正文 -->
-          <main class="w-3/4 p-4">
+          <main class="w-3/4 p-4 border-r border-gray-300">
             <slot />
           </main>
           <!-- 侧栏 -->
-          <aside class="w-1/4 bg-green-500 p-4">
-            <div class="h-full bg-yellow-300 flex items-center justify-center text-xl font-bold">
-              侧栏内容占位
-            </div>
+          <aside class="w-1/4 p-4">
+            <!-- 侧栏内容 -->
           </aside>
         </div>
 
