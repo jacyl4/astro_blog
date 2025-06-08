@@ -22,14 +22,12 @@ const posts: FullBlogPostEntry[] = await getPostsByCategory(categoryName);
 ---
 
 <MainLayout title={`${categoryName} - 分类 - 我的博客`}>
-  <header class="mb-8">
-    <h1 class="text-3xl font-bold mb-2">{categoryName}</h1>
-    <p class="text-gray-600 dark:text-gray-400">
-      该分类共有 {posts.length} 篇文章
-    </p>
-  </header>
+  <h1 class="text-3xl font-bold mb-4">{categoryName}</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8">
+    该分类共有 {posts.length} 篇文章
+  </p>
   
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {posts.map((post) => (
       <BlogPostCard post={post} />
     ))}

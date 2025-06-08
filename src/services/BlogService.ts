@@ -19,6 +19,12 @@ export interface BlogCategory {
   count: number;
 }
 
+export interface BlogTag {
+  name: string;
+  slug: string;
+  count: number;
+}
+
 // 缓存所有文章，避免重复读取和解析
 let cachedPosts: FullBlogPostEntry[] | null = null;
 let cacheTimestamp: number = 0;
@@ -114,26 +120,34 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   return categories;
 }
 
-export async function getAllTags(): Promise<{name: string, slug: string, count: number}[]> {
+export async function getAllTags(): Promise<BlogTag[]> {
   const allPosts = await getAllPosts();
   const tagsMap = new Map<string, number>();
   
   allPosts.forEach(post => {
     if (post.data.tags && post.data.tags.length > 0) {
       post.data.tags.forEach(tag => {
-        const count = tagsMap.get(tag) || 0;
-        tagsMap.set(tag, count + 1);
+        // 确保 tag 不是空字符串或只包含空白字符
+        if (tag && tag.trim() !== '') {
+          const count = tagsMap.get(tag) || 0;
+          tagsMap.set(tag, count + 1);
+        }
       });
     }
   });
   
-  const tags: {name: string, slug: string, count: number}[] = [];
+  const tags: BlogTag[] = [];
   tagsMap.forEach((count, name) => {
-    tags.push({
-      name,
-      slug: slugify(name),
-      count
-    });
+    const slug = slugify(name);
+    // 只有当 slug 不为空时才添加标签
+    if (slug !== '') {
+      console.log(`[BlogService - getAllTags] Generated tag: name="${name}", slug="${slug}"`);
+      tags.push({
+        name,
+        slug,
+        count
+      });
+    }
   });
   
   return tags;

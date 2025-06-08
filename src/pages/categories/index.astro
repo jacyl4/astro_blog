@@ -8,10 +8,9 @@ const categories = await getAllCategories();
 ---
 
 <MainLayout title="分类 - 我的博客">
+  <h1 class="text-3xl font-bold mb-8">文章分类</h1>
+  
   <div>
-    <h1>文章分类</h1>
-    
-    <div>
     {categories.map((category: BlogCategory) => (
       <a 
         href={`/categories/${category.slug}/`}

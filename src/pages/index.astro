@@ -9,9 +9,9 @@ const posts: FullBlogPostEntry[] = await getAllPosts();
 ---
 
 <MainLayout title="首页 - 我的博客">
-  <h1>文章列表</h1>
+  <h1 class="text-3xl font-bold mb-8">文章列表</h1>
   
-  <div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {posts.map((post) => (
       <BlogPostCard post={post} />
     ))}
