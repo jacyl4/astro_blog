@@ -27,7 +27,7 @@ const formattedDate: string = entry.data.createDate
   : '未知日期';
 ---
 
-<MainLayout title={entry.data.title}>
+<MainLayout title={entry.data.title || '无标题文章'}>
   <article>
     <h1 class="font-bold text-2xl mb-4">{entry.data.title}</h1>
     <div class="post-meta text-gray-500 mb-8">

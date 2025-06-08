@@ -1,7 +1,6 @@
 // 博客业务服务：负责 Markdown 读取、解析、聚合、标签分类等核心逻辑
 // 遵循单一职责与高内聚低耦合原则
-import { getCollection, getEntry, render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { slugify } from '../utils/stringUtils';
 import type { BlogPost } from '../interfaces/BlogPost'; // 导入 BlogPost 接口
 
@@ -37,7 +36,7 @@ export async function getAllPosts(): Promise<FullBlogPostEntry[]> {
 
     const posts: FullBlogPostEntry[] = await Promise.all(
       allEntries.map(async (entry) => {
-        const { Content, remarkPluginFrontmatter } = await render(entry);
+        const { Content } = await render(entry);
         // Content Collections 默认不提供 excerpt，可以从 description 或手动截取
         const excerptHtml = entry.data.description || ''; // 假设 description 作为摘要
 

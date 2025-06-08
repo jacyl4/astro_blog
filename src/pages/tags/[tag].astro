@@ -3,7 +3,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
 import { getAllTags, getPostsByTag } from '../../services/BlogService';
-import type { BlogPost } from '../../services/BlogService'; // 从 BlogService 导入更新后的 BlogPost 类型
+import type { FullBlogPostEntry } from '../../services/BlogService'; // 从 BlogService 导入 FullBlogPostEntry 类型
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { tagName } = Astro.props;
 
-const posts = await getPostsByTag(tag);
+const posts: FullBlogPostEntry[] = await getPostsByTag(tag);
 ---
 
 <MainLayout title={`${tagName} - 标签 - 我的博客`}>
@@ -41,7 +41,7 @@ const posts = await getPostsByTag(tag);
     
     {posts.length > 0 ? (
       <div>
-        {posts.map((post: BlogPost) => (
+        {posts.map((post) => (
           <BlogPostCard post={post} />
         ))}
       </div>

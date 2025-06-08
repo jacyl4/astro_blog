@@ -9,8 +9,8 @@ const blogCollection = defineCollection({
     categories: z.array(z.string()).optional(), // 分类
     tags: z.array(z.string()).optional(), // 标签
     // 如果有封面图片，可以这样定义
-    // cover: image().optional(),
-    // coverAlt: z.string().optional(),
+    cover: image().optional(),
+    coverAlt: z.string().optional(),
   }),
 });
 

@@ -3,16 +3,16 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import BlogPostCard from '../components/BlogPostCard.astro';
 import { getAllPosts } from '../services/BlogService';
-import type { BlogPost } from '../services/BlogService'; // 从 BlogService 导入更新后的 BlogPost 类型
+import type { FullBlogPostEntry } from '../services/BlogService'; // 从 BlogService 导入 FullBlogPostEntry 类型
 
-const posts = await getAllPosts();
+const posts: FullBlogPostEntry[] = await getAllPosts();
 ---
 
 <MainLayout title="首页 - 我的博客">
   <h1>文章列表</h1>
   
   <div>
-    {posts.map((post: BlogPost) => (
+    {posts.map((post) => (
       <BlogPostCard post={post} />
     ))}
   </div>
