@@ -1,7 +1,3 @@
-# Astro 博客
-
-使用 Astro 构建的个人博客网站，内容来源于 @posts 目录下的 Markdown 文件。
-
 ## 技术栈
 
 - [Astro](https://astro.build) - 静态站点生成器
@@ -28,19 +24,6 @@ astro_blog/
 └── README.md           # 项目说明
 ```
 
-## 设计原则
-
-本项目遵循以下设计原则：
-
-- 单一职责原则 (Single Responsibility Principle)
-- 开放封闭原则 (Open/Closed Principle)
-- 里氏替换原则 (Liskov Substitution Principle)
-- 依赖倒置原则 (Dependency Inversion Principle)
-- 接口隔离原则 (Interface Segregation Principle)
-- 迪米特法则 (Law of Demeter)
-- 组合复用原则 (Composite Reuse Principle)
-- 高内聚低耦合原则 (High Cohesion and Low Coupling)
-
 ## 开发
 
 ```bash
@@ -55,17 +38,6 @@ npm run build
 
 # 预览生产版本
 npm run preview
-```
-
-## 添加内容
-
-要添加新的博客文章，只需在 `src/content/blog/` 目录下相应的类别文件夹中创建新的 Markdown 文件即可。
-
-```text
-src/content/blog/
-├── HomeLab/           # HomeLab 类别的文章
-├── Programming/       # 编程类别的文章
-└── Other/             # 其他类别的文章
 ```
 
 ## 其他
