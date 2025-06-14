@@ -5,6 +5,7 @@ const blogCollection = defineCollection({
   schema: ({ image }) => z.object({
     title: z.string().optional(),
     createDate: z.coerce.date(), // 创建日期
+    updatedDate: z.coerce.date().optional(), // 更新日期
     description: z.string().optional(), // 对应原来的 excerpt
     categories: z.array(z.string()).optional(), // 分类
     tags: z.array(z.string()).optional(), // 标签

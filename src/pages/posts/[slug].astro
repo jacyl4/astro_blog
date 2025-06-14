@@ -1,9 +1,9 @@
 ---
 // 博客文章详情页
-import MainLayout from '../../layouts/MainLayout.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { getSiteLink } from '../../utils/urlUtils';
-import { slugify } from '../../utils/stringUtils';
+import { getSiteLink } from '@/utils/urlUtils';
+import { slugify } from '@/utils/stringUtils';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
@@ -35,21 +35,21 @@ const formattedDate: string = entry.data.createDate
       {entry.data.categories && entry.data.categories.length > 0 && (
         <div class="mb-1">
           分类:
-          {entry.data.categories!.map((category, index) => (
-            <>
-              <a href={getSiteLink(`categories/${slugify(category)}/`)} class="category-link text-gray-500 hover:underline">{category}</a>{(index < entry.data.categories!.length - 1 ? ',' : '')}{(index < entry.data.categories!.length - 1 ? ' ' : '')}
-            </>
-          ))}
+          {entry.data.categories.map((category, index) => (
+            <a href={`/categories/${encodeURIComponent(category)}/`} class="category-link text-gray-500 hover:underline ml-1">
+              {category}
+            </a>
+          )).reduce((prev, curr) => <>{prev}, {curr}</>)}
         </div>
       )}
       {entry.data.tags && entry.data.tags.length > 0 && (
         <div class="mb-1">
           标签:
-          {entry.data.tags!.map((tag, index) => (
-            <>
-              <a href={getSiteLink(`tags/${slugify(tag)}/`)} class="tag-link text-gray-500 hover:underline">{tag}</a>{(index < entry.data.tags!.length - 1 ? ',' : '')}{(index < entry.data.tags!.length - 1 ? ' ' : '')}
-            </>
-          ))}
+          {entry.data.tags.map((tag, index) => (
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link text-gray-500 hover:underline ml-1">
+              {tag}
+            </a>
+          )).reduce((prev, curr) => <>{prev}, {curr}</>)}
         </div>
       )}
     </div>

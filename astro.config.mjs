@@ -1,9 +1,13 @@
 // Astro 配置文件，负责全局构建与 Markdown 渲染等设置
 import { defineConfig } from 'astro/config';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
+  viewTransitions: true,
   integrations: [],
   vite: {
     plugins: [tailwindcss()],
@@ -23,16 +27,16 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'gruvbox-light-medium'
+      themes: {
+        light: 'gruvbox-light-medium',
+        dark: 'gruvbox-dark-medium',
+      },
+      wrap: true,
     },
     smartypants: true,
     remarkPlugins: [],
-    rehypePlugins: []
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
   },
 
   cacheDir: './.astro/', // 添加缓存目录
-
-  experimental: {
-    responsiveImages: true, // 启用响应式图片
-  },
 });

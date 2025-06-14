@@ -1,17 +1,10 @@
 // 博客业务服务：负责 Markdown 读取、解析、聚合、标签分类等核心逻辑
 // 遵循单一职责与高内聚低耦合原则
-import { getCollection, render } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify } from '../utils/stringUtils';
-import type { BlogPost } from '../interfaces/BlogPost'; // 导入 BlogPost 接口
 
-// 定义一个完整的博客文章条目类型，包含 Content Collections 的所有字段
-export interface FullBlogPostEntry {
-  id: string;
-  slug: string;
-  body: string;
-  data: BlogPost; // 使用导入的 BlogPost 接口作为 data 的类型
-  excerptHtml?: string;
-}
+// 使用 Astro 的 CollectionEntry 作为核心的文章类型
+export type BlogPost = CollectionEntry<'blog'>;
 
 export interface BlogCategory {
   name: string;
@@ -25,87 +18,92 @@ export interface BlogTag {
   count: number;
 }
 
-// 缓存所有文章，避免重复读取和解析
-let cachedPosts: FullBlogPostEntry[] | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 缓存有效期 5 分钟 (开发模式下可以更短或禁用)
+// 缓存所有已排序的文章，避免在单次构建/请求中重复处理
+let sortedPosts: BlogPost[] | null = null;
 
-export async function getAllPosts(): Promise<FullBlogPostEntry[]> {
-  const now = Date.now();
-  if (cachedPosts && (now - cacheTimestamp < CACHE_DURATION)) {
-    console.log('[BlogService - getAllPosts] Returning cached posts.');
-    return cachedPosts;
+/**
+ * 获取所有博客文章，并按创建日期降序排序。
+ * 使用简单的内存缓存（生命周期为单次构建或服务器运行期间），避免重复查询和排序。
+ */
+export async function getAllPosts(): Promise<BlogPost[]> {
+  // 如果已经缓存，直接返回
+  if (sortedPosts) {
+    return sortedPosts;
   }
 
   try {
     const allEntries = await getCollection('blog');
-
-    const posts: FullBlogPostEntry[] = await Promise.all(
-      allEntries.map(async (entry) => {
-        const { Content } = await render(entry);
-        // Content Collections 默认不提供 excerpt，可以从 description 或手动截取
-        const excerptHtml = entry.data.description || ''; // 假设 description 作为摘要
-
-        return {
-          id: entry.id,
-          slug: entry.slug,
-          body: Content.toString(), // Content 是一个 Astro Component，需要转换为字符串
-          data: entry.data as BlogPost, // 将 entry.data 断言为 BlogPost 类型
-          excerptHtml: excerptHtml,
-        };
-      })
+    
+    // 按创建日期降序排序
+    const posts = allEntries.sort((a, b) => 
+      b.data.createDate.getTime() - a.data.createDate.getTime()
     );
 
-    console.log(`[BlogService - getAllPosts] Found ${posts.length} posts. Titles: ${posts.map(p => p.data.title).join(', ')}`);
-    // 按日期排序，最新的在前面
-    // 按日期排序，最新的在前面。如果 createDate 不存在，则视为 0 (即非常早的日期)，排在后面。
-    const sortedPosts = posts.sort((a, b) => (b.data.createDate?.getTime() || 0) - (a.data.createDate?.getTime() || 0));
-    cachedPosts = sortedPosts;
-    cacheTimestamp = now;
-    return sortedPosts;
+    console.log(`[BlogService] Fetched and sorted ${posts.length} posts.`);
+    // 缓存结果
+    sortedPosts = posts;
+    return posts;
   } catch (error) {
-    console.error('Error reading blog posts from Content Collections:', error);
-    cachedPosts = [];
-    cacheTimestamp = 0;
+    console.error('Error fetching or sorting blog posts:', error);
+    // 在出错时返回空数组，防止下游消费者出错
     return [];
   }
 }
 
-export async function getPostsByCategory(category: string): Promise<FullBlogPostEntry[]> {
+/**
+ * 根据分类名称获取文章列表
+ */
+export async function getPostsByCategory(category: string): Promise<BlogPost[]> {
   const allPosts = await getAllPosts();
   return allPosts.filter(post => 
-    post.data.categories && post.data.categories.some(cat => 
+    post.data.categories?.some(cat => 
       cat.toLowerCase() === category.toLowerCase()
     )
   );
 }
 
-export async function getPostBySlug(slug: string): Promise<FullBlogPostEntry | null> {
-  const allPosts = await getAllPosts(); // 获取所有文章以进行 slug 匹配
-  const post = allPosts.find(post => post.slug === slug); // 直接使用 slug 匹配
+/**
+ * 获取所有文章的归档月份列表 (YYYY-MM)
+ */
+export async function getArchiveMonths(): Promise<string[]> {
+  const allPosts = await getAllPosts();
+  const months = new Set<string>();
 
-  if (post) {
-    console.log(`[BlogService - getPostBySlug] Found post for slug: "${slug}"`);
-  } else {
-    console.log(`[BlogService - getPostBySlug] NO MATCH FOUND for URL slug: "${slug}"`);
-    const availableSlugs = allPosts.map(p => `"${p.slug}" (Length: ${p.slug.length})`);
-    console.log(`[BlogService - getPostBySlug] All available generated slugs: [${availableSlugs.join(', ')}]`);
-  }
-  
-  return post || null;
+  allPosts.forEach(post => {
+    const date = post.data.createDate;
+    const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+    months.add(month);
+  });
+
+  return Array.from(months).sort().reverse();
 }
 
+/**
+ * 根据 slug 获取单篇文章
+ */
+export async function getPostBySlug(slug: string): Promise<BlogPost | undefined> {
+  const allPosts = await getAllPosts();
+  const post = allPosts.find(p => p.slug === slug);
+
+  if (!post) {
+    console.warn(`[BlogService] Post with slug "${slug}" not found.`);
+  }
+
+  return post;
+}
+
+/**
+ * 获取所有分类及其文章数量
+ */
 export async function getAllCategories(): Promise<BlogCategory[]> {
   const allPosts = await getAllPosts();
   const categoriesMap = new Map<string, number>();
   
   allPosts.forEach(post => {
-    if (post.data.categories && post.data.categories.length > 0) {
-      post.data.categories.forEach(category => {
-        const count = categoriesMap.get(category) || 0;
-        categoriesMap.set(category, count + 1);
-      });
-    }
+    post.data.categories?.forEach(category => {
+      const count = categoriesMap.get(category) || 0;
+      categoriesMap.set(category, count + 1);
+    });
   });
   
   const categories: BlogCategory[] = [];
@@ -120,28 +118,26 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   return categories;
 }
 
+/**
+ * 获取所有标签及其文章数量
+ */
 export async function getAllTags(): Promise<BlogTag[]> {
   const allPosts = await getAllPosts();
   const tagsMap = new Map<string, number>();
   
   allPosts.forEach(post => {
-    if (post.data.tags && post.data.tags.length > 0) {
-      post.data.tags.forEach(tag => {
-        // 确保 tag 不是空字符串或只包含空白字符
-        if (tag && tag.trim() !== '') {
-          const count = tagsMap.get(tag) || 0;
-          tagsMap.set(tag, count + 1);
-        }
-      });
-    }
+    post.data.tags?.forEach(tag => {
+      if (tag && tag.trim() !== '') {
+        const count = tagsMap.get(tag) || 0;
+        tagsMap.set(tag, count + 1);
+      }
+    });
   });
   
   const tags: BlogTag[] = [];
   tagsMap.forEach((count, name) => {
     const slug = slugify(name);
-    // 只有当 slug 不为空时才添加标签
-    if (slug !== '') {
-      console.log(`[BlogService - getAllTags] Generated tag: name="${name}", slug="${slug}"`);
+    if (slug) {
       tags.push({
         name,
         slug,
@@ -153,11 +149,15 @@ export async function getAllTags(): Promise<BlogTag[]> {
   return tags;
 }
 
-export async function getPostsByTag(tag: string): Promise<FullBlogPostEntry[]> {
+/**
+ * 根据标签名称或 slug 获取文章列表
+ */
+export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
   const allPosts = await getAllPosts();
+  const lowercasedTag = tag.toLowerCase();
   return allPosts.filter(post => 
-    post.data.tags && post.data.tags.some(t => 
-      t.toLowerCase() === tag.toLowerCase() || slugify(t) === tag.toLowerCase()
+    post.data.tags?.some(t => 
+      t.toLowerCase() === lowercasedTag || slugify(t) === lowercasedTag
     )
   );
 }

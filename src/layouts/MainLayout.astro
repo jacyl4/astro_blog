@@ -1,10 +1,13 @@
 ---
 // 全站主布局，包含头部导航、内容插槽
-import '../styles/global.css';
-import NavigationBar from '../components/NavigationBar.astro';
-import CategoryList from '../components/CategoryList.astro'; // 引入 CategoryList 组件
-import TagList from '../components/TagList.astro'; // 引入 TagList 组件
-import { getCollection } from 'astro:content';
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/base.css';
+import '../styles/shiki.css';
+import NavigationBar from '@/components/NavigationBar.astro';
+import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
+import CategoryList from '@/components/CategoryList.astro';
+import TagList from '@/components/TagList.astro';
+import { getArchiveMonths } from '@/services/BlogService';
 import cloudsImage from '../assets/images/clouds.webp';
 import headCarImage from '../assets/images/head_car.webp';
 
@@ -14,17 +17,9 @@ interface Props {
   showSidebar?: boolean; // 新增属性
 }
 
-const { title, description = '我的Astro博客', showSidebar = true } = Astro.props; // 默认显示侧栏
+const { title, description = '我的Astro博客', showSidebar = true } = Astro.props;
 
-const allPosts = await getCollection('blog');
-
-const uniqueMonths = [...new Set(allPosts
-  .filter(post => post.data.createDate) // 过滤掉没有 createDate 的文章
-  .map(post => {
-    const date = new Date(post.data.createDate!); // 确保 createDate 存在
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-  })
-)].sort().reverse();
+const uniqueMonths = await getArchiveMonths();
 ---
 
 <!DOCTYPE html>
@@ -37,6 +32,9 @@ const uniqueMonths = [...new Set(allPosts
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-mono/style.css" />
+    <ViewTransitions />
     <link rel="preload" as="image" href={cloudsImage.src}>
     <link rel="preload" as="image" href={headCarImage.src}>
     <style>
@@ -73,23 +71,24 @@ const uniqueMonths = [...new Set(allPosts
   <body class="font-sans" style={`--clouds-bg: url(${cloudsImage.src}); --head-car-bg: url(${headCarImage.src});`}>
     <div class="parallax-bg" id="parallax-bg"></div>
     <div class="content-wrapper">
-      <div class="mx-auto my-[21px] max-w-[1152px] shadow-lg bg-white rounded-lg overflow-hidden">
+      <div id="main-content" class="mx-auto my-[21px] max-w-[1152px] shadow-lg rounded-lg overflow-hidden" style="background-color: var(--main-content-bg);">
         <!-- 页头 -->
         <div class="header-placeholder relative">
           <header>
           </header>
           <NavigationBar />
+          <ThemeSwitcher />
         </div>
 
         <!-- 正文和侧栏区域 -->
         <div class="flex">
           <!-- 正文 -->
-          <main class={showSidebar ? "w-3/4 p-8 border-r border-gray-300" : "w-full p-8"}>
+          <main class={showSidebar ? "w-3/4 p-8 border-r border-[var(--divider-shadow-dark)]" : "w-full p-8"}>
             <slot />
           </main>
           <!-- 侧栏 -->
           {showSidebar && (
-            <aside class="w-1/4 p-8 space-y-8"> {/* 添加 space-y-8 增加组件间距 */}
+            <aside class="w-1/4 p-8 space-y-8 border-l border-[var(--divider-shadow-light)]"> {/* 添加 space-y-8 增加组件间距 */}
               <CategoryList /> {/* 添加 CategoryList 组件 */}
               <TagList /> {/* 添加 TagList 组件 */}
               <h2 class="text-xl font-bold mb-4">Archives</h2>
@@ -105,9 +104,9 @@ const uniqueMonths = [...new Set(allPosts
         </div>
 
         <!-- 底栏 -->
-        <footer class="h-[39px] bg-[#F5F5F7] p-4 flex items-center justify-end">
-          <p class="text-gray-600 text-sm">
-            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer">Powered by Astro</a>
+        <footer class="h-[39px] p-4 flex items-center justify-end border-t border-[var(--divider-shadow-dark)]" style="background-color: var(--footer-bg);">
+          <p class="text-sm">
+            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-transparent [text-shadow:-0.5px_-0.5px_0.5px_var(--text-shadow-dark),0.5px_0.5px_0.5px_var(--text-shadow-light)]">Powered by Astro</a>
           </p>
         </footer>
       </div>

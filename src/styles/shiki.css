@@ -1,0 +1,131 @@
+/*
+  Core styles for Shiki to enable themes and fix layout.
+*/
+
+.astro-code {
+  /* Layout fixes */
+  position: relative;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+/* 
+  Do NOT style ".astro-code span" here with a blanket color.
+  Shiki applies colors to individual spans with inline styles for syntax highlighting.
+  Overriding it here would break the theme.
+*/
+
+.astro-code code {
+  /* Word wrapping for long lines */
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/* gruvbox-light-medium theme */
+html:not(.dark) .astro-code {
+  background-color: #fbf1c7;
+  color: #3c3836;
+}
+html:not(.dark) .astro-code .token.comment,
+html:not(.dark) .astro-code .token.prolog,
+html:not(.dark) .astro-code .token.doctype,
+html:not(.dark) .astro-code .token.cdata {
+  color: #928374;
+}
+html:not(.dark) .astro-code .token.punctuation {
+  color: #3c3836;
+}
+html:not(.dark) .astro-code .token.property,
+html:not(.dark) .astro-code .token.tag,
+html:not(.dark) .astro-code .token.boolean,
+html:not(.dark) .astro-code .token.number,
+html:not(.dark) .astro-code .token.constant,
+html:not(.dark) .astro-code .token.symbol,
+html:not(.dark) .astro-code .token.deleted {
+  color: #9d0006;
+}
+html:not(.dark) .astro-code .token.selector,
+html:not(.dark) .astro-code .token.attr-name,
+html:not(.dark) .astro-code .token.string,
+html:not(.dark) .astro-code .token.char,
+html:not(.dark) .astro-code .token.builtin,
+html:not(.dark) .astro-code .token.inserted {
+  color: #79740e;
+}
+html:not(.dark) .astro-code .token.operator,
+html:not(.dark) .astro-code .token.entity,
+html:not(.dark) .astro-code .token.url,
+html:not(.dark) .astro-code .language-css .token.string,
+html:not(.dark) .astro-code .style .token.string {
+  color: #b57614;
+}
+html:not(.dark) .astro-code .token.atrule,
+html:not(.dark) .astro-code .token.attr-value,
+html:not(.dark) .astro-code .token.keyword {
+  color: #9d0006;
+}
+html:not(.dark) .astro-code .token.function,
+html:not(.dark) .astro-code .token.class-name {
+  color: #b16286;
+}
+html:not(.dark) .astro-code .token.regex,
+html:not(.dark) .astro-code .token.important,
+html:not(.dark) .astro-code .token.variable {
+  color: #076678;
+}
+
+/* gruvbox-dark-medium theme */
+html.dark .astro-code {
+  background-color: #282828 !important;
+  color: #ebdbb2 !important;
+}
+html.dark .astro-code .token.comment,
+html.dark .astro-code .token.prolog,
+html.dark .astro-code .token.doctype,
+html.dark .astro-code .token.cdata {
+  color: #928374 !important;
+}
+html.dark .astro-code .token.punctuation {
+  color: #ebdbb2 !important;
+}
+html.dark .astro-code .token.property,
+html.dark .astro-code .token.tag,
+html.dark .astro-code .token.boolean,
+html.dark .astro-code .token.number,
+html.dark .astro-code .token.constant,
+html.dark .astro-code .token.symbol,
+html.dark .astro-code .token.deleted {
+  color: #fb4934 !important;
+}
+html.dark .astro-code .token.selector,
+html.dark .astro-code .token.attr-name,
+html.dark .astro-code .token.string,
+html.dark .astro-code .token.char,
+html.dark .astro-code .token.builtin,
+html.dark .astro-code .token.inserted {
+  color: #b8bb26 !important;
+}
+html.dark .astro-code .token.operator,
+html.dark .astro-code .token.entity,
+html.dark .astro-code .token.url,
+html.dark .astro-code .language-css .token.string,
+html.dark .astro-code .style .token.string {
+  color: #fabd2f !important;
+}
+html.dark .astro-code .token.atrule,
+html.dark .astro-code .token.attr-value,
+html.dark .astro-code .token.keyword {
+  color: #fb4934 !important;
+}
+html.dark .astro-code .token.function,
+html.dark .astro-code .token.class-name {
+  color: #d3869b !important;
+}
+html.dark .astro-code .token.regex,
+html.dark .astro-code .token.important,
+html.dark .astro-code .token.variable {
+  color: #83a598 !important;
+}

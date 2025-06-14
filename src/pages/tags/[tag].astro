@@ -1,9 +1,8 @@
 ---
 // 标签详情页，展示某标签下所有文章
-import MainLayout from '../../layouts/MainLayout.astro';
-import BlogPostCard from '../../components/BlogPostCard.astro';
-import { getAllTags, getPostsByTag } from '../../services/BlogService';
-import type { FullBlogPostEntry } from '../../services/BlogService'; // 从 BlogService 导入 FullBlogPostEntry 类型
+import MainLayout from '@/layouts/MainLayout.astro';
+import BlogPostCard from '@/components/BlogPostCard.astro';
+import { getAllTags, getPostsByTag, type BlogPost } from '@/services/BlogService';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
@@ -17,7 +16,7 @@ export async function getStaticPaths() {
 }
 
 const { tagName } = Astro.props;
-const posts: FullBlogPostEntry[] = await getPostsByTag(tagName);
+const posts: BlogPost[] = await getPostsByTag(tagName);
 ---
 
 <MainLayout title={`${tagName} - 标签 - 我的博客`}>

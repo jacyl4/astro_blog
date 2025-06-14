@@ -1,22 +1,23 @@
 ---
 // 博客文章卡片组件，展示标题、摘要、分类等
-import { getSiteLink } from '../utils/urlUtils';
-import type { FullBlogPostEntry } from '../services/BlogService'; // 从 BlogService 导入 FullBlogPostEntry 类型
+import { getSiteLink } from '@/utils/urlUtils';
+import type { BlogPost } from '@/services/BlogService';
 
 interface Props {
-  post: FullBlogPostEntry;
+  post: BlogPost;
 }
 
 const { post } = Astro.props;
-
 ---
 
-<article class="article-card">
-  <a href={getSiteLink(`posts/${post.slug}/`)}>
-    <h2 class="font-bold text-xl">{post.data.title}</h2>
+<article class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+  <a href={`/posts/${post.slug}/`}>
+    <h2 class="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">{post.data.title}</h2>
   </a>
-  {post.excerptHtml && (
-    <div class="prose dark:prose-invert max-w-none mb-4" set:html={post.excerptHtml} />
+  {post.data.description && (
+    <p class="text-gray-600 dark:text-gray-400 mb-4">{post.data.description}</p>
   )}
-  <a href={getSiteLink(`posts/${post.slug}/`)} class="text-blue-600 hover:underline">阅读更多 &rarr;</a>
+  <a href={`/posts/${post.slug}/`} class="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
+    阅读更多 &rarr;
+  </a>
 </article>

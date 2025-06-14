@@ -13,9 +13,11 @@
     "@astrojs/check": "^0.9.4",
     "@shikijs/themes": "^3.6.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.10",
     "astro": "^5.9.3",
-    "tailwindcss": "^4.1.8"
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0",
+    "tailwindcss": "^4.1.10"
   },
   "devDependencies": {
     "@types/estree": "^1.0.8",
