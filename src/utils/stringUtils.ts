@@ -13,10 +13,13 @@ export function slugify(text: string): string {
 
   let slug = text.toString().toLowerCase().trim();
 
-  // 移除所有非 ASCII 字符
-  slug = slug.replace(/[^\x00-\x7F]/g, ''); 
+  // 对整个字符串进行 URL 编码，以处理非 ASCII 字符（如中文）
+  // 然后再进行 slugify 处理
+  slug = encodeURIComponent(slug);
   
   // Convert whitespace to hyphens
+  // 注意：encodeURIComponent 已经处理了空格，这里可能不再需要
+  // 但为了兼容性，保留此行，确保任何剩余的空白符也被处理
   slug = slug.replace(/\s+/g, '-');
   
   // Remove characters that are not letters, numbers, or hyphens.

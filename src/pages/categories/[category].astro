@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   const validCategories = categories.filter(cat => cat.slug && cat.slug.trim() !== '');
   
   return validCategories.map((category) => ({
-    params: { category: category.slug },
+    params: { category: category.name }, // 使用原始分类名称作为路由参数
     props: { categoryName: category.name },
   }));
 }
@@ -39,7 +39,4 @@ const posts: FullBlogPostEntry[] = await getPostsByCategory(categoryName);
     </div>
   )}
   
-  <div class="mt-10 pt-6 border-t dark:border-gray-700">
-    <a href="/categories" class="text-blue-600 dark:text-blue-400 hover:underline">&larr; 返回分类列表</a>
-  </div>
 </MainLayout>

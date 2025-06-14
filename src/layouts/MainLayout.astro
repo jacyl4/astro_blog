@@ -2,14 +2,17 @@
 // 全站主布局，包含头部导航、内容插槽
 import '../styles/global.css';
 import NavigationBar from '../components/NavigationBar.astro';
+import CategoryList from '../components/CategoryList.astro'; // 引入 CategoryList 组件
+import TagList from '../components/TagList.astro'; // 引入 TagList 组件
 import { getCollection } from 'astro:content';
 
 interface Props {
   title: string;
   description?: string;
+  showSidebar?: boolean; // 新增属性
 }
 
-const { title, description = '我的Astro博客' } = Astro.props;
+const { title, description = '我的Astro博客', showSidebar = true } = Astro.props; // 默认显示侧栏
 
 const allPosts = await getCollection('blog');
 
@@ -77,20 +80,24 @@ const uniqueMonths = [...new Set(allPosts
         <!-- 正文和侧栏区域 -->
         <div class="flex">
           <!-- 正文 -->
-          <main class="w-3/4 p-8 border-r border-gray-300">
+          <main class={showSidebar ? "w-3/4 p-8 border-r border-gray-300" : "w-full p-8"}>
             <slot />
           </main>
           <!-- 侧栏 -->
-          <aside class="w-1/4 p-8">
-            <h2 class="text-xl font-bold mb-4">Archives</h2>
-            <ul>
-              {uniqueMonths.map(month => (
-                <li class="mb-2">
-                  <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          {showSidebar && (
+            <aside class="w-1/4 p-8 space-y-8"> {/* 添加 space-y-8 增加组件间距 */}
+              <CategoryList /> {/* 添加 CategoryList 组件 */}
+              <TagList /> {/* 添加 TagList 组件 */}
+              <h2 class="text-xl font-bold mb-4">Archives</h2>
+              <ul>
+                {uniqueMonths.map(month => (
+                  <li class="mb-2">
+                    <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          )}
         </div>
 
         <!-- 底栏 -->

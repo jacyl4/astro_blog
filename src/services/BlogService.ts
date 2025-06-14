@@ -112,7 +112,7 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   categoriesMap.forEach((count, name) => {
     categories.push({
       name,
-      slug: slugify(name),
+      slug: name, // 直接使用原始名称作为 slug，与路由保持一致
       count
     });
   });
