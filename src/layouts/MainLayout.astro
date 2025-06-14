@@ -37,6 +37,8 @@ const uniqueMonths = [...new Set(allPosts
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
+    <link rel="preload" as="image" href={cloudsImage.src}>
+    <link rel="preload" as="image" href={headCarImage.src}>
     <style>
       body {
         margin: 0;
