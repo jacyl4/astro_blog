@@ -3,20 +3,12 @@
 */
 
 .astro-code {
-  /* Layout fixes */
   position: relative;
   overflow-x: auto;
   padding: 1rem;
 }
 
-/* 
-  Do NOT style ".astro-code span" here with a blanket color.
-  Shiki applies colors to individual spans with inline styles for syntax highlighting.
-  Overriding it here would break the theme.
-*/
-
 .astro-code code {
-  /* Word wrapping for long lines */
   display: block;
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -77,7 +69,7 @@ html:not(.dark) .astro-code .token.variable {
   color: #076678;
 }
 
-/* gruvbox-dark-medium theme */
+/* gruvbox-dark-medium theme, with !important to override inline styles */
 html.dark .astro-code {
   background-color: #282828 !important;
   color: #ebdbb2 !important;
