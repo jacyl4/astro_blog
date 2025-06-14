@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
-  viewTransitions: true,
+  viewTransitions: {
+    fallback: 'animate',
+  },
   integrations: [],
   vite: {
     plugins: [tailwindcss()],
