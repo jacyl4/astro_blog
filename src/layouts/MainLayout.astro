@@ -5,6 +5,8 @@ import NavigationBar from '../components/NavigationBar.astro';
 import CategoryList from '../components/CategoryList.astro'; // 引入 CategoryList 组件
 import TagList from '../components/TagList.astro'; // 引入 TagList 组件
 import { getCollection } from 'astro:content';
+import cloudsImage from '../assets/images/clouds.webp';
+import headCarImage from '../assets/images/head_car.webp';
 
 interface Props {
   title: string;
@@ -47,7 +49,7 @@ const uniqueMonths = [...new Set(allPosts
         left: 0;
         width: 100%;
         height: 100%; /* 恢复 */
-        background-image: url('/clouds.webp'); /* 恢复为 clouds.webp */
+        background-image: var(--clouds-bg); /* 使用 CSS 变量 */
         background-size: cover;
         background-position: center;
         z-index: -1; /* Place behind content */
@@ -59,14 +61,14 @@ const uniqueMonths = [...new Set(allPosts
       }
       .header-placeholder {
         height: 450px; /* Maintain original header height */
-        background-image: url('/head_car.webp'); /* 设置页头背景 */
+        background-image: var(--head-car-bg); /* 使用 CSS 变量 */
         background-size: cover;
         background-position: center;
         background-color: transparent; /* Make header transparent */
       }
     </style>
   </head>
-  <body class="font-sans">
+  <body class="font-sans" style={`--clouds-bg: url(${cloudsImage.src}); --head-car-bg: url(${headCarImage.src});`}>
     <div class="parallax-bg" id="parallax-bg"></div>
     <div class="content-wrapper">
       <div class="mx-auto my-[21px] max-w-[1152px] shadow-lg bg-white rounded-lg overflow-hidden">
@@ -109,8 +111,6 @@ const uniqueMonths = [...new Set(allPosts
       </div>
     </div>
 
-    <script>
-      // 移除视差滚动效果，确保背景图始终覆盖
-    </script>
+    
   </body>
 </html>
