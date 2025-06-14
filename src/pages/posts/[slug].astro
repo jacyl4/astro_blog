@@ -2,7 +2,6 @@
 // 博客文章详情页
 import MainLayout from '@/layouts/MainLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { getSiteLink } from '@/utils/urlUtils';
 import { slugify } from '@/utils/stringUtils';
 
 export async function getStaticPaths() {
@@ -35,7 +34,7 @@ const formattedDate: string = entry.data.createDate
       {entry.data.categories && entry.data.categories.length > 0 && (
         <div class="mb-1">
           分类:
-          {entry.data.categories.map((category, index) => (
+          {entry.data.categories.map((category) => (
             <a href={`/categories/${encodeURIComponent(category)}/`} class="category-link text-gray-500 hover:underline ml-1">
               {category}
             </a>
@@ -45,7 +44,7 @@ const formattedDate: string = entry.data.createDate
       {entry.data.tags && entry.data.tags.length > 0 && (
         <div class="mb-1">
           标签:
-          {entry.data.tags.map((tag, index) => (
+          {entry.data.tags.map((tag) => (
             <a href={`/tags/${slugify(tag)}/`} class="tag-link text-gray-500 hover:underline ml-1">
               {tag}
             </a>
