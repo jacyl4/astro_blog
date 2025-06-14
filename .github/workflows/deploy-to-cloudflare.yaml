@@ -1,0 +1,71 @@
+# GitHub Action 名称
+name: Deploy to Cloudflare Pages
+
+# 触发条件：允许你从 GitHub Actions 页面手动运行此工作流
+on:
+  workflow_dispatch:
+
+# 任务（Jobs）
+jobs:
+  publish:
+    # 运行环境：使用最新的 Ubuntu
+    runs-on: ubuntu-latest
+    
+    # 权限设置：需要读取代码仓库和写入部署状态的权限
+    permissions:
+      contents: read
+      deployments: write
+      
+    # 步骤
+    steps:
+      # 第一步：检出你的代码
+      # 使用 actions/checkout@v4 拉取你的仓库代码
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 第二步：设置 Node.js 环境
+      # 使用 actions/setup-node@v4 来配置 Node.js 运行环境
+      # 这里使用了最新的 Node.js 22.x 版本。如果需要最高的稳定性，可以考虑换成 '20.x' (LTS版本)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          # 使用缓存来加速后续的 npm install
+          cache: 'npm'
+
+      # 第三步：安装项目依赖
+      # 运行 npm install 来安装 package.json 中定义的所有依赖
+      - name: Install dependencies
+        run: npm install
+
+      # 第四步：构建 Astro 项目
+      # 运行你在 package.json 中定义的 build 脚本
+      # 通常对于 Astro 项目，这会是 'astro build'
+      - name: Build
+        run: npm run build
+
+      # 第五步：发布到 Cloudflare Pages
+      # 使用官方的 Cloudflare Pages Action 来进行部署
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          # 必填：你的 Cloudflare API Token
+          # 请在 GitHub 仓库的 Secrets 中设置，名称为 CLOUDFLARE_API_TOKEN
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          
+          # 必填：你的 Cloudflare 账户 ID
+          # 请在 GitHub 仓库的 Secrets 中设置，名称为 CLOUDFLARE_ACCOUNT_ID
+          # 你可以在 Cloudflare Pages 项目的概览页面找到它
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          
+          # 必填：你的 Cloudflare Pages 项目名称
+          # 请替换成你在 Cloudflare 上创建的项目名称
+          projectName: 'blog' # <-- 请将 'your-astro-blog' 替换成你的项目名
+          
+          # 必填：要发布的目录
+          # Astro build 之后默认的输出目录是 'dist'
+          directory: 'dist'
+          
+          # 可选：GitHub 分支名称
+          # 这个信息会显示在 Cloudflare Pages 的部署记录中
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
