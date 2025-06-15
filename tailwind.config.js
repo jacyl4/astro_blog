@@ -8,7 +8,6 @@ export default {
     extend: {
       fontFamily: {
         sans: ['"Geist Sans"', 'sans-serif'],
-        mono: ['"GeistMono Nerd Font"', 'monospace'],
       },
     },
   },
