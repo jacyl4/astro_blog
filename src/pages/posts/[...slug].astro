@@ -1,9 +1,8 @@
 ---
 // 博客文章详情页
 import MainLayout from '@/layouts/MainLayout.astro';
-import { getAllPosts, getPostBySlug, type ProcessedBlogPost } from '@/services/BlogService';
+import { getAllPosts, getPostBySlug } from '@/services/BlogService';
 import { render } from 'astro:content';
-import { slugify } from '@/utils/stringUtils';
 import { UI_TEXT, DATE_FORMAT, URLS } from '@/consts';
 
 export async function getStaticPaths() {
