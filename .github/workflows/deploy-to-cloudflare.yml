@@ -1,9 +1,17 @@
 # GitHub Action 名称
 name: Deploy to Cloudflare Pages
 
-# 触发条件：允许你从 GitHub Actions 页面手动运行此工作流
+# 触发条件
 on:
+  # 允许你从 GitHub Actions 页面手动运行此工作流
   workflow_dispatch:
+
+  # 新增的触发器：当指定目录文件发生变动时触发
+  push:
+    branches:
+      - main # 注意：请根据你的主分支名称修改，例如 'master'
+    paths:
+      - 'src/content/blog/**' # 监视 src/content/blog/ 目录下的所有文件和子目录
 
 # 任务（Jobs）
 jobs:
