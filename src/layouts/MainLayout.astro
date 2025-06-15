@@ -23,7 +23,7 @@ const uniqueMonths = await getArchiveMonths();
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN" transition:animate="fade">
+<html lang="zh-CN" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -38,6 +38,9 @@ const uniqueMonths = await getArchiveMonths();
     <link rel="preload" as="image" href={cloudsImage.src}>
     <link rel="preload" as="image" href={headCarImage.src}>
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
       body {
         margin: 0;
         padding: 0;
@@ -68,23 +71,31 @@ const uniqueMonths = await getArchiveMonths();
       }
 
       ::view-transition-old(main-content) {
-        animation: fade-out 0.4s ease-out forwards;
+        animation: fade-and-slide-out 0.5s ease-in-out forwards;
       }
       ::view-transition-new(main-content) {
-        animation: fade-in 0.4s ease-in forwards;
+        animation: fade-and-slide-in 0.5s ease-in-out forwards;
       }
 
-      @keyframes fade-in {
+      @keyframes fade-and-slide-in {
         from {
           opacity: 0;
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
+          transform: translateY(0);
         }
       }
-      @keyframes fade-out {
-        from { opacity: 1; }
-        to { opacity: 0; }
+      @keyframes fade-and-slide-out {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
       }
     </style>
   </head>
@@ -132,6 +143,13 @@ const uniqueMonths = await getArchiveMonths();
       </div>
     </div>
 
-    
+    <script>
+      document.addEventListener('astro:after-swap', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    </script>
   </body>
 </html>
