@@ -6,7 +6,7 @@ export const NAVIGATION_LINKS = [
     { href: '/about/', text: 'About' },
 ];
 
-export const POST_READ_MORE_TEXT = '阅读更多 &rarr;';
+export const POST_READ_MORE_TEXT = '阅读更多 →';
 
 export const URLS = {
     posts: '/posts',
