@@ -1,9 +1,10 @@
 ---
-title: "Debian XFCE 初始化"
-createDate: 2025-06-08
-description: "Debian XFCE 初始化配置指南。"
-categories: ["Linux", "Debian"]
-tags: ["XFCE", "初始化", "配置", "WireGuard", "Rime"]
+tags:
+  - "#apt"
+  - "#linux-configuration"
+  - "#package-management"
+  - "#shell-scripting"
+creation_date: 2025-04-22
 ---
 自动登录
 编辑/etc/lightdm/lightdm.conf
@@ -83,3 +84,5 @@ fi
 启动命令，以便输密码
 ```bash
 pkexec /path/to/your/wireguard_toggle.sh
+```
+
