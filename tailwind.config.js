@@ -6,10 +6,6 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-      },
       fontFamily: {
         sans: ['"Geist Sans"', 'sans-serif'],
       },
