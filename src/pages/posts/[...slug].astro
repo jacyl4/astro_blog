@@ -30,8 +30,8 @@ if (!post) {
 
 const { Content } = await render(post);
 
-const formattedDate: string = post.data.creation_date
-  ? post.data.creation_date.toLocaleDateString(DATE_FORMAT.locale, DATE_FORMAT.options as Intl.DateTimeFormatOptions)
+const formattedDate: string = post.data.created
+  ? post.data.created.toLocaleDateString(DATE_FORMAT.locale, DATE_FORMAT.options as Intl.DateTimeFormatOptions)
   : UI_TEXT.unknownDate;
 ---
 

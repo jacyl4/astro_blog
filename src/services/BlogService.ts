@@ -65,8 +65,8 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
     }) as ProcessedBlogPost[];
 
     const posts = postsWithCategory.sort((a, b) => {
-      const dateA = a.data.creation_date?.getTime() ?? 0;
-      const dateB = b.data.creation_date?.getTime() ?? 0;
+      const dateA = a.data.created?.getTime() ?? 0;
+      const dateB = b.data.created?.getTime() ?? 0;
       return dateB - dateA;
     });
 
@@ -99,7 +99,7 @@ export async function getArchiveMonths(): Promise<string[]> {
   const months = new Set<string>();
 
   allPosts.forEach(post => {
-    const date = post.data.creation_date;
+    const date = post.data.created;
     if (date) {
       const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
       months.add(month);
