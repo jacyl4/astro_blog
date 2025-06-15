@@ -102,14 +102,16 @@ const uniqueMonths = await getArchiveMonths();
   <body class="font-sans" style={`--clouds-bg: url(${cloudsImage.src}); --head-car-bg: url(${headCarImage.src});`}>
     <div class="parallax-bg" id="parallax-bg"></div>
     <div class="content-wrapper">
-      <div id="main-content" transition:name="main-content" class="mx-auto my-[21px] max-w-[1152px] shadow-lg rounded-lg overflow-hidden" style="background-color: var(--main-content-bg);">
+    <div class="mx-auto my-[21px] max-w-[1152px] relative">
+      <div id="main-content" transition:name="main-content" class="shadow-lg rounded-lg overflow-hidden" style="background-color: var(--main-content-bg);">
         <!-- 页头 -->
         <div class="header-placeholder relative">
           <header>
           </header>
-          <NavigationBar />
           <ThemeSwitcher />
         </div>
+
+        <NavigationBar />
 
         <!-- 正文和侧栏区域 -->
         <div class="flex">
@@ -119,7 +121,7 @@ const uniqueMonths = await getArchiveMonths();
           </main>
           <!-- 侧栏 -->
           {showSidebar && (
-            <aside class="w-1/4 p-8 space-y-8 border-l border-[var(--divider-shadow-light)]"> {/* 添加 space-y-8 增加组件间距 */}
+            <aside class="w-1/4 p-8 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]"> {/* 添加 space-y-8 增加组件间距 */}
               <CategoryList /> {/* 添加 CategoryList 组件 */}
               <TagList /> {/* 添加 TagList 组件 */}
               <h2 class="text-xl font-bold mb-4">Archives</h2>
@@ -135,12 +137,13 @@ const uniqueMonths = await getArchiveMonths();
         </div>
 
         <!-- 底栏 -->
-        <footer class="h-[39px] p-4 flex items-center justify-end border-t border-[var(--divider-shadow-dark)]" style="background-color: var(--footer-bg);">
+        <footer class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); box-shadow: var(--footer-shadow); border-top: 1px solid var(--divider-shadow-dark);">
           <p class="text-sm">
             <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-transparent [text-shadow:-0.5px_-0.5px_0.5px_var(--text-shadow-dark),0.5px_0.5px_0.5px_var(--text-shadow-light)]">Powered by Astro</a>
           </p>
         </footer>
       </div>
+      <img src="/avatar.webp" alt="Avatar" class="absolute top-[450px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-lg z-10">
     </div>
 
     <script>

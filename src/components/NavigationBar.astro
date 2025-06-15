@@ -12,14 +12,12 @@ import { NAVIGATION_LINKS } from '@/consts';
 
 <style>
   nav {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
     backdrop-filter: blur(4px);
-    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
     height: 2.25rem; /* 36px */
+    background-color: rgba(var(--main-content-bg-rgb), 0.85);
+    border-top: 1px solid var(--divider-shadow-dark);
+    border-bottom: 1px solid var(--divider-shadow-dark);
+    box-shadow: var(--nav-shadow);
   }
 
   a {
