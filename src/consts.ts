@@ -1,4 +1,4 @@
-export const SITE_TITLE = 'Jacyl4';
+export const SITE_TITLE = 'JacyL4';
 export const SITE_DESCRIPTION = '一个专注于技术、生活和学习的个人博客。';
 
 export const NAVIGATION_LINKS = [
