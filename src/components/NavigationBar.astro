@@ -1,13 +1,17 @@
 ---
 import { NAVIGATION_LINKS } from '@/consts';
+import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
 ---
 
-<nav>
-  <ul class="flex justify-start h-full pl-4">
+<nav class="flex items-center justify-between px-4">
+  <ul class="flex justify-start h-full">
     {NAVIGATION_LINKS.map(link => (
       <li><a href={link.href} class="h-full flex items-center px-6 font-semibold transition-colors duration-200">{link.text}</a></li>
     ))}
   </ul>
+  <div class="pr-4">
+    <ThemeSwitcher />
+  </div>
 </nav>
 
 <style>
@@ -23,6 +27,10 @@ import { NAVIGATION_LINKS } from '@/consts';
   a {
     color: var(--nav-text-color);
     background-color: transparent;
+  }
+
+  html:not(.dark) a {
+    color: var(--text-color);
   }
 
   html.dark a {
