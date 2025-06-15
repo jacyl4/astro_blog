@@ -11,7 +11,7 @@ const { post } = Astro.props;
 const postUrl = `${URLS.posts}/${post.slug}/`;
 ---
 
-<article class="bg-card p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+<article class="bg-card p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
   <a href={postUrl}>
     <h2 class="font-bold text-xl text-text-primary mb-2">{post.data.title}</h2>
   </a>
