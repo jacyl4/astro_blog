@@ -20,11 +20,19 @@
     z-index: 10; /* Ensure it's above other header elements */
   }
 
-  .sun { fill: black; }
-  .moon { fill: transparent; }
+  .sun {
+    fill: var(--text-color);
+  }
+  .moon {
+    fill: transparent;
+  }
 
-  :global(.dark) .sun { fill: transparent; }
-  :global(.dark) .moon { fill: white; }
+  :global(.dark) .sun {
+    fill: transparent;
+  }
+  :global(.dark) .moon {
+    fill: var(--text-color);
+  }
 </style>
 
 <script is:inline>

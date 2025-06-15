@@ -1,9 +1,34 @@
 ---
 ---
 
-<nav class="absolute bottom-0 left-0 right-0 z-10 bg-black/40 backdrop-blur-sm shadow-lg h-9">
-  <ul class="flex justify-center h-full">
-    <li><a href="/" class="h-full flex items-center px-6 text-gray-200 font-semibold bg-transparent hover:bg-black/20 transition-colors duration-200">Blog</a></li>
-    <li><a href="/about/" class="h-full flex items-center px-6 text-gray-200 font-semibold bg-transparent hover:bg-black/20 transition-colors duration-200">Me</a></li>
+<nav>
+  <ul class="flex justify-start h-full pl-4">
+    <li><a href="/" class="h-full flex items-center px-6 font-semibold transition-colors duration-200">Blog</a></li>
+    <li><a href="/about/" class="h-full flex items-center px-6 font-semibold transition-colors duration-200">Me</a></li>
   </ul>
 </nav>
+
+<style>
+  nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+    height: 2.25rem; /* 36px */
+  }
+
+  a {
+    color: var(--nav-text-color);
+    background-color: transparent;
+  }
+
+  html.dark a {
+    color: var(--text-color);
+  }
+
+  a:hover {
+  }
+</style>

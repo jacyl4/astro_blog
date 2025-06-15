@@ -6,17 +6,10 @@ h1 {
   line-height: 2.25rem !important;
 }
 
-@font-face {
-  font-family: 'GeistMono Nerd Font';
-  src: url('/fonts/GeistMonoNerdFont-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* 确保 Shiki 生成的代码块使用此字体 */
 .shiki {
-  font-family: 'GeistMono Nerd Font', monospace;
+  font-family: 'Geist Sans', sans-serif;
 }
 
 /* 为文章正文内容中的标题应用粗体和稍微放大的样式 */
@@ -44,39 +37,4 @@ h1 {
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-}
-
-/* View Transitions 动画 */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes slide-from-right {
-  from {
-    transform: translateX(30px);
-  }
-}
-
-@keyframes slide-to-left {
-  to {
-    transform: translateX(-30px);
-  }
-}
-
-::view-transition-old(root) {
-  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
-}
-
-::view-transition-new(root) {
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
