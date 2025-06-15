@@ -3,6 +3,7 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { slugify } from '@/utils/stringUtils';
+import { UI_TEXT, DATE_FORMAT, URLS } from '@/consts';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
@@ -18,24 +19,20 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 
 const formattedDate: string = entry.data.createDate
-  ? entry.data.createDate.toLocaleDateString('zh-CN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  : '未知日期';
+  ? entry.data.createDate.toLocaleDateString(DATE_FORMAT.locale, DATE_FORMAT.options as Intl.DateTimeFormatOptions)
+  : UI_TEXT.unknownDate;
 ---
 
-<MainLayout title={entry.data.title || '无标题文章'}>
+<MainLayout title={entry.data.title || UI_TEXT.untitledPost}>
   <article>
     <h1 class="font-bold text-2xl mb-4">{entry.data.title}</h1>
     <div class="post-meta text-gray-500 mb-8">
-      {formattedDate && <div class="mb-1">发布日期: {formattedDate}</div>}
+      {formattedDate && <div class="mb-1">{UI_TEXT.publishDate}: {formattedDate}</div>}
       {entry.data.categories && entry.data.categories.length > 0 && (
         <div class="mb-1">
-          分类:
+          {UI_TEXT.category}:
           {entry.data.categories.map((category) => (
-            <a href={`/categories/${encodeURIComponent(category)}/`} class="category-link text-gray-500 hover:underline ml-1">
+            <a href={`${URLS.categories}/${encodeURIComponent(category)}/`} class="category-link text-gray-500 hover:underline ml-1">
               {category}
             </a>
           )).reduce((prev, curr) => <>{prev}, {curr}</>)}
@@ -43,9 +40,9 @@ const formattedDate: string = entry.data.createDate
       )}
       {entry.data.tags && entry.data.tags.length > 0 && (
         <div class="mb-1">
-          标签:
+          {UI_TEXT.tag}:
           {entry.data.tags.map((tag) => (
-            <a href={`/tags/${slugify(tag)}/`} class="tag-link text-gray-500 hover:underline ml-1">
+            <a href={`${URLS.tags}/${slugify(tag)}/`} class="tag-link text-gray-500 hover:underline ml-1">
               {tag}
             </a>
           )).reduce((prev, curr) => <>{prev}, {curr}</>)}

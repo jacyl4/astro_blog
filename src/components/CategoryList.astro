@@ -1,17 +1,18 @@
 ---
 import { getAllCategories } from '@/services/BlogService';
 import type { BlogCategory } from '@/services/BlogService';
+import { UI_TEXT, URLS } from '@/consts';
 
 const categories = await getAllCategories();
 ---
 
 <div>
-  <h2 class="text-xl font-bold mb-4">分类</h2>
+  <h2 class="text-xl font-bold mb-4">{UI_TEXT.categoriesTitle}</h2>
   <ul>
     {categories.map((category: BlogCategory) => (
       <li class="mb-2">
         <a 
-          href={`/categories/${category.slug}/`}
+          href={`${URLS.categories}/${category.slug}/`}
           class="text-gray-600 hover:underline"
         >
           {category.name} ({category.count})
@@ -20,6 +21,6 @@ const categories = await getAllCategories();
     ))}
   </ul>
   {categories.length === 0 && (
-    <p class="text-gray-600">暂无分类。</p>
+    <p class="text-gray-600">{UI_TEXT.noCategories}</p>
   )}
 </div>

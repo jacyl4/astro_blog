@@ -4,12 +4,13 @@ import MainLayout from '../layouts/MainLayout.astro';
 import BlogPostCard from '../components/BlogPostCard.astro';
 import { getAllPosts } from '../services/BlogService';
 import type { BlogPost } from '../services/BlogService'; // 从 BlogService 导入 BlogPost 类型
+import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '../consts';
 
 const posts: BlogPost[] = await getAllPosts();
 ---
 
-<MainLayout title="首页 - 我的博客">
-  <h1 class="text-3xl font-bold mb-8">文章列表</h1>
+<MainLayout title={`${PAGE_TITLES.home} - ${SITE_TITLE}`}>
+  <h1 class="text-3xl font-bold mb-8">{UI_TEXT.postList}</h1>
   
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {posts.map((post) => (
@@ -19,7 +20,7 @@ const posts: BlogPost[] = await getAllPosts();
   
   {posts.length === 0 && (
     <div>
-      <p>暂无文章。</p>
+      <p>{UI_TEXT.noPosts}</p>
     </div>
   )}
 </MainLayout>

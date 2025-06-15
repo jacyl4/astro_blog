@@ -3,6 +3,7 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
 import { getAllTags, getPostsByTag, type BlogPost } from '@/services/BlogService';
+import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
@@ -19,10 +20,10 @@ const { tagName } = Astro.props;
 const posts: BlogPost[] = await getPostsByTag(tagName);
 ---
 
-<MainLayout title={`${tagName} - 标签 - 我的博客`}>
+<MainLayout title={`${tagName} - ${PAGE_TITLES.tags} - ${SITE_TITLE}`}>
   <h1 class="text-3xl font-bold mb-4">{tagName}</h1>
   <p class="text-gray-600 dark:text-gray-400 mb-8">
-    该标签共有 {posts.length} 篇文章
+    {UI_TEXT.postsInTag(posts.length)}
   </p>
   
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -33,7 +34,7 @@ const posts: BlogPost[] = await getPostsByTag(tagName);
   
   {posts.length === 0 && (
     <div class="text-center py-12">
-      <p class="text-xl text-gray-600 dark:text-gray-400">该标签下暂无文章</p>
+      <p class="text-xl text-gray-600 dark:text-gray-400">{UI_TEXT.noPostsInTag}</p>
     </div>
   )}
   

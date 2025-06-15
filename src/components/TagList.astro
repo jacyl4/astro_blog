@@ -1,17 +1,18 @@
 ---
 import { getAllTags } from '@/services/BlogService';
 import type { BlogTag } from '@/services/BlogService';
+import { UI_TEXT, URLS } from '@/consts';
 
 const tags = await getAllTags();
 ---
 
 <div>
-  <h2 class="text-xl font-bold mb-4">标签</h2>
+  <h2 class="text-xl font-bold mb-4">{UI_TEXT.tagsTitle}</h2>
   <ul>
     {tags.map((tag: BlogTag) => (
       <li class="mb-2">
         <a 
-          href={`/tags/${tag.slug}/`}
+          href={`${URLS.tags}/${tag.slug}/`}
           class="text-gray-600 hover:underline"
         >
           {tag.name} ({tag.count})
@@ -20,6 +21,6 @@ const tags = await getAllTags();
     ))}
   </ul>
   {tags.length === 0 && (
-    <p class="text-gray-600">暂无标签。</p>
+    <p class="text-gray-600">{UI_TEXT.noTags}</p>
   )}
 </div>

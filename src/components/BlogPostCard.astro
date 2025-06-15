@@ -1,22 +1,24 @@
 ---
 // 博客文章卡片组件，展示标题、摘要、分类等
 import type { BlogPost } from '@/services/BlogService';
+import { POST_READ_MORE_TEXT, URLS } from '@/consts';
 
 interface Props {
   post: BlogPost;
 }
 
 const { post } = Astro.props;
+const postUrl = `${URLS.posts}/${post.slug}/`;
 ---
 
 <article class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
-  <a href={`/posts/${post.slug}/`}>
+  <a href={postUrl}>
     <h2 class="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2">{post.data.title}</h2>
   </a>
   {post.data.description && (
     <p class="text-gray-600 dark:text-gray-400 mb-4">{post.data.description}</p>
   )}
-  <a href={`/posts/${post.slug}/`} class="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
-    阅读更多 &rarr;
+  <a href={postUrl} class="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
+    {POST_READ_MORE_TEXT}
   </a>
 </article>

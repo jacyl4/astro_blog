@@ -1,10 +1,12 @@
 ---
+import { NAVIGATION_LINKS } from '@/consts';
 ---
 
 <nav>
   <ul class="flex justify-start h-full pl-4">
-    <li><a href="/" class="h-full flex items-center px-6 font-semibold transition-colors duration-200">Blog</a></li>
-    <li><a href="/about/" class="h-full flex items-center px-6 font-semibold transition-colors duration-200">Me</a></li>
+    {NAVIGATION_LINKS.map(link => (
+      <li><a href={link.href} class="h-full flex items-center px-6 font-semibold transition-colors duration-200">{link.text}</a></li>
+    ))}
   </ul>
 </nav>
 
