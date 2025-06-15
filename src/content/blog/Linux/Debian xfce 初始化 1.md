@@ -4,7 +4,7 @@ tags:
   - "#linux-configuration"
   - "#package-management"
   - "#shell-scripting"
-creation_date: 2025-04-22
+created: 2025-04-22
 ---
 自动登录
 编辑/etc/lightdm/lightdm.conf

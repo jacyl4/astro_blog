@@ -6,7 +6,7 @@ tags:
   - "#ceph"
   - "#glusterfs"
   - "#drbd"
-creation_date: 2025-01-12
+created: 2025-01-12
 ---
 1. 执行摘要
 

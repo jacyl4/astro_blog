@@ -11,7 +11,7 @@ tags:
   - "#astro-blog-tutorial"
   - "#static-site-generation"
   - "#content-focused-framework"
-creation_date: 2025-05-01
+created: 2025-05-01
 ---
 第一章：开启您的 Astro 之旅：现代博客的强大引擎
 1.1 Astro 是什么？为何它是您博客的理想选择？
