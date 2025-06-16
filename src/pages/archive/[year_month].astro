@@ -1,14 +1,14 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
+import { getAllPosts, type ProcessedBlogPost } from '../../services/BlogService';
 
 type Archive = {
-  [key: string]: CollectionEntry<'blog'>[];
+  [key: string]: ProcessedBlogPost[];
 };
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog');
+  const allPosts = await getAllPosts();
 
   const archives = allPosts.reduce((acc: Archive, post) => {
     if (post.data.created) { // 确保 created 存在
@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 }
 
 interface Props {
-  posts: CollectionEntry<'blog'>[];
+  posts: ProcessedBlogPost[];
   yearMonth: string;
 }
 
@@ -45,7 +45,7 @@ import { SITE_TITLE, UI_TEXT } from '../../consts';
     {UI_TEXT.postsInYearMonth(posts.length, yearMonth)}
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {posts.map((post: CollectionEntry<'blog'>) => (
+    {posts.map((post) => (
       <BlogPostCard post={post} />
     ))}
   </div>
