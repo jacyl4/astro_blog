@@ -1,6 +1,5 @@
 // Astro 配置文件，负责全局构建与 Markdown 渲染等设置
 import { defineConfig } from 'astro/config';
-import cloudflare from '@astrojs/cloudflare';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import tailwindcss from '@tailwindcss/vite';
@@ -10,9 +9,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'hybrid',
   outDir: './dist',
-  integrations: [cloudflare(), swup({
+  integrations: [swup({
     theme: 'fade',
     containers: ['#swup'],
     plugins: [
