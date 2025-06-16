@@ -6,8 +6,6 @@ import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
 import headCarImage from '../assets/images/head_car.webp';
 import wallpaper from '../assets/images/wallpaper.webp';
-import '../styles/global.css';
-import '../styles/shiki.css';
 
 interface Props {
   title: string;
@@ -28,6 +26,243 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <meta property="og:description" content={description} />
     <title>{title}</title>
     <link rel="preload" as="image" href={headCarImage.src}>
+    <style is:global>
+      @import "tailwindcss";
+
+      /* 确保 Shiki 生成的代码块使用此字体 */
+      .shiki {
+        font-family: 'Geist Mono', monospace;
+      }
+
+      /* 为文章正文内容（.prose）中的标题设置优雅、和谐的模块化字体比例 */
+      .prose h1,
+      .prose h2,
+      .prose h3,
+      .prose h4,
+      .prose h5,
+      .prose h6 {
+        font-weight: 700; /* Bold */
+        line-height: 1.3; /* Tighter line height for headings */
+      }
+
+      /* 
+        使用基于 1.25 (Major Third) 的模块化比例尺。
+        基础字号为 1rem (桌面端 18px)。
+      */
+      .prose h1 {
+        font-size: 2.441rem;
+      }
+
+      .prose h2 {
+        font-size: 1.953rem;
+      }
+
+      .prose h3 {
+        font-size: 1.563rem;
+      }
+
+      .prose h4 {
+        font-size: 1.25rem;
+      }
+
+
+      :root {
+        --background-color: #f8f9fa;
+        --card-bg: #ffffff;
+        --main-content-bg: #ffffff;
+        --footer-bg: #f8f9fa;
+        --text-color: #212529;
+        --nav-text-color: var(--text-color);
+        
+        --divider-shadow-dark: rgba(0, 0, 0, 0.1);
+        --divider-shadow-light: #ffffff;
+        --text-shadow-dark: rgba(0, 0, 0, 0.1);
+        --text-shadow-light: rgba(255, 255, 255, 0.5);
+        
+        --shadow-color: rgba(0, 0, 0, 0.05);
+        --shadow-color-secondary: rgba(0, 0, 0, 0.02);
+        --nav-shadow: 0 1px 2px 0 var(--shadow-color);
+        --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+
+        --main-content-bg-rgb: 255, 255, 255;
+      }
+
+      html.dark {
+        --background-color: #121212;
+        --card-bg: #1e1e1e;
+        --main-content-bg: #1e1e1e;
+        --footer-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --nav-text-color: var(--text-color);
+
+        --divider-shadow-dark: rgba(0, 0, 0, 0.5);
+        --divider-shadow-light: rgba(255, 255, 255, 0.1);
+        --text-shadow-dark: rgba(0, 0, 0, 0.5);
+        --text-shadow-light: rgba(255, 255, 255, 0.1);
+
+        --shadow-color: rgba(0, 0, 0, 0.5);
+        --shadow-color-secondary: rgba(0, 0, 0, 0.3);
+        --nav-shadow: 0 1px 2px 0 var(--shadow-color);
+        --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+
+        --main-content-bg-rgb: 30, 30, 30;
+      }
+
+      body {
+        font-family: 'Geist Mono', monospace;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      @media (min-width: 768px) {
+        body {
+          font-size: 18px;
+        }
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        transition: text-decoration-color 0.3s;
+      }
+
+      a:hover {
+        text-decoration: underline;
+        text-decoration-color: var(--text-color);
+      }
+
+      /* 为导航栏和侧栏设置更“秀气”的字体大小 */
+      nav,
+      #sidebar {
+        font-size: 15px;
+      }
+
+      /* from shiki.css */
+      /*
+        Core styles for Shiki to enable themes and fix layout.
+      */
+
+      .astro-code {
+        position: relative;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+
+      .astro-code code {
+        display: block;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      /* Custom Light theme based on user-provided image */
+      html:not(.dark) .astro-code {
+        background-color: #fbf1c7;
+        color: #3c3836;
+      }
+      html:not(.dark) .astro-code .token.comment,
+      html:not(.dark) .astro-code .token.prolog,
+      html:not(.dark) .astro-code .token.doctype,
+      html:not(.dark) .astro-code .token.cdata {
+        color: #928374;
+      }
+      html:not(.dark) .astro-code .token.punctuation {
+        color: #3c3836;
+      }
+      html:not(.dark) .astro-code .token.property,
+      html:not(.dark) .astro-code .token.tag,
+      html:not(.dark) .astro-code .token.boolean,
+      html:not(.dark) .astro-code .token.number,
+      html:not(.dark) .astro-code .token.constant,
+      html:not(.dark) .astro-code .token.symbol,
+      html:not(.dark) .astro-code .token.deleted {
+        color: #9d0006;
+      }
+      html:not(.dark) .astro-code .token.selector,
+      html:not(.dark) .astro-code .token.attr-name,
+      html:not(.dark) .astro-code .token.string,
+      html:not(.dark) .astro-code .token.char,
+      html:not(.dark) .astro-code .token.builtin,
+      html:not(.dark) .astro-code .token.inserted {
+        color: #79740e;
+      }
+      html:not(.dark) .astro-code .token.operator,
+      html:not(.dark) .astro-code .token.entity,
+      html:not(.dark) .astro-code .token.url,
+      html:not(.dark) .astro-code .language-css .token.string,
+      html:not(.dark) .astro-code .style .token.string {
+        color: #b57614;
+      }
+      html:not(.dark) .astro-code .token.atrule,
+      html:not(.dark) .astro-code .token.attr-value,
+      html:not(.dark) .astro-code .token.keyword {
+        color: #9d0006;
+      }
+      html:not(.dark) .astro-code .token.function,
+      html:not(.dark) .astro-code .token.class-name {
+        color: #8f3f71;
+      }
+      html:not(.dark) .astro-code .token.regex,
+      html:not(.dark) .astro-code .token.important,
+      html:not(.dark) .astro-code .token.variable {
+        color: #427b58;
+      }
+
+      /* Custom Dark theme based on user-provided image, with !important to override inline styles */
+      html.dark .astro-code {
+        background-color: #282828 !important;
+        color: #ebdbb2 !important;
+      }
+      html.dark .astro-code .token.comment,
+      html.dark .astro-code .token.prolog,
+      html.dark .astro-code .token.doctype,
+      html.dark .astro-code .token.cdata {
+        color: #928374 !important;
+      }
+      html.dark .astro-code .token.punctuation {
+        color: #ebdbb2 !important;
+      }
+      html.dark .astro-code .token.property,
+      html.dark .astro-code .token.tag,
+      html.dark .astro-code .token.boolean,
+      html.dark .astro-code .token.number,
+      html.dark .astro-code .token.constant,
+      html.dark .astro-code .token.symbol,
+      html.dark .astro-code .token.deleted {
+        color: #fb4934 !important;
+      }
+      html.dark .astro-code .token.selector,
+      html.dark .astro-code .token.attr-name,
+      html.dark .astro-code .token.string,
+      html.dark .astro-code .token.char,
+      html.dark .astro-code .token.builtin,
+      html.dark .astro-code .token.inserted {
+        color: #b8bb26 !important;
+      }
+      html.dark .astro-code .token.operator,
+      html.dark .astro-code .token.entity,
+      html.dark .astro-code .token.url,
+      html.dark .astro-code .language-css .token.string,
+      html.dark .astro-code .style .token.string {
+        color: #fabd2f !important;
+      }
+      html.dark .astro-code .token.atrule,
+      html.dark .astro-code .token.attr-value,
+      html.dark .astro-code .token.keyword {
+        color: #fb4934 !important;
+      }
+      html.dark .astro-code .token.function,
+      html.dark .astro-code .token.class-name {
+        color: #d3869b !important;
+      }
+      html.dark .astro-code .token.regex,
+      html.dark .astro-code .token.important,
+      html.dark .astro-code .token.variable {
+        color: #8ec07c !important;
+      }
+    </style>
     <style>
       @font-face {
         font-family: 'Geist Sans';
@@ -107,7 +342,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
           </p>
         </footer>
         
-        <img id="avatar" src="/avatar.webp" alt="Avatar" class="absolute top-[468px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-soft-lg z-10">
+        <img id="avatar" src="/avatar.webp" alt="Avatar" width="96" height="96" class="absolute top-[468px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-soft-lg z-10">
       </div>
     </div>
   </body>

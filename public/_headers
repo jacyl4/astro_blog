@@ -1,0 +1,7 @@
+# Set a long cache time for static assets
+/_assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# For the HTML, don't cache so we always get the latest version
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

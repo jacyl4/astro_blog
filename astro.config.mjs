@@ -23,11 +23,7 @@ export default defineConfig({
     plugins: [
       new SwupMorphPlugin({
         containers: [
-          '#header-container',
-          '#footer',
-          '#avatar',
-          '#parallax-bg',
-          '#sidebar'
+          '#avatar'
         ]
       })
     ]
