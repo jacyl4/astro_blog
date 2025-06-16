@@ -96,7 +96,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
           <NavigationBar />
         </div>
 
-        <div id="main-content" class="shadow-lg overflow-hidden flex" style="background-color: var(--main-content-bg);">
+        <div id="main-content" class="shadow-soft-lg overflow-hidden flex" style="background-color: var(--main-content-bg);">
           <main id="swup" class="swup-transition-fade w-3/4">
             <div class="p-8">
               <slot />
@@ -110,13 +110,13 @@ const { title, description = '我的Astro博客' } = Astro.props;
           </aside>
         </div>
 
-        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); box-shadow: var(--footer-shadow); border-top: 1px solid var(--divider-shadow-dark);">
+        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-dark);">
           <p class="text-sm">
-            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-transparent [text-shadow:-0.5px_-0.5px_0.5px_var(--text-shadow-dark),0.5px_0.5px_0.5px_var(--text-shadow-light)]">目前样式巨丑，努力施工中。Self-designed, Astro-driven.</a>
+            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-text-primary">目前样式巨丑，努力施工中。Self-designed, Astro-driven.</a>
           </p>
         </footer>
         
-        <img id="avatar" src="/avatar.webp" alt="Avatar" class="absolute top-[450px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-lg z-10">
+        <img id="avatar" src="/avatar.webp" alt="Avatar" class="absolute top-[450px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-soft-lg z-10">
       </div>
     </div>
   </body>

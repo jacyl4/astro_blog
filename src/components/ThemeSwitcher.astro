@@ -33,6 +33,7 @@
 
 <script is:inline>
   let themeToggle;
+  let mediaQuery;
 
   const applyTheme = (theme) => {
     if (theme === 'dark') {
@@ -44,25 +45,45 @@
 
   const handleToggleClick = () => {
     const theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('theme', theme); // Only set localStorage on manual toggle
     applyTheme(theme);
+    // If the user makes a choice, we no longer need to listen to system changes
+    if (mediaQuery) {
+      mediaQuery.removeEventListener('change', handleSystemThemeChange);
+    }
+  };
+
+  // This function is called when the system theme changes
+  const handleSystemThemeChange = (e) => {
+    // If there's a user-set theme in localStorage, do nothing.
+    if (localStorage.getItem('theme')) {
+      return;
+    }
+    // Otherwise, apply the new system theme.
+    const systemTheme = e.matches ? 'dark' : 'light';
+    applyTheme(systemTheme);
   };
 
   const initTheme = () => {
-    // Clean up old listener if it exists
+    // Clean up old listeners if they exist
     if (themeToggle) {
       themeToggle.removeEventListener('click', handleToggleClick);
     }
+    if (mediaQuery) {
+      mediaQuery.removeEventListener('change', handleSystemThemeChange);
+    }
 
-    // Set initial theme based on localStorage or system preference
+    // Set initial theme
     const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme ?? (systemPrefersDark ? 'dark' : 'light');
     
-    applyTheme(initialTheme);
-    // If theme was not in localStorage, save the determined theme
-    if (!savedTheme) {
-      localStorage.setItem('theme', initialTheme);
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else {
+      // If no theme is saved, use system preference
+      mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      applyTheme(mediaQuery.matches ? 'dark' : 'light');
+      // And listen for changes
+      mediaQuery.addEventListener('change', handleSystemThemeChange);
     }
 
     // Find the new button and attach listener
