@@ -4,7 +4,6 @@ import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
-import cloudsImage from '../assets/images/clouds.webp';
 import headCarImage from '../assets/images/head_car.webp';
 import '../styles/global.css';
 import '../styles/shiki.css';
@@ -27,7 +26,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
-    <link rel="preload" as="image" href={cloudsImage.src}>
     <link rel="preload" as="image" href={headCarImage.src}>
     <style>
       @font-face {
@@ -52,16 +50,25 @@ const { title, description = '我的Astro博客' } = Astro.props;
         padding: 0;
         min-height: 100vh; /* 恢复 */
       }
-      .parallax-bg {
-        position: fixed; /* 恢复 */
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%; /* 恢复 */
-        background-image: var(--clouds-bg); /* 使用 CSS 变量 */
-        background-size: cover;
-        background-position: center;
-        z-index: -1; /* Place behind content */
+      /* Premium Background Styles */
+      @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(3deg); }
+      }
+      @keyframes pulse {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 0.3; }
+      }
+      .animate-float { animation: float 8s ease-in-out infinite; }
+      .animate-pulse-slow { animation: pulse 10s ease-in-out infinite; }
+      @keyframes animate-gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .animated-gradient {
+        background-size: 200% 200%;
+        animation: animate-gradient 15s ease-in-out infinite;
       }
       .content-wrapper {
         position: relative;
@@ -85,12 +92,28 @@ const { title, description = '我的Astro博客' } = Astro.props;
       }
     </style>
   </head>
-  <body class="font-sans" style={`--clouds-bg: url(${cloudsImage.src}); --head-car-bg: url(${headCarImage.src});`}>
-    <div id="parallax-bg" class="parallax-bg"></div>
+  <body class="font-sans bg-gray-950" style={`--head-car-bg: url(${headCarImage.src});`}>
+    <!-- Premium Background Container -->
+    <div class="fixed inset-0 -z-10">
+        <!-- Gradient background layer -->
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-400/30 from-5% via-blue-500/30 via-40% to-cyan-600/30 to-90% backdrop-blur-3xl animated-gradient"></div>
+        
+        <!-- Halo effect -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,_transparent_70%)] animate-pulse-slow"></div>
+
+        <!-- Particle effect -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute w-2 h-2 bg-white/10 rounded-full animate-float top-1/4 left-1/4 delay-1000"></div>
+            <div class="absolute w-3 h-3 bg-white/20 rounded-full animate-float bottom-1/4 right-1/4 delay-2000"></div>
+            <div class="absolute w-1 h-1 bg-white/5 rounded-full animate-pulse-slow top-1/2 left-1/2"></div>
+            <div class="absolute w-2 h-2 bg-white/10 rounded-full animate-float top-3/4 left-3/4 delay-3000"></div>
+            <div class="absolute w-1 h-1 bg-white/10 rounded-full animate-float bottom-1/2 right-1/3 delay-4000"></div>
+        </div>
+    </div>
     <div class="content-wrapper">
       <div class="mx-auto my-[21px] max-w-[1152px] relative">
         <div id="header-container">
-          <div class="header-placeholder relative">
+          <div class="header-placeholder relative rounded-t-xl">
             <header></header>
           </div>
           <NavigationBar />
@@ -110,7 +133,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
           </aside>
         </div>
 
-        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-dark);">
+        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end rounded-b-xl" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-dark);">
           <p class="text-sm">
             <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-text-primary">目前样式巨丑，努力施工中。Self-designed, Astro-driven.</a>
           </p>
