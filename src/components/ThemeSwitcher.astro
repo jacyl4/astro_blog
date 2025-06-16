@@ -32,70 +32,35 @@
 </style>
 
 <script is:inline>
-  let themeToggle;
-  let mediaQuery;
+  // This script only handles the click event for the theme toggle button.
+  // The initial theme is set in MainLayout.astro to prevent flashing.
+  const initThemeSwitcher = () => {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
 
-  const applyTheme = (theme) => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    const handleClick = () => {
+      // 1. Determine the new theme.
+      const isDark = document.documentElement.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+
+      // 2. Apply the new theme to the <html> element.
+      document.documentElement.classList.toggle('dark', !isDark);
+
+      // 3. Save the user's preference to localStorage.
+      localStorage.setItem('theme', newTheme);
+    };
+
+    themeToggle.addEventListener('click', handleClick);
+
+    // Clean up the event listener when the component is unmounted (during page transitions).
+    document.addEventListener('astro:before-swap', () => {
+      themeToggle.removeEventListener('click', handleClick);
+    }, { once: true });
   };
 
-  const handleToggleClick = () => {
-    const theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-    localStorage.setItem('theme', theme); // Only set localStorage on manual toggle
-    applyTheme(theme);
-    // If the user makes a choice, we no longer need to listen to system changes
-    if (mediaQuery) {
-      mediaQuery.removeEventListener('change', handleSystemThemeChange);
-    }
-  };
+  // Initialize the switcher on initial page load.
+  initThemeSwitcher();
 
-  // This function is called when the system theme changes
-  const handleSystemThemeChange = (e) => {
-    // If there's a user-set theme in localStorage, do nothing.
-    if (localStorage.getItem('theme')) {
-      return;
-    }
-    // Otherwise, apply the new system theme.
-    const systemTheme = e.matches ? 'dark' : 'light';
-    applyTheme(systemTheme);
-  };
-
-  const initTheme = () => {
-    // Clean up old listeners if they exist
-    if (themeToggle) {
-      themeToggle.removeEventListener('click', handleToggleClick);
-    }
-    if (mediaQuery) {
-      mediaQuery.removeEventListener('change', handleSystemThemeChange);
-    }
-
-    // Set initial theme
-    const savedTheme = localStorage.getItem('theme');
-    
-    if (savedTheme) {
-      applyTheme(savedTheme);
-    } else {
-      // If no theme is saved, use system preference
-      mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      applyTheme(mediaQuery.matches ? 'dark' : 'light');
-      // And listen for changes
-      mediaQuery.addEventListener('change', handleSystemThemeChange);
-    }
-
-    // Find the new button and attach listener
-    themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', handleToggleClick);
-    }
-  };
-
-  // Run on initial page load
-  initTheme();
-
-  // Run after every Astro view transition to re-initialize
-  document.addEventListener('astro:after-swap', initTheme);
+  // Re-initialize the switcher after every Astro view transition.
+  document.addEventListener('astro:after-swap', initThemeSwitcher);
 </script>

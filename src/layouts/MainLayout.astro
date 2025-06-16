@@ -17,28 +17,41 @@ const { title, description = '我的Astro博客' } = Astro.props;
 <html lang="zh-CN">
   <head>
     <script is:inline>
+      // This script is executed before the page is rendered to prevent theme flashing.
       const theme = (() => {
+        // 1. Check for a theme in localStorage.
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
           return localStorage.getItem('theme');
         }
+        // 2. Check for the system's preferred color scheme.
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           return 'dark';
         }
+        // 3. Default to 'light' theme.
         return 'light';
       })();
 
+      // Apply the theme to the <html> element.
       if (theme === 'light') {
         document.documentElement.classList.remove('dark');
       } else {
         document.documentElement.classList.add('dark');
       }
-      // A bit of a hack to handle Astro's island hydration
+
+      // When using Astro's View Transitions, we need to re-apply the theme after a page swap.
       document.addEventListener('astro:after-swap', () => {
-        if (localStorage.getItem('theme') === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+          if (storedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
         }
+        // If no theme is in storage, the initial logic based on media query will handle it,
+        // but we might need to re-evaluate if the user changed system settings while browsing.
+        // For simplicity, we'll rely on the stored theme. If it's not there, we don't do anything on swap,
+        // assuming the initial page load script on the new page will handle it correctly.
       });
     </script>
     <meta charset="UTF-8" />
