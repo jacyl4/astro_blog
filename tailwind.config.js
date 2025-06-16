@@ -4,6 +4,12 @@ export default {
   content: [
     './src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}',
   ],
+  safelist: [
+    'hover:border-accent',
+    'hover:shadow-soft-lg',
+    'hover:-translate-y-1',
+    'group-hover:text-accent',
+  ],
   theme: {
     extend: {
       colors: {
