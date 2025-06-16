@@ -4,13 +4,26 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import tailwindcss from '@tailwindcss/vite';
 import swup from '@swup/astro';
+import SwupMorphPlugin from 'swup-morph-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
   integrations: [swup({
-    morph: ['#main-content']
+    theme: 'fade',
+    containers: ['#swup'],
+    plugins: [
+      new SwupMorphPlugin({
+        containers: [
+          '#header-container',
+          '#footer',
+          '#avatar',
+          '#parallax-bg',
+          '#sidebar'
+        ]
+      })
+    ]
   })],
   vite: {
     plugins: [

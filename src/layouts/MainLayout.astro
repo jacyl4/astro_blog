@@ -12,10 +12,9 @@ import '../styles/shiki.css';
 interface Props {
   title: string;
   description?: string;
-  showSidebar?: boolean; // 新增属性
 }
 
-const { title, description = '我的Astro博客', showSidebar = true } = Astro.props;
+const { title, description = '我的Astro博客' } = Astro.props;
 
 const uniqueMonths = await getArchiveMonths();
 ---
@@ -77,52 +76,45 @@ const uniqueMonths = await getArchiveMonths();
     </style>
   </head>
   <body class="font-sans" style={`--clouds-bg: url(${cloudsImage.src}); --head-car-bg: url(${headCarImage.src});`}>
-    <div class="parallax-bg" id="parallax-bg"></div>
+    <div id="parallax-bg" class="parallax-bg"></div>
     <div class="content-wrapper">
-    <div class="mx-auto my-[21px] max-w-[1152px] relative">
-      <div id="main-content" class="shadow-lg rounded-lg overflow-hidden" style="background-color: var(--main-content-bg);">
-        <!-- 页头 -->
-        <div class="header-placeholder relative">
-          <header>
-          </header>
+      <div class="mx-auto my-[21px] max-w-[1152px] relative">
+        <div id="header-container">
+          <div class="header-placeholder relative">
+            <header></header>
+          </div>
+          <NavigationBar />
         </div>
 
-        <NavigationBar />
-
-        <main id="swup" class="swup-transition-fade">
-          <!-- 正文和侧栏区域 -->
-          <div class="flex">
-            <!-- 正文 -->
-            <div class={showSidebar ? "w-3/4 p-8 border-r border-[var(--divider-shadow-dark)]" : "w-full p-8"}>
+        <div id="main-content" class="shadow-lg overflow-hidden flex" style="background-color: var(--main-content-bg);">
+          <main id="swup" class="swup-transition-fade w-3/4">
+            <div class="p-8">
               <slot />
             </div>
-            <!-- 侧栏 -->
-            {showSidebar && (
-              <aside class="w-1/4 p-8 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]"> {/* 添加 space-y-8 增加组件间距 */}
-                <CategoryList /> {/* 添加 CategoryList 组件 */}
-                <TagList /> {/* 添加 TagList 组件 */}
-                <h2 class="text-xl font-bold mb-4">Archives</h2>
-                <ul>
-                  {uniqueMonths.map(month => (
-                    <li class="mb-2">
-                      <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
-                    </li>
-                  ))}
-                </ul>
-              </aside>
-            )}
-          </div>
-        </main>
+          </main>
 
-        <!-- 底栏 -->
-        <footer class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); box-shadow: var(--footer-shadow); border-top: 1px solid var(--divider-shadow-dark);">
+          <aside id="sidebar" class="w-1/4 p-8 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]">
+            <CategoryList />
+            <TagList />
+            <h2 class="text-xl font-bold mb-4">Archives</h2>
+            <ul>
+              {uniqueMonths.map(month => (
+                <li class="mb-2">
+                  <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+
+        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end" style="background-color: var(--footer-bg); box-shadow: var(--footer-shadow); border-top: 1px solid var(--divider-shadow-dark);">
           <p class="text-sm">
             <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-transparent [text-shadow:-0.5px_-0.5px_0.5px_var(--text-shadow-dark),0.5px_0.5px_0.5px_var(--text-shadow-light)]">目前样式巨丑，努力施工中。Self-designed, Astro-driven.</a>
           </p>
         </footer>
+        
+        <img id="avatar" src="/avatar.webp" alt="Avatar" class="absolute top-[450px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-lg z-10">
       </div>
-      <img src="/avatar.webp" alt="Avatar" class="absolute top-[450px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-lg z-10">
     </div>
-
   </body>
 </html>
