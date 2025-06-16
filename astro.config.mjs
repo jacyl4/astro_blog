@@ -6,13 +6,20 @@ import tailwindcss from '@tailwindcss/vite';
 import swup from '@swup/astro';
 import SwupMorphPlugin from 'swup-morph-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
-  integrations: [swup({
-    theme: 'fade',
-    containers: ['#swup'],
+  integrations: [
+    icon({
+      include: {
+        lucide: ['arrow-right'],
+      },
+    }),
+    swup({
+      theme: 'fade',
+      containers: ['#swup'],
     plugins: [
       new SwupMorphPlugin({
         containers: [

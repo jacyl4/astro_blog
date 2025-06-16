@@ -6,20 +6,18 @@ import { UI_TEXT, URLS } from '@/consts';
 const tags = await getAllTags();
 ---
 
-<div>
-  <h2 class="text-xl font-bold mb-4">{UI_TEXT.tagsTitle}</h2>
-  <ul>
+<div class="flex flex-col gap-2">
+  <h2 class="text-xl font-bold">{UI_TEXT.tagsTitle}</h2>
+  <div class="flex flex-wrap gap-x-2 gap-y-1">
     {tags.map((tag: BlogTag) => (
-      <li class="mb-2">
-        <a 
-          href={`${URLS.tags}/${tag.slug}/`}
-          class="text-gray-600 hover:underline"
-        >
-          {tag.name} ({tag.count})
-        </a>
-      </li>
+      <a 
+        href={`${URLS.tags}/${tag.slug}/`}
+        class="block px-2 py-1 text-sm rounded-md bg-card hover:bg-opacity-80 transition-colors"
+      >
+        {tag.name} <span class="opacity-70">({tag.count})</span>
+      </a>
     ))}
-  </ul>
+  </div>
   {tags.length === 0 && (
     <p class="text-gray-600">{UI_TEXT.noTags}</p>
   )}

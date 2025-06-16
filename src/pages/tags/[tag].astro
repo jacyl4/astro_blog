@@ -2,7 +2,7 @@
 // 标签详情页，展示某标签下所有文章
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
-import { getAllTags, getPostsByTag, type BlogPost } from '@/services/BlogService';
+import { getAllTags, getPostsByTag, type ProcessedBlogPost } from '@/services/BlogService';
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {
@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const tagName = tag; // tag 参数就是原始名称
-const posts: BlogPost[] = await getPostsByTag(tagName);
+const posts: ProcessedBlogPost[] = await getPostsByTag(tagName);
 ---
 
 <MainLayout title={`${tagName} - ${PAGE_TITLES.tags} - ${SITE_TITLE}`}>

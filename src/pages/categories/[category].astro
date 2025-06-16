@@ -2,7 +2,7 @@
 // 分类详情页，展示某分类下所有文章
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
-import { getAllCategories, getPostsByCategory, type BlogPost } from '@/services/BlogService';
+import { getAllCategories, getPostsByCategory, type ProcessedBlogPost } from '@/services/BlogService';
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {
@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { categoryName } = Astro.props;
-const posts: BlogPost[] = await getPostsByCategory(categoryName);
+const posts: ProcessedBlogPost[] = await getPostsByCategory(categoryName);
 ---
 
 <MainLayout title={`${categoryName} - ${PAGE_TITLES.categories} - ${SITE_TITLE}`}>

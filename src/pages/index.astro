@@ -3,10 +3,10 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import BlogPostCard from '../components/BlogPostCard.astro';
 import { getAllPosts } from '../services/BlogService';
-import type { BlogPost } from '../services/BlogService'; // 从 BlogService 导入 BlogPost 类型
+import type { ProcessedBlogPost } from '../services/BlogService'; // 修正导入的类型
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '../consts';
 
-const posts: BlogPost[] = await getAllPosts();
+const posts: ProcessedBlogPost[] = await getAllPosts();
 ---
 
 <MainLayout title={`${PAGE_TITLES.home} - ${SITE_TITLE}`}>

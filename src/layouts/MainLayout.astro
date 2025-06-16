@@ -6,7 +6,7 @@ import TagList from '@/components/TagList.astro';
 import { getArchiveMonths } from '@/services/BlogService';
 import cloudsImage from '../assets/images/clouds.webp';
 import headCarImage from '../assets/images/head_car.webp';
-import '../styles/base.css';
+import '../styles/global.css';
 import '../styles/shiki.css';
 
 interface Props {
@@ -29,11 +29,23 @@ const uniqueMonths = await getArchiveMonths();
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/style.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-mono/style.css" />
     <link rel="preload" as="image" href={cloudsImage.src}>
     <link rel="preload" as="image" href={headCarImage.src}>
     <style>
+      @font-face {
+        font-family: 'Geist Sans';
+        src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@latest/files/geist-sans-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Geist Mono';
+        src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-mono@latest/files/geist-mono-latin-400-normal.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
       html {
         scroll-behavior: smooth;
       }
@@ -93,17 +105,19 @@ const uniqueMonths = await getArchiveMonths();
             </div>
           </main>
 
-          <aside id="sidebar" class="w-1/4 p-8 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]">
+          <aside id="sidebar" class="w-1/4 p-4 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]">
             <CategoryList />
             <TagList />
-            <h2 class="text-xl font-bold mb-4">Archives</h2>
-            <ul>
-              {uniqueMonths.map(month => (
-                <li class="mb-2">
-                  <a href={`/archive/${month}/`} class="text-gray-600 hover:underline">{month}</a>
-                </li>
-              ))}
-            </ul>
+            <div>
+              <h2 class="text-xl font-bold mb-4">归档</h2>
+              <ul class="pl-0">
+                {uniqueMonths.map(month => (
+                  <li class="mb-2">
+                    <a href={`/archive/${month}/`} class="hover:underline">{month}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </aside>
         </div>
 
