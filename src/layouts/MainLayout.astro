@@ -4,8 +4,6 @@ import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
-import headCarImage from '../assets/images/head_car.webp';
-import wallpaper from '../assets/images/wallpaper.webp';
 
 interface Props {
   title: string;
@@ -25,7 +23,34 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
-    <link rel="preload" as="image" href={headCarImage.src}>
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+      // A bit of a hack to handle Astro's island hydration
+      document.addEventListener('astro:after-swap', () => {
+        if (localStorage.getItem('theme') === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      });
+    </script>
+    <link rel="preload" as="image" href="/images/head_car.webp">
+    <link rel="preload" as="image" href="/images/wallpaper.webp">
+    <link rel="preload" as="image" href="/avatar.webp">
     <style is:global>
       @import "tailwindcss";
 
@@ -294,9 +319,13 @@ const { title, description = '我的Astro博客' } = Astro.props;
       html.is-animating .swup-transition-fade {
         opacity: 0;
       }
+      body {
+        --head-car-bg: url('/images/head_car.webp');
+        --wallpaper-bg: url('/images/wallpaper.webp');
+      }
     </style>
   </head>
-  <body style={`--head-car-bg: url(${headCarImage.src}); --wallpaper-bg: url(${wallpaper.src});`}>
+  <body>
     <div class="content-wrapper">
       <div class="mx-auto my-[21px] max-w-[1152px] relative">
         <div id="header-container">
