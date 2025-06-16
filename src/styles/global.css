@@ -2,7 +2,6 @@
 
 /* 确保 Shiki 生成的代码块使用此字体 */
 .shiki {
-  font-family: 'Geist Mono', monospace;
 }
 
 /* 为文章正文内容（.prose）中的标题设置优雅、和谐的模块化字体比例 */
@@ -80,7 +79,6 @@ html.dark {
 }
 
 body {
-  font-family: 'Geist Mono', monospace;
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;

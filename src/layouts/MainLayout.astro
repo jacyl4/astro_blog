@@ -31,7 +31,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
 
       /* 确保 Shiki 生成的代码块使用此字体 */
       .shiki {
-        font-family: 'Geist Mono', monospace;
       }
 
       /* 为文章正文内容（.prose）中的标题设置优雅、和谐的模块化字体比例 */
@@ -109,7 +108,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
       }
 
       body {
-        font-family: 'Geist Mono', monospace;
         background-color: var(--bg-color);
         color: var(--text-color);
         transition: background-color 0.3s, color 0.3s;
@@ -264,20 +262,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
       }
     </style>
     <style>
-      @font-face {
-        font-family: 'Geist Sans';
-        src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@latest/files/geist-sans-latin-400-normal.woff2') format('woff2');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'Geist Mono';
-        src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-mono@latest/files/geist-mono-latin-400-normal.woff2') format('woff2');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
       html {
         scroll-behavior: smooth;
       }
@@ -312,7 +296,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
       }
     </style>
   </head>
-  <body class="font-sans" style={`--head-car-bg: url(${headCarImage.src}); --wallpaper-bg: url(${wallpaper.src});`}>
+  <body style={`--head-car-bg: url(${headCarImage.src}); --wallpaper-bg: url(${wallpaper.src});`}>
     <div class="content-wrapper">
       <div class="mx-auto my-[21px] max-w-[1152px] relative">
         <div id="header-container">
