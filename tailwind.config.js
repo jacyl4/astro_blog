@@ -13,6 +13,8 @@ export default {
         'footer': 'var(--footer-bg)',
         'text-primary': 'var(--text-color)',
         'link': 'var(--link-color)',
+        'accent': 'var(--accent-color)',
+        'border-primary': 'var(--border-color)',
       },
       fontFamily: {
         sans: ['sans-serif'],

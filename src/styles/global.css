@@ -42,6 +42,9 @@
   --main-content-bg: oklch(98% 0.005 255);
   --footer-bg: oklch(96% 0.01 255);
   --text-color: #212529;
+  --link-color: oklch(55% 0.15 255);
+  --accent-color: oklch(60% 0.15 255);
+  --border-color: oklch(90% 0.01 255);
   --nav-text-color: var(--text-color);
   
   --divider-shadow-dark: rgba(0, 0, 0, 0.1);
@@ -63,6 +66,9 @@ html.dark {
   --main-content-bg: oklch(30% 0.03 250);
   --footer-bg: oklch(30% 0.03 250);
   --text-color: #e0e0e0;
+  --link-color: oklch(70% 0.15 250);
+  --accent-color: oklch(70% 0.15 250);
+  --border-color: oklch(40% 0.03 250);
   --nav-text-color: var(--text-color);
 
   --divider-shadow-dark: rgba(0, 0, 0, 0.5);
@@ -98,7 +104,7 @@ a {
 
 a:hover {
   text-decoration: underline;
-  text-decoration-color: var(--text-color);
+  text-decoration-color: var(--link-color);
 }
 
 /* 为导航栏和侧栏设置更“秀气”的字体大小 */
