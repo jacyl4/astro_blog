@@ -16,13 +16,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <meta name="keywords" content="Astro, 博客, 技术, 文章" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <title>{title}</title>
     <script is:inline>
       const theme = (() => {
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -48,6 +41,13 @@ const { title, description = '我的Astro博客' } = Astro.props;
         }
       });
     </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Astro, 博客, 技术, 文章" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <title>{title}</title>
     <link rel="preload" as="image" href="/images/head_car.webp">
     <link rel="preload" as="image" href="/images/wallpaper.webp">
     <link rel="preload" as="image" href="/avatar.webp">
@@ -137,9 +137,8 @@ const { title, description = '我的Astro博客' } = Astro.props;
       }
 
       body {
-        background-color: var(--bg-color);
+        background-color: var(--background-color);
         color: var(--text-color);
-        transition: background-color 0.3s, color 0.3s;
       }
 
       @media (min-width: 768px) {
