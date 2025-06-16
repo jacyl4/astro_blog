@@ -37,10 +37,10 @@
 
 
 :root {
-  --background-color: #f8f9fa;
-  --card-bg: #ffffff;
-  --main-content-bg: #ffffff;
-  --footer-bg: #f8f9fa;
+  --background-color: oklch(96% 0.01 255);
+  --card-bg: oklch(98% 0.005 255);
+  --main-content-bg: oklch(98% 0.005 255);
+  --footer-bg: oklch(96% 0.01 255);
   --text-color: #212529;
   --nav-text-color: var(--text-color);
   
@@ -54,14 +54,14 @@
   --nav-shadow: 0 1px 2px 0 var(--shadow-color);
   --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
 
-  --main-content-bg-rgb: 255, 255, 255;
+  --main-content-bg-rgb: 247, 248, 250;
 }
 
 html.dark {
-  --background-color: #121212;
-  --card-bg: #1e1e1e;
-  --main-content-bg: #1e1e1e;
-  --footer-bg: #1e1e1e;
+  --background-color: oklch(25% 0.03 250);
+  --card-bg: oklch(30% 0.03 250);
+  --main-content-bg: oklch(30% 0.03 250);
+  --footer-bg: oklch(30% 0.03 250);
   --text-color: #e0e0e0;
   --nav-text-color: var(--text-color);
 
@@ -75,11 +75,11 @@ html.dark {
   --nav-shadow: 0 1px 2px 0 var(--shadow-color);
   --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
 
-  --main-content-bg-rgb: 30, 30, 30;
+  --main-content-bg-rgb: 64, 67, 77;
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
 }

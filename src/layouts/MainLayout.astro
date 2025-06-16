@@ -93,20 +93,22 @@ const { title, description = '我的Astro博客' } = Astro.props;
       :root {
         --background-color: #f8f9fa;
         --card-bg: #ffffff;
-        --main-content-bg: #ffffff;
+        --main-content-bg: #f8f9fa;
         --footer-bg: #f8f9fa;
         --text-color: #212529;
         --nav-text-color: var(--text-color);
         
-        --divider-shadow-dark: rgba(0, 0, 0, 0.1);
+        --divider-shadow-dark: rgba(0, 0, 0, 0.2);
         --divider-shadow-light: #ffffff;
         --text-shadow-dark: rgba(0, 0, 0, 0.1);
         --text-shadow-light: rgba(255, 255, 255, 0.5);
+        --text-emboss-shadow: -1px -1px 0 rgba(0, 0, 0, 0.15), 1px 1px 0 rgba(255, 255, 255, 0.8);
         
         --shadow-color: rgba(0, 0, 0, 0.05);
         --shadow-color-secondary: rgba(0, 0, 0, 0.02);
         --nav-shadow: 0 1px 2px 0 var(--shadow-color);
         --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+        --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-dark), inset 2px 0 0 var(--divider-shadow-light);
 
         --main-content-bg-rgb: 255, 255, 255;
       }
@@ -120,14 +122,16 @@ const { title, description = '我的Astro博客' } = Astro.props;
         --nav-text-color: var(--text-color);
 
         --divider-shadow-dark: rgba(0, 0, 0, 0.5);
-        --divider-shadow-light: rgba(255, 255, 255, 0.1);
+        --divider-shadow-light: rgba(255, 255, 255, 0.15);
         --text-shadow-dark: rgba(0, 0, 0, 0.5);
         --text-shadow-light: rgba(255, 255, 255, 0.1);
+        --text-emboss-shadow: -1px -1px 0 rgba(0, 0, 0, 0.6), 1px 1px 0 rgba(255, 255, 255, 0.1);
 
         --shadow-color: rgba(0, 0, 0, 0.5);
         --shadow-color-secondary: rgba(0, 0, 0, 0.3);
         --nav-shadow: 0 1px 2px 0 var(--shadow-color);
         --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+        --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-light), inset 2px 0 0 var(--divider-shadow-dark);
 
         --main-content-bg-rgb: 30, 30, 30;
       }
@@ -153,6 +157,14 @@ const { title, description = '我的Astro博客' } = Astro.props;
       a:hover {
         text-decoration: underline;
         text-decoration-color: var(--text-color);
+      }
+
+      .footer-link:hover {
+        text-decoration: none !important;
+      }
+
+      .text-emboss {
+        text-shadow: var(--text-emboss-shadow);
       }
 
       /* 为导航栏和侧栏设置更“秀气”的字体大小 */
@@ -342,7 +354,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
             </div>
           </main>
 
-          <aside id="sidebar" class="w-1/4 p-4 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]">
+          <aside id="sidebar" class="w-1/4 p-4 pt-24 space-y-8" style="box-shadow: var(--divider-box-shadow);">
             <CategoryList />
             <TagList />
             <ArchiveList />
@@ -351,7 +363,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
 
         <footer id="footer" class="h-[39px] p-4 flex items-center justify-end rounded-b-xl" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-dark);">
           <p class="text-sm">
-            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-text-primary">Self-designed, Astro-driven.</a>
+            <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-text-primary text-emboss footer-link">Self-designed, Astro-driven.</a>
           </p>
         </footer>
         
