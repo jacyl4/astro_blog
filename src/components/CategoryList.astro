@@ -6,20 +6,18 @@ import { UI_TEXT, URLS } from '@/consts';
 const categories = await getAllCategories();
 ---
 
-<div>
-  <h2 class="text-xl font-bold mb-4">{UI_TEXT.categoriesTitle}</h2>
-  <ul class="pl-0">
+<div class="flex flex-col gap-2">
+  <h2 class="text-xl font-bold">{UI_TEXT.categoriesTitle}</h2>
+  <div class="flex flex-col gap-1">
     {categories.map((category: BlogCategory) => (
-      <li class="mb-2">
-        <a 
-          href={`${URLS.categories}/${category.slug}/`}
-          class="hover:underline"
-        >
-          {category.name} <span class="opacity-70">({category.count})</span>
-        </a>
-      </li>
+      <a
+        href={`${URLS.categories}/${category.slug}/`}
+        class="block px-2 py-1 rounded-md hover:bg-card hover:bg-opacity-80 transition-colors"
+      >
+        {category.name} <span class="opacity-70">({category.count})</span>
+      </a>
     ))}
-  </ul>
+  </div>
   {categories.length === 0 && (
     <p class="text-gray-600">{UI_TEXT.noCategories}</p>
   )}

@@ -16,7 +16,7 @@
   word-break: break-all;
 }
 
-/* gruvbox-light-medium theme */
+/* Custom Light theme based on user-provided image */
 html:not(.dark) .astro-code {
   background-color: #fbf1c7;
   color: #3c3836;
@@ -61,15 +61,15 @@ html:not(.dark) .astro-code .token.keyword {
 }
 html:not(.dark) .astro-code .token.function,
 html:not(.dark) .astro-code .token.class-name {
-  color: #b16286;
+  color: #8f3f71;
 }
 html:not(.dark) .astro-code .token.regex,
 html:not(.dark) .astro-code .token.important,
 html:not(.dark) .astro-code .token.variable {
-  color: #076678;
+  color: #427b58;
 }
 
-/* gruvbox-dark-medium theme, with !important to override inline styles */
+/* Custom Dark theme based on user-provided image, with !important to override inline styles */
 html.dark .astro-code {
   background-color: #282828 !important;
   color: #ebdbb2 !important;
@@ -119,5 +119,5 @@ html.dark .astro-code .token.class-name {
 html.dark .astro-code .token.regex,
 html.dark .astro-code .token.important,
 html.dark .astro-code .token.variable {
-  color: #83a598 !important;
+  color: #8ec07c !important;
 }

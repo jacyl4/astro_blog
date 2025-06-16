@@ -12,14 +12,16 @@ export const URLS = {
     posts: '/posts',
     tags: '/tags',
     categories: '/categories',
+    archive: '/archive',
 };
 
 export const UI_TEXT = {
     noTags: '暂无标签。',
     noCategories: '暂无分类。',
+    noArchives: '暂无归档。',
     tagsTitle: '标签',
     categoriesTitle: '分类',
-    archiveTitle: 'Archive',
+    archiveTitle: '归档',
     postsInYearMonth: (count: number, yearMonth: string) => `在 ${yearMonth} 归档中共有 ${count} 篇文章`,
     page_404_title: '404 - 页面未找到',
     page_404_message: '很抱歉，您请求的页面不存在或已被移动。',

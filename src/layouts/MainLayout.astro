@@ -3,7 +3,7 @@
 import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
-import { getArchiveMonths } from '@/services/BlogService';
+import ArchiveList from '@/components/ArchiveList.astro';
 import cloudsImage from '../assets/images/clouds.webp';
 import headCarImage from '../assets/images/head_car.webp';
 import '../styles/global.css';
@@ -15,8 +15,6 @@ interface Props {
 }
 
 const { title, description = '我的Astro博客' } = Astro.props;
-
-const uniqueMonths = await getArchiveMonths();
 ---
 
 <!DOCTYPE html>
@@ -108,16 +106,7 @@ const uniqueMonths = await getArchiveMonths();
           <aside id="sidebar" class="w-1/4 p-4 pt-24 space-y-8 border-l border-[var(--divider-shadow-light)]">
             <CategoryList />
             <TagList />
-            <div>
-              <h2 class="text-xl font-bold mb-4">归档</h2>
-              <ul class="pl-0">
-                {uniqueMonths.map(month => (
-                  <li class="mb-2">
-                    <a href={`/archive/${month}/`} class="hover:underline">{month}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ArchiveList />
           </aside>
         </div>
 
