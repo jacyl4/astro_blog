@@ -3,14 +3,14 @@ import { defineConfig } from 'astro/config';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import tailwindcss from '@tailwindcss/vite';
+import swup from '@swup/astro';
 
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
-  viewTransitions: {
-    fallback: 'animate',
-  },
-  integrations: [],
+  integrations: [swup({
+    morph: ['#main-content']
+  })],
   vite: {
     plugins: [tailwindcss()],
     build: {
