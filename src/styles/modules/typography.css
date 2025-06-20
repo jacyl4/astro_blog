@@ -85,7 +85,7 @@
 
   /* Table Styles */
   .prose table {
-    @apply w-full my-6 border-collapse;
+    @apply w-full my-6 border-collapse block overflow-x-auto;
   }
 
   .prose th,

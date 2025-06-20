@@ -32,7 +32,7 @@ export const UI_TEXT = {
     noPostsInTag: '该标签下暂无文章',
     unknownDate: '未知日期',
     untitledPost: '无标题文章',
-    publishDate: '发布日期',
+    publishDate: '发布',
     category: '分类',
     tag: '标签',
     postList: '文章列表',

@@ -32,29 +32,37 @@ const { Content } = await render(post);
 const formattedDate: string = post.data.created
   ? post.data.created.toLocaleDateString(DATE_FORMAT.locale, DATE_FORMAT.options as Intl.DateTimeFormatOptions)
   : UI_TEXT.unknownDate;
+
 ---
 
 <MainLayout title={post.data.title || UI_TEXT.untitledPost}>
   <article class="prose prose-lg dark:prose-invert max-w-4xl mx-auto mb-4 text-justify">
     <h1 class="mt-0 text-4xl leading-normal">{post.data.title}</h1>
     <div class="post-meta text-gray-500 mb-8">
-      {formattedDate && <div class="mb-1">{UI_TEXT.publishDate}: {formattedDate}</div>}
+      {formattedDate && (
+        <div class="flex mb-1">
+          <span class="font-bold w-16 shrink-0">{UI_TEXT.publishDate}:</span>
+          <span>{formattedDate}</span>
+        </div>
+      )}
       {post.data.category && (
-        <div class="mb-1">
-          {UI_TEXT.category}:
-          <a href={`${URLS.categories}/${post.data.category}/`} class="category-link text-gray-500 hover:underline ml-1">
+        <div class="flex mb-1">
+          <span class="font-bold w-16 shrink-0">{UI_TEXT.category}:</span>
+          <a href={`${URLS.categories}/${post.data.category}/`} class="category-link text-gray-500 hover:underline">
             {post.data.category}
           </a>
         </div>
       )}
       {post.data.tags && post.data.tags.length > 0 && (
-        <div class="mb-1">
-          {UI_TEXT.tag}:
-          {post.data.tags.map((tag: string) => (
-            <a href={`${URLS.tags}/${tag}/`} class="tag-link text-gray-500 hover:underline ml-1">
-              {tag}
-            </a>
-          )).reduce((prev: any, curr: any) => <>{prev}, {curr}</>)}
+        <div class="flex">
+          <span class="font-bold w-16 shrink-0">{UI_TEXT.tag}:</span>
+          <div class="flex flex-wrap gap-x-2 gap-y-1">
+            {post.data.tags.map((tag: string) => (
+              <a href={`${URLS.tags}/${tag}/`} class="tag-link text-gray-500 hover:underline">
+                {tag}
+              </a>
+            ))}
+          </div>
         </div>
       )}
     </div>
