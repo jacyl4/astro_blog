@@ -1,0 +1,19 @@
+/* 为导航栏和侧栏设置更“秀气”的字体大小 */
+nav,
+#sidebar {
+  font-size: 15px;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+.header-placeholder {
+  height: 450px; /* Maintain original header height */
+  background-image: var(--head-car-bg); /* 使用 CSS 变量 */
+  background-size: cover;
+  background-position: center;
+  background-color: transparent; /* Make header transparent */
+}

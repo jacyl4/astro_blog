@@ -1,0 +1,40 @@
+/* 为文章正文内容（.prose）中的标题设置优雅、和谐的模块化字体比例 */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-weight: 700; /* Bold */
+  line-height: 1.3; /* Tighter line height for headings */
+}
+
+/* 
+  使用基于 1.25 (Major Third) 的模块化比例尺。
+  基础字号为 1rem (桌面端 16px)。
+*/
+.prose h1 {
+  font-size: 2.441rem;
+}
+
+.prose h2 {
+  font-size: 1.953rem;
+}
+
+.prose h3 {
+  font-size: 1.563rem;
+}
+
+.prose h4 {
+  font-size: 1.25rem;
+}
+
+.prose p {
+  line-height: 1.8;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}

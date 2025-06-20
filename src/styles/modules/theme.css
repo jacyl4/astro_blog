@@ -1,0 +1,48 @@
+:root {
+  --background-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --main-content-bg: #f8f9fa;
+  --footer-bg: #f8f9fa;
+  --text-color: #212529;
+  --nav-text-color: var(--text-color);
+  
+  --divider-shadow-dark: rgba(0, 0, 0, 0.2);
+  --divider-shadow-light: #ffffff;
+  --text-shadow-dark: rgba(0, 0, 0, 0.1);
+  --text-shadow-light: rgba(255, 255, 255, 0.5);
+  --text-emboss-shadow: -1px -1px 0 rgba(0, 0, 0, 0.15), 1px 1px 0 rgba(255, 255, 255, 0.8);
+  
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --shadow-color-secondary: rgba(0, 0, 0, 0.02);
+  --nav-shadow: 0 1px 2px 0 var(--shadow-color);
+  --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+  --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-dark), inset 2px 0 0 var(--divider-shadow-light);
+
+  --main-content-bg-rgb: 255, 255, 255;
+
+  --head-car-bg: url('/images/head_car.webp');
+  --wallpaper-bg: url('/images/wallpaper.webp');
+}
+
+html.dark {
+  --background-color: #121212;
+  --card-bg: #1e1e1e;
+  --main-content-bg: #1e1e1e;
+  --footer-bg: #1e1e1e;
+  --text-color: #e0e0e0;
+  --nav-text-color: var(--text-color);
+
+  --divider-shadow-dark: rgba(0, 0, 0, 0.5);
+  --divider-shadow-light: rgba(255, 255, 255, 0.15);
+  --text-shadow-dark: rgba(0, 0, 0, 0.5);
+  --text-shadow-light: rgba(255, 255, 255, 0.1);
+  --text-emboss-shadow: -1px -1px 0 rgba(0, 0, 0, 0.6), 1px 1px 0 rgba(255, 255, 255, 0.1);
+
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-color-secondary: rgba(0, 0, 0, 0.3);
+  --nav-shadow: 0 1px 2px 0 var(--shadow-color);
+  --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
+  --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-light), inset 2px 0 0 var(--divider-shadow-dark);
+
+  --main-content-bg-rgb: 30, 30, 30;
+}

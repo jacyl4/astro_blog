@@ -18,15 +18,7 @@ export default defineConfig({
       },
     }),
     swup({
-      theme: 'fade',
-      containers: ['#swup'],
-    plugins: [
-      new SwupMorphPlugin({
-        containers: [
-          '#avatar'
-        ]
-      })
-    ]
+      containers: ['#swup']
   })],
   vite: {
     plugins: [
