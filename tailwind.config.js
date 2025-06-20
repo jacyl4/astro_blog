@@ -69,12 +69,13 @@ export default {
             '--tw-prose-invert-pre-bg': 'rgb(0 0 0 / 50%)',
             '--tw-prose-invert-th-borders': theme('colors.text-primary'),
             '--tw-prose-invert-td-borders': theme('colors.text-primary'),
-            // 增加正文行高
+            // 设置更秀气的字体大小和行高
+            fontSize: '15px',
+            fontWeight: '400',
+            lineHeight: '1.8',
             p: {
               lineHeight: '1.8',
             },
-            // 也可以为整个 .prose 设置基础行高
-            lineHeight: '1.8',
           },
         },
       }),

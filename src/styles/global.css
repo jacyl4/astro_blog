@@ -17,22 +17,22 @@
 
 /* 
   使用基于 1.25 (Major Third) 的模块化比例尺。
-  基础字号为 1rem (桌面端 18px)。
+  基础字号为 15px。
 */
 .prose h1 {
-  font-size: 2.441rem;
+  font-size: 2.25rem; /* 36px */
 }
 
 .prose h2 {
-  font-size: 1.953rem;
+  font-size: 1.875rem; /* 30px */
 }
 
 .prose h3 {
-  font-size: 1.563rem;
+  font-size: 1.5rem; /* 24px */
 }
 
 .prose h4 {
-  font-size: 1.25rem;
+  font-size: 1.25rem; /* 20px */
 }
 
 
@@ -88,12 +88,6 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
-}
-
-@media (min-width: 768px) {
-  body {
-    font-size: 18px;
-  }
 }
 
 a {
