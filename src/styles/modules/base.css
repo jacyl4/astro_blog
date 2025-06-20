@@ -29,6 +29,6 @@ a:hover {
   text-decoration: none !important;
 }
 
-.text-emboss {
-  text-shadow: var(--text-emboss-shadow);
+.text-inset {
+  text-shadow: var(--text-inset-shadow);
 }
