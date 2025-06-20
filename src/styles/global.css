@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "./modules/theme.css";
 @import "./modules/base.css";
-@import "./modules/typography.css";
 @import "./modules/layout.css";
 @import "./modules/animations.css";
 @import "./modules/shiki.css";

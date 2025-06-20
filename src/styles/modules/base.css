@@ -32,3 +32,9 @@ a:hover {
 .text-inset {
   text-shadow: var(--text-inset-shadow);
 }
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}

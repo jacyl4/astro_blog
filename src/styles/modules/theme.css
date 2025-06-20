@@ -8,14 +8,9 @@
   
   --divider-shadow-dark: rgba(0, 0, 0, 0.2);
   --divider-shadow-light: #ffffff;
-  --text-shadow-dark: rgba(0, 0, 0, 0.1);
-  --text-shadow-light: rgba(255, 255, 255, 0.5);
   --text-inset-shadow: -1px -1px 1px rgba(0,0,0,0.1), 1px 1px 1px rgba(255,255,255,0.7);
   
   --shadow-color: rgba(0, 0, 0, 0.05);
-  --shadow-color-secondary: rgba(0, 0, 0, 0.02);
-  --nav-shadow: 0 1px 2px 0 var(--shadow-color);
-  --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
   --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-dark), inset 2px 0 0 var(--divider-shadow-light);
 
   --main-content-bg-rgb: 255, 255, 255;
@@ -34,14 +29,9 @@ html.dark {
 
   --divider-shadow-dark: rgba(0, 0, 0, 0.5);
   --divider-shadow-light: rgba(255, 255, 255, 0.15);
-  --text-shadow-dark: rgba(0, 0, 0, 0.5);
-  --text-shadow-light: rgba(255, 255, 255, 0.1);
   --text-inset-shadow: -1px -1px 1px rgba(0, 0, 0, 0.4), 1px 1px 1px rgba(255, 255, 255, 0.15);
 
   --shadow-color: rgba(0, 0, 0, 0.5);
-  --shadow-color-secondary: rgba(0, 0, 0, 0.3);
-  --nav-shadow: 0 1px 2px 0 var(--shadow-color);
-  --footer-shadow: 0 -1px 2px 0 var(--shadow-color);
   --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-light), inset 2px 0 0 var(--divider-shadow-dark);
 
   --main-content-bg-rgb: 30, 30, 30;
