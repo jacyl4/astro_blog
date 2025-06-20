@@ -39,37 +39,32 @@ const { title, description = '我的Astro博客' } = Astro.props;
         document.documentElement.classList.add('dark');
       }
 
-      // When using Astro's View Transitions, we need to re-apply the theme after a page swap.
+      // This is the final, simplified implementation based on the user's new logic.
       document.addEventListener('astro:after-swap', () => {
+        // Re-apply theme.
         const storedTheme = localStorage.getItem('theme');
         if (storedTheme) {
-          if (storedTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
+          document.documentElement.classList.toggle('dark', storedTheme === 'dark');
         }
-        // If no theme is in storage, the initial logic based on media query will handle it,
-        // but we might need to re-evaluate if the user changed system settings while browsing.
-        // For simplicity, we'll rely on the stored theme. If it's not there, we don't do anything on swap,
-        // assuming the initial page load script on the new page will handle it correctly.
 
-        // Custom scroll behavior for post pages
+        // For post pages, implement the "top, then to avatar" scroll behavior.
         if (window.location.pathname.startsWith('/posts/')) {
-          const avatar = document.getElementById('avatar');
-          if (avatar) {
-            // The avatar is positioned absolutely and centered vertically with `translate-y-1/2`.
-            // `offsetTop` gives the `top` value, so we adjust by half the height to find the top edge.
-            const avatarTopEdge = avatar.offsetTop - (avatar.offsetHeight / 2);
-            
-            // Scroll so the viewport is 21px above the avatar's top edge.
-            const desiredScrollY = avatarTopEdge -21;
+          // 1. Ensure we are at the very top instantly.
+          window.scrollTo({ top: 0, behavior: 'instant' });
 
-            // Scroll to the calculated position, with a timeout to ensure browser compatibility (especially for Edge).
-            setTimeout(() => {
-              window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
-            }, 0);
-          }
+          // 2. Use requestAnimationFrame for the smoothest possible animation timing.
+          // This waits for the browser to be ready for the next paint.
+          requestAnimationFrame(() => {
+            // A second frame gives the browser a moment to process the instant scroll.
+            requestAnimationFrame(() => {
+              const avatar = document.getElementById('avatar');
+              if (avatar) {
+                const avatarTopEdge = avatar.offsetTop - (avatar.offsetHeight / 2);
+                const desiredScrollY = avatarTopEdge - 21;
+                window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
+              }
+            });
+          });
         }
       });
     </script>
