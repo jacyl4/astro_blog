@@ -53,6 +53,22 @@ const { title, description = '我的Astro博客' } = Astro.props;
         // but we might need to re-evaluate if the user changed system settings while browsing.
         // For simplicity, we'll rely on the stored theme. If it's not there, we don't do anything on swap,
         // assuming the initial page load script on the new page will handle it correctly.
+
+        // Custom scroll behavior for post pages
+        if (window.location.pathname.startsWith('/posts/')) {
+          const avatar = document.getElementById('avatar');
+          if (avatar) {
+            // The avatar is positioned absolutely and centered vertically with `translate-y-1/2`.
+            // `offsetTop` gives the `top` value, so we adjust by half the height to find the top edge.
+            const avatarTopEdge = avatar.offsetTop - (avatar.offsetHeight / 2);
+            
+            // Scroll so the viewport is 21px above the avatar's top edge.
+            const desiredScrollY = avatarTopEdge -21;
+
+            // Scroll to the calculated position.
+            window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
+          }
+        }
       });
     </script>
     <meta charset="UTF-8" />
