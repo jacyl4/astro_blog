@@ -12,7 +12,7 @@ const tags = await getAllTags();
     {tags.map((tag: BlogTag) => (
       <a 
         href={`${URLS.tags}/${tag.slug}/`}
-        class="block px-2 py-1 rounded-md bg-card hover:bg-opacity-80 transition-colors"
+        class="block px-2 py-1 rounded-md transition-colors"
       >
         {tag.name} <span class="opacity-70">({tag.count})</span>
       </a>

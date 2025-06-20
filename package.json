@@ -14,7 +14,6 @@
     "@iconify-json/lucide": "^1.2.51",
     "@shikijs/themes": "^3.7.0",
     "@swup/astro": "^1.6.0",
-    "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.10",
     "astro": "^5.10.0",
     "astro-icon": "^1.1.5",

@@ -1,19 +1,27 @@
 :root {
-  --background-color: #f8f9fa;
+  /* A softer, warmer light theme to reduce eye strain */
+  --background-color: #f5f5f5; /* Softer gray */
   --card-bg: #ffffff;
-  --main-content-bg: #f8f9fa;
-  --footer-bg: #f8f9fa;
-  --text-color: #212529;
+  --main-content-bg: #f5f5f5; /* Softer gray */
+  --footer-bg: #f5f5f5; /* Softer gray */
+  --text-color: #343a40; /* Dark gray, less harsh than black */
   --nav-text-color: var(--text-color);
+  --link-color: #007bff; /* A pleasant blue for links */
+  --accent-color: #007bff; /* A pleasant blue for accents */
   
-  --divider-shadow-dark: rgba(0, 0, 0, 0.2);
+  --divider-shadow-dark: rgba(0, 0, 0, 0.15);
   --divider-shadow-light: #ffffff;
-  --text-inset-shadow: -1px -1px 1px rgba(0,0,0,0.1), 1px 1px 1px rgba(255,255,255,0.7);
+  --text-inset-shadow: none; /* Removed shadow for better clarity */
   
-  --shadow-color: rgba(0, 0, 0, 0.05);
+  --shadow-color: rgba(0, 0, 0, 0.04);
   --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-dark), inset 2px 0 0 var(--divider-shadow-light);
 
-  --main-content-bg-rgb: 255, 255, 255;
+  --main-content-bg-rgb: 245, 245, 245;
+
+  --border-color: #dee2e6; /* gray-300 */
+  --border-secondary-color: #dee2e6; /* gray-300 */
+  --surface-secondary-color: #eeeeee; /* gray-200 */
+  --table-stripe-bg: #fafafa; /* gray-50 */
 
   --head-car-bg: url('/images/head_car.webp');
   --wallpaper-bg: url('/images/wallpaper.webp');
@@ -26,6 +34,8 @@ html.dark {
   --footer-bg: #1e1e1e;
   --text-color: #e0e0e0;
   --nav-text-color: var(--text-color);
+  --link-color: #3391ff; /* A slightly brighter blue for dark mode */
+  --accent-color: #3391ff; /* A slightly brighter blue for dark mode */
 
   --divider-shadow-dark: rgba(0, 0, 0, 0.5);
   --divider-shadow-light: rgba(255, 255, 255, 0.15);
@@ -35,4 +45,9 @@ html.dark {
   --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-light), inset 2px 0 0 var(--divider-shadow-dark);
 
   --main-content-bg-rgb: 30, 30, 30;
+
+  --border-color: #374151; /* gray-700 */
+  --border-secondary-color: #374151; /* gray-700 */
+  --surface-secondary-color: #1f2937; /* gray-800 */
+  --table-stripe-bg: #1f2937; /* gray-800 */
 }

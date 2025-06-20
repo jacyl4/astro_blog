@@ -1,6 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: var(--background-color);
+  --color-card: var(--card-bg);
+  --color-main-content: var(--main-content-bg);
+  --color-footer: var(--footer-bg);
+  --color-text: var(--text-color);
+  --color-link: var(--link-color);
+  --color-accent: var(--accent-color);
+  --color-border: var(--border-color);
+  --color-border-secondary: var(--border-secondary-color);
+  --color-surface-secondary: var(--surface-secondary-color);
+}
+
 @import "./modules/theme.css";
 @import "./modules/base.css";
+@import "./modules/typography.css";
 @import "./modules/layout.css";
 @import "./modules/animations.css";
 @import "./modules/shiki.css";

@@ -12,13 +12,13 @@ const { post } = Astro.props;
 const postUrl = `${URLS.posts}/${post.slug}/`;
 ---
 
-<article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary transition-all duration-300 hover:border-accent hover:shadow-soft-lg hover:-translate-y-1">
+<article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary transition-all duration-300 dark:hover:shadow-soft-lg hover:-translate-y-1">
   <a href={postUrl} class="absolute inset-0 z-10" aria-label={`阅读更多关于 ${post.data.title} 的文章`}></a>
   
   <div class="flex flex-col flex-grow">
     <header class="mb-4">
       <a href={postUrl} class="block">
-        <h2 class="font-bold text-xl text-text-primary group-hover:text-accent transition-colors duration-300">{post.data.title}</h2>
+        <h2 class="font-bold text-xl text-text-primary transition-colors duration-300">{post.data.title}</h2>
       </a>
     </header>
     

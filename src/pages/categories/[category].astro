@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   const validCategories = categories.filter(cat => cat.slug && cat.slug.trim() !== '');
   
   return validCategories.map((category) => ({
-    params: { category: category.name }, // 使用原始分类名称作为路由参数
+    params: { category: category.slug },
     props: { categoryName: category.name },
   }));
 }
