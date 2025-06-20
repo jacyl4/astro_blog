@@ -65,8 +65,10 @@ const { title, description = '我的Astro博客' } = Astro.props;
             // Scroll so the viewport is 21px above the avatar's top edge.
             const desiredScrollY = avatarTopEdge -21;
 
-            // Scroll to the calculated position.
-            window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
+            // Scroll to the calculated position, with a timeout to ensure browser compatibility (especially for Edge).
+            setTimeout(() => {
+              window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
+            }, 0);
           }
         }
       });
