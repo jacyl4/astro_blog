@@ -54,6 +54,8 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
       // 返回一个符合 ProcessedBlogPost 类型的新对象
       return {
         ...post,
+        // Overwrite the slug with the generated one if it exists
+        slug: slugify(post.slug),
         data: {
           ...post.data,
           title: inferredTitle, // 确保 title 存在
@@ -119,7 +121,7 @@ export async function getPostBySlug(slug: string): Promise<ProcessedBlogPost | u
 
   const allPosts = await getAllPosts();
   
-  // 直接使用 post.slug 进行匹配
+  // Directly use post.slug for matching. This now works because we've overwritten it in getAllPosts.
   const post = allPosts.find(p => p.slug === slug);
 
   if (!post) {
@@ -146,7 +148,7 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   categoriesMap.forEach((count, name) => {
     categories.push({
       name,
-      slug: name, // 直接使用原始名称作为 slug，与路由保持一致
+      slug: slugify(name),
       count
     });
   });
