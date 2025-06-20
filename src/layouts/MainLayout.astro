@@ -47,25 +47,8 @@ const { title, description = '我的Astro博客' } = Astro.props;
           document.documentElement.classList.toggle('dark', storedTheme === 'dark');
         }
 
-        // For post pages, implement the "top, then to avatar" scroll behavior.
-        if (window.location.pathname.startsWith('/posts/')) {
-          // 1. Ensure we are at the very top instantly.
-          window.scrollTo({ top: 0, behavior: 'instant' });
-
-          // 2. Use requestAnimationFrame for the smoothest possible animation timing.
-          // This waits for the browser to be ready for the next paint.
-          requestAnimationFrame(() => {
-            // A second frame gives the browser a moment to process the instant scroll.
-            requestAnimationFrame(() => {
-              const avatar = document.getElementById('avatar');
-              if (avatar) {
-                const avatarTopEdge = avatar.offsetTop - (avatar.offsetHeight / 2);
-                const desiredScrollY = avatarTopEdge - 21;
-                window.scrollTo({ top: desiredScrollY, behavior: 'smooth' });
-              }
-            });
-          });
-        }
+        // On page transitions, scroll to the top for better consistency.
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     </script>
     <meta charset="UTF-8" />
