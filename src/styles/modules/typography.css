@@ -13,33 +13,33 @@
   }
 
   .prose h1 {
-    @apply text-4xl font-bold mb-5 mt-10;
-    line-height: 1.15;
+    @apply text-3xl font-bold mb-5 mt-5;
+    line-height: 1.1;
   }
 
   .prose h2 {
-    @apply text-3xl font-bold mb-4 mt-8;
-    line-height: 1.2;
+    @apply text-2xl font-bold mb-4 mt-4;
+    line-height: 1.15;
   }
 
   .prose h3 {
-    @apply text-2xl font-bold mb-3 mt-6;
-    line-height: 1.25;
+    @apply text-xl font-bold mb-3 mt-3;
+    line-height: 1.2;
   }
 
   .prose h4 {
-    @apply text-xl font-bold mb-2 mt-4;
-    line-height: 1.35;
+    @apply text-lg font-bold mb-2 mt-2;
+    line-height: 1.3;
   }
 
   .prose h5 {
-    @apply text-lg font-bold mb-2 mt-3;
-    line-height: 1.4;
+    @apply text-base font-bold mb-2 mt-2;
+    line-height: 1.35;
   }
 
   .prose h6 {
-    @apply text-base font-bold mb-1 mt-2;
-    line-height: 1.5;
+    @apply text-sm font-bold mb-1 mt-1;
+    line-height: 1.45;
   }
 
   .prose p {
@@ -94,7 +94,7 @@
   }
 
   .prose th {
-    @apply font-semibold text-left;
+    @apply font-semibold text-left bg-surface-secondary;
   }
 
   /* Zebra striping for table rows */
