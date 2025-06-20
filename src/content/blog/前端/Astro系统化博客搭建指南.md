@@ -1,23 +1,14 @@
 ---
 tags:
-  - "#web-development"
-  - "#code"
-  - "#web-framework"
   - "#static-site-generator"
   - "#blogging-platform"
   - "#content-management"
   - "#static-site-generation"
-  - "#astro-blog-tutorial"
-  - "#content-focused-framework"
-  - "#apt"
-  - "#linux-configuration"
-  - "#package-management"
-  - "#shell-scripting"
-  - "#zettelkasten"
-  - "#flashcards"
-  - "#TailwindCSS"
   - "#Astro"
-  - "#PLG"
+  - "#TailwindCSS"
+  - "#web-development"
+  - "#astro-tutorial"
+  - "#blog-development"
 created: 2025-05-23
 ---
 # **系统化学习 Astro：从零开始构建现代化博客**
