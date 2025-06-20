@@ -22,6 +22,7 @@
   --border-secondary-color: #dee2e6; /* gray-300 */
   --surface-secondary-color: #eeeeee; /* gray-200 */
   --table-stripe-bg: #fafafa; /* gray-50 */
+  --code-bg: #e9ecef;
 
   --head-car-bg: url('/images/head_car.webp');
   --wallpaper-bg: url('/images/wallpaper.webp');
@@ -50,4 +51,5 @@ html.dark {
   --border-secondary-color: #374151; /* gray-700 */
   --surface-secondary-color: #1f2937; /* gray-800 */
   --table-stripe-bg: #1f2937; /* gray-800 */
+  --code-bg: #2c3e50;
 }
