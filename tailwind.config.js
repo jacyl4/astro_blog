@@ -74,7 +74,13 @@ export default {
             fontWeight: '400',
             lineHeight: '1.8',
             p: {
-              lineHeight: '1.8',
+              textAlign: 'justify',
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+            },
+            'h1, h2, h3, h4, h5, h6': {
+              textAlign: 'left',
+              fontFamily: 'serif', // 标题使用衬线字体
             },
           },
         },
