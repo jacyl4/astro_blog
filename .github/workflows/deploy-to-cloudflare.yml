@@ -51,9 +51,9 @@ jobs:
       # 通常对于 Astro 项目，这会是 'astro build'
       - name: Build
         run: npm run build
+      - name: Restore package-lock.json
+        run: git restore package-lock.json
 
-      - name: Check Git Status
-        run: git status
       # 第五步：发布到 Cloudflare Pages
       # 使用官方的 Cloudflare Pages Action 来进行部署
       - name: Publish to Cloudflare Pages
