@@ -31,8 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check Git Status
-        run: git status
+
       # 第二步：设置 Node.js 环境
       # 使用 actions/setup-node@v4 来配置 Node.js 运行环境
       # 这里使用了最新的 Node.js 22.x 版本。如果需要最高的稳定性，可以考虑换成 '20.x' (LTS版本)
