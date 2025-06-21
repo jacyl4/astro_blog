@@ -31,14 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
       # 第二步：设置 Node.js 环境
       # 使用 actions/setup-node@v4 来配置 Node.js 运行环境
       # 这里使用了最新的 Node.js 22.x 版本。如果需要最高的稳定性，可以考虑换成 '20.x' (LTS版本)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           # 使用缓存来加速后续的 npm install
           cache: 'npm'
 
@@ -53,6 +52,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check Git Status
+        run: git status
       # 第五步：发布到 Cloudflare Pages
       # 使用官方的 Cloudflare Pages Action 来进行部署
       - name: Publish to Cloudflare Pages
