@@ -54,7 +54,7 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
       // 返回一个符合 ProcessedBlogPost 类型的新对象
       return {
         ...post,
-        // Overwrite the slug with the generated one if it exists
+        // 使用 slugify 将 Astro 从文件路径生成的默认 slug（可能含中文）转换为全拼音 slug
         slug: slugify(post.slug),
         data: {
           ...post.data,
@@ -121,7 +121,7 @@ export async function getPostBySlug(slug: string): Promise<ProcessedBlogPost | u
 
   const allPosts = await getAllPosts();
   
-  // Directly use post.slug for matching. This now works because we've overwritten it in getAllPosts.
+  // 直接匹配我们自定义生成的 pinyin slug
   const post = allPosts.find(p => p.slug === slug);
 
   if (!post) {
