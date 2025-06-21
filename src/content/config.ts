@@ -15,6 +15,15 @@ const blogCollection = defineCollection({
       .transform((data) => ({ ...data, slug: data.title ? slugify(data.title) : undefined })),
 });
 
+const pagesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+});
+
 export const collections = {
   blog: blogCollection,
+  pages: pagesCollection,
 };

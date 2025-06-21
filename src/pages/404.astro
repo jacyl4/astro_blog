@@ -1,14 +1,16 @@
 ---
-// 404 错误页面，当用户访问不存在的路径时显示
+import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
-import { UI_TEXT } from '../consts';
----
 
-<MainLayout title={UI_TEXT.page_404_title}>
-  <div>
-    <h1>404</h1>
-    <h2>{UI_TEXT.page_404_title}</h2>
-    <p>{UI_TEXT.page_404_message}</p>
-    <a href="/">{UI_TEXT.go_back_home}</a>
-  </div>
+const pages = await getCollection('pages', ({ id }) => {
+  return id === 'not-found.md';
+});
+const notFoundPage = pages[0];
+const { Content } = await notFoundPage.render();
+---
+<MainLayout title={notFoundPage.data.title}>
+  <article class="prose prose-invert max-w-none text-center">
+    <h1 class="text-6xl font-bold">404</h1>
+    <Content />
+  </article>
 </MainLayout>
