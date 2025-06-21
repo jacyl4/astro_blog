@@ -37,19 +37,30 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
     const menuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    if (menuButton && mobileMenu) {
+    // Initialize button click handler
+    if (menuButton && mobileMenu && !menuButton.dataset.menuButtonInitialized) {
       menuButton.addEventListener('click', () => {
         const state = mobileMenu.getAttribute('data-state');
-        if (state === 'closed') {
-          mobileMenu.setAttribute('data-state', 'open');
-        } else {
-          mobileMenu.setAttribute('data-state', 'closed');
-        }
+        mobileMenu.setAttribute('data-state', state === 'closed' ? 'open' : 'closed');
       });
+      menuButton.dataset.menuButtonInitialized = 'true';
+    }
+
+    // Initialize link click handlers to close menu on navigation
+    if (mobileMenu && !mobileMenu.dataset.menuLinksInitialized) {
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.setAttribute('data-state', 'closed');
+        });
+      });
+      mobileMenu.dataset.menuLinksInitialized = 'true';
     }
   }
 
+  // Run on initial page load
   setupMobileMenu();
+
+  // Run after view transitions
   document.addEventListener('astro:after-swap', setupMobileMenu);
 </script>
 
