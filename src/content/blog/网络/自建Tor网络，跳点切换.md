@@ -70,51 +70,51 @@ Tor的核心技术是“洋葱路由”（Onion Routing），它通过多层加�
 私有网络的核心在于拥有一套自己控制的目录权威。以下是创建这些权威所需加密材料的步骤：
 
 1. **生成身份密钥:** 为每一个计划中的目录权威（通常至少需要3个以便投票）生成一个主身份密钥。
-   Bash
-   tor-gencert --create-identity-key -m \<months\>
-
+   ```bash
+   tor-gencert --create-identity-key -m <months>
+   ```
    这会在当前目录下创建一个名为authority_identity_key的密钥文件。你需要为每个DA节点重复此步骤，并将生成的密钥文件分别存放在对应节点的配置目录中。
 2. **获取密钥指纹:** 生成密钥后，需要获取其指纹，这将在后续步骤和配置中用到。
-   Bash
+   ```bash
    tor --list-fingerprint --datadir /path/to/da1/keys/
-
+   ```
    其中/path/to/da1/keys/是存放上一步生成的authority_identity_key的目录。
 3. **生成权威证书:** 每个目录权威都需要一个由自身和其他权威共同认可的证书。此步骤建立了DA之间的信任关系。
-   Bash
-   tor-gencert --create-cert -i /path/to/da1/keys/authority_identity_key -a \<DA2_IP\>:\<DA2_DirPort\> -a \<DA3_IP\>:\<DA3_DirPort\>...
-
+   ```bash
+   tor-gencert --create-cert -i /path/to/da1/keys/authority_identity_key -a <DA2_IP>:<DA2_DirPort> -a <DA3_IP>:<DA3_DirPort>...
+   ```
    你需要为每个DA重复此操作，并提供其他所有DA的IP地址、目录端口和身份密钥指纹。这一过程体现了目录权威之间相互依赖的信任模型 12。
 
 ### 2.3 目录权威配置 (torrc)
 
 目录权威的torrc文件是私有网络的心脏。以下是一份示例配置及其关键参数解释：
 
-Ini, TOML
-
-\# DA1的torrc示例
+```ini
+# DA1的torrc示例
 DataDirectory /var/lib/tor/da1
 ORPort 9001
 DirPort 7001
-Address 10.0.0.1 \# DA1的IP地址
+Address 10.0.0.1 # DA1的IP地址
 
-\# --- 权威目录特定配置 ---
+# --- 权威目录特定配置 ---
 AuthoritativeDirectory 1
-ContactInfo YourName \<your@email.com\>
+ContactInfo YourName <your@email.com>
 Nickname DA1
 
-\# --- 投票与共识配置 ---
-\# 列出网络中所有的目录权威（包括自身）
-\# 格式: DirAuthority \<nickname\> \<flags\> v3ident=\<fingerprint\> \<ip\>:\<dirport\> \<orport\>
+# --- 投票与共识配置 ---
+# 列出网络中所有的目录权威（包括自身）
+# 格式: DirAuthority <nickname> <flags> v3ident=<fingerprint> <ip>:<dirport> <orport>
 DirAuthority DA1 v3ident=FINGERPRINT1 10.0.0.1:7001 9001
 DirAuthority DA2 v3ident=FINGERPRINT2 10.0.0.2:7002 9002
 DirAuthority DA3 v3ident=FINGERPRINT3 10.0.0.3:7003 9003
 
-\# --- 测试网络特定配置 ---
+# --- 测试网络特定配置 ---
 TestingTorNetwork 1
-TestingV3AuthInitialVotingInterval 5 \# 单位：秒
-TestingV3AuthVoteDelay 2 \# 单位：秒
-TestingV3AuthDistDelay 2 \# 单位：秒
-TestingV3AuthVotingSignatureDelay 2 \# 单位：秒
+TestingV3AuthInitialVotingInterval 5 # 单位：秒
+TestingV3AuthVoteDelay 2 # 单位：秒
+TestingV3AuthDistDelay 2 # 单位：秒
+TestingV3AuthVotingSignatureDelay 2 # 单位：秒
+```
 
 * AuthoritativeDirectory 1: 声明此节点是一个目录权威。
 * DirAuthority...: 这是最关键的配置。它完全替换了Tor内置的公共目录权威列表，强制此节点只信任和连接你指定的私有权威 17。你需要列出网络中所有的DA。
@@ -125,30 +125,30 @@ TestingV3AuthVotingSignatureDelay 2 \# 单位：秒
 
 私有网络中的中继节点（包括中间和出口）也需要特殊配置，以确保它们能正确地加入你的私有网络。
 
-Ini, TOML
-
-\# 中继的torrc示例
+```ini
+# 中继的torrc示例
 DataDirectory /var/lib/tor/relay1
 ORPort 9001
-Address 10.0.1.1 \# 中继的IP地址
+Address 10.0.1.1 # 中继的IP地址
 Nickname MyPrivateRelay
 
-\# --- 核心配置：指向私有目录权威 ---
-\# 只列出你的私有DAs
+# --- 核心配置：指向私有目录权威 ---
+# 只列出你的私有DAs
 DirAuthority 10.0.0.1:7001 FINGERPRINT1
 DirAuthority 10.0.0.2:7002 FINGERPRINT2
 DirAuthority 10.0.0.3:7003 FINGERPRINT3
 
-\# --- 出口策略 ---
-\# 作为中间中继，拒绝所有出口请求
+# --- 出口策略 ---
+# 作为中间中继，拒绝所有出口请求
 ExitPolicy reject *:*
-\# 或者，作为出口中继，允许所有出口请求
-\# ExitPolicy accept *:*
+# 或者，作为出口中继，允许所有出口请求
+# ExitPolicy accept *:*
 
-\# --- 其他推荐配置 ---
-SocksPort 0 \# 中继节点不应作为客户端代理
-ContactInfo YourName \<your@email.com\>
+# --- 其他推荐配置 ---
+SocksPort 0 # 中继节点不应作为客户端代理
+ContactInfo YourName <your@email.com>
 TestingTorNetwork 1
+```
 
 * DirAuthority...: 与DA配置类似，这是中继配置中最关键的部分。它必须只指向你的私有目录权威，确保该中继向你的私有网络注册并从中获取网络信息，而不是公共网络。
 * Address \<IP\>: 由于Tor默认不宣告私有IP地址，因此在私有网络环境中，必须明确设置此参数 17。
@@ -159,20 +159,20 @@ TestingTorNetwork 1
 
 最后，客户端也需要被配置为仅使用你的私有网络。
 
-Ini, TOML
-
-\# 客户端的torrc示例
+```ini
+# 客户端的torrc示例
 DataDirectory /var/lib/tor/client1
 SocksPort 9050
 
-\# --- 核心配置：指向私有目录权威 ---
+# --- 核心配置：指向私有目录权威 ---
 DirAuthority 10.0.0.1:7001 FINGERPRINT1
 DirAuthority 10.0.0.2:7002 FINGERPRINT2
 DirAuthority 10.0.0.3:7003 FINGERPRINT3
 
-\# --- 其他推荐配置 ---
-UseBridges 0 \# 确保不尝试使用公共网桥
+# --- 其他推荐配置 ---
+UseBridges 0 # 确保不尝试使用公共网桥
 TestingTorNetwork 1
+```
 
 * DirAuthority...: 同样，客户端的torrc文件必须被配置为仅信任你的私有目录权威。这是将其与公共Tor网络隔离的关键。
 * UseBridges 0: 明确禁用网桥，因为我们的目标是连接到一个完全独立的网络。
@@ -235,12 +235,12 @@ SIGNAL NEWNYM是控制协议中一个非常重要的命令，它指示Tor切换�
 * **Stem简介:** Stem是一个功能强大的Python库，专门用于通过控制协议来编写脚本和控制Tor 25。
 * **自动化教程:** 以下是一个简单的Python脚本，演示了如何实现用户所期望的自动化“跳点”功能。
   1. **安装依赖:**
-     Bash
+     ```bash
      pip install requests[socks] stem
-
+     ```
      32
   2. **Python脚本实现自动切换:**
-     Python
+     ```python
      import time
      from stem import Signal
      from stem.control import Controller
@@ -250,10 +250,10 @@ SIGNAL NEWNYM是控制协议中一个非常重要的命令，它指示Tor切换�
          连接到Tor控制端口并发送SIGNAL NEWNYM命令。
          """
          try:
-             \# 默认控制端口为9051
+             # 默认控制端口为9051
              with Controller.from_port(port=9051) as controller:
-                 \# 如果设置了密码，在此处提供
-                 \# controller.authenticate(password="your_password")
+                 # 如果设置了密码，在此处提供
+                 # controller.authenticate(password="your_password")
                  controller.authenticate()
 
                  controller.signal(Signal.NEWNYM)
@@ -263,11 +263,12 @@ SIGNAL NEWNYM是控制协议中一个非常重要的命令，它指示Tor切换�
              print(f"Error switching Tor identity: {e}")
 
      if __name__ == "__main__":
-         \# 每隔60秒自动切换一次电路
+         # 每隔60秒自动切换一次电路
          while True:
              switch_tor_identity()
              print("Waiting for 60 seconds before next switch...")
              time.sleep(60)
+     ```
 
      此脚本通过stem.control.Controller连接到控制端口并进行认证 25，然后使用controller.signal(Signal.NEWNYM)发送切换身份的信号 25。通过一个while循环，即可实现周期性的自动化电路切换。
 
