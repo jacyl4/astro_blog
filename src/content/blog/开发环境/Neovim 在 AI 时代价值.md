@@ -1,3 +1,16 @@
+---
+tags:
+  - "#neovim"
+  - "#ai-integration"
+  - "#code-editor-comparison"
+  - "#developer-tooling"
+  - "#ide"
+  - "#remote-development"
+  - "#plugin-ecosystem"
+  - "#vscode"
+  - "#cursor"
+created: 2025-07-01
+---
 # 现代开发者十字路口：Neovim 的不朽哲学与 AI 革命的对决
 
 ## 引言：在 AI 时代重估 Neovim 的价值
