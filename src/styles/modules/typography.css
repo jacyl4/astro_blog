@@ -83,6 +83,10 @@
     @apply border-t border-border my-8;
   }
 
+  .prose a[id^="ref-"] {
+    @apply block;
+  }
+
   /* Table Styles */
   .prose table {
     @apply w-full my-6 border-collapse block overflow-x-auto;
