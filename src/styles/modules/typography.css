@@ -1,6 +1,7 @@
 @layer components {
   .prose {
-    @apply text-base text-text;
+    font-size: theme('fontSize.base');
+    color: var(--text);
   }
 
   .prose h1,
@@ -9,105 +10,171 @@
   .prose h4,
   .prose h5,
   .prose h6 {
-    @apply text-text text-left;
+    color: var(--text);
+    text-align: left;
   }
 
   .prose h1 {
-    @apply text-3xl font-bold mb-5 mt-5;
+    font-size: theme('fontSize.3xl');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.5');
+    margin-bottom: theme('spacing.5');
     line-height: 1.5;
   }
 
   .prose h2 {
-    @apply text-2xl font-bold mb-4 mt-4;
+    font-size: theme('fontSize.2xl');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.4');
+    margin-bottom: theme('spacing.4');
     line-height: 1.15;
   }
 
   .prose h3 {
-    @apply text-xl font-bold mb-3 mt-3;
+    font-size: theme('fontSize.xl');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.3');
+    margin-bottom: theme('spacing.3');
     line-height: 1.2;
   }
 
   .prose h4 {
-    @apply text-lg font-bold mb-2 mt-2;
+    font-size: theme('fontSize.lg');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.2');
+    margin-bottom: theme('spacing.2');
     line-height: 1.3;
   }
 
   .prose h5 {
-    @apply text-base font-bold mb-2 mt-2;
+    font-size: theme('fontSize.base');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.2');
+    margin-bottom: theme('spacing.2');
     line-height: 1.35;
   }
 
   .prose h6 {
-    @apply text-sm font-bold mb-1 mt-1;
+    font-size: theme('fontSize.sm');
+    font-weight: theme('fontWeight.bold');
+    margin-top: theme('spacing.1');
+    margin-bottom: theme('spacing.1');
     line-height: 1.45;
   }
 
   .prose p {
-    @apply my-4 text-justify;
+    margin-top: theme('spacing.4');
+    margin-bottom: theme('spacing.4');
+    text-align: justify;
     line-height: 1.8;
   }
 
   .prose a {
-    @apply text-accent hover:underline;
+    color: var(--accent);
+  }
+  .prose a:hover {
+    text-decoration-line: underline;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-border pl-4 italic my-4;
+    border-left-width: 4px;
+    border-color: var(--border);
+    padding-left: theme('spacing.4');
+    font-style: italic;
+    margin-top: theme('spacing.4');
+    margin-bottom: theme('spacing.4');
   }
 
   .prose ul {
-    @apply list-disc list-inside my-4;
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-top: theme('spacing.4');
+    margin-bottom: theme('spacing.4');
   }
 
   .prose ol {
-    @apply list-decimal list-inside my-4;
+    list-style-type: decimal;
+    list-style-position: inside;
+    margin-top: theme('spacing.4');
+    margin-bottom: theme('spacing.4');
   }
 
   .prose li {
-    @apply my-2;
+    margin-top: theme('spacing.2');
+    margin-bottom: theme('spacing.2');
   }
 
   .prose code {
-    @apply bg-[var(--code-bg)] rounded px-1 py-0.5 text-sm;
+    background-color: var(--code-bg);
+    border-radius: theme('borderRadius.DEFAULT');
+    padding-left: theme('spacing.1');
+    padding-right: theme('spacing.1');
+    padding-top: theme('spacing.1');
+    padding-bottom: theme('spacing.1');
+    font-size: theme('fontSize.sm');
   }
 
   .prose pre {
-    @apply bg-[var(--code-bg)] rounded p-4 overflow-x-auto;
+    background-color: var(--code-bg);
+    border-radius: theme('borderRadius.DEFAULT');
+    padding: theme('spacing.4');
+    overflow-x: auto;
   }
 
   .prose pre code {
-    @apply bg-transparent p-0;
+    background-color: transparent;
+    padding: 0;
   }
 
   .prose hr {
-    @apply border-t border-border my-8;
+    border-top-width: 1px;
+    border-color: var(--border);
+    margin-top: theme('spacing.8');
+    margin-bottom: theme('spacing.8');
   }
 
   .prose a[id^="ref-"] {
-    @apply block;
+    display: block;
   }
 
   /* Table Styles */
   .prose table {
-    @apply w-full my-6 border-collapse block overflow-x-auto;
+    width: 100%;
+    margin-top: theme('spacing.6');
+    margin-bottom: theme('spacing.6');
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
   }
 
   .prose th,
   .prose td {
-    @apply border border-border-secondary px-4 py-3;
+    border-width: 1px;
+    border-color: var(--border-secondary-color);
+    padding: theme('spacing.3') theme('spacing.4');
   }
 
   .prose th {
-    @apply font-semibold text-left bg-surface-secondary;
+    font-weight: theme('fontWeight.semibold');
+    text-align: left;
+    background-color: var(--surface-secondary-color);
   }
 
   /* Zebra striping for table rows */
   .prose tbody tr:nth-child(even) {
-    @apply bg-surface-secondary;
+    background-color: var(--table-stripe-bg);
   }
 
   /* Dark mode styles for prose */
   .dark .prose {
-    @apply text-text;
+    color: var(--text);
+  }
+
+  .dark .prose th {
+    background-color: var(--surface-secondary-color);
+  }
+
+  .dark .prose tbody tr:nth-child(even) {
+    background-color: var(--background-color);
   }
 }
