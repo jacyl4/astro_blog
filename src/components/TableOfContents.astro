@@ -93,9 +93,36 @@
   };
 
   const initToc = () => {
-    // Use a timeout to ensure the main content, especially headings from markdown, is fully rendered.
-    // Increased delay to 300ms for more reliability on slow loads.
-    setTimeout(updateToc, 300);
+    // The content of the main element may be loaded dynamically.
+    // We use a MutationObserver to wait for the headings to be added to the DOM.
+    const mainContent = document.querySelector('main');
+    if (!mainContent) {
+      updateToc(); // Run once in case content is already there
+      return;
+    }
+
+    // Run once immediately in case the content is already present.
+    updateToc();
+
+    const observer = new MutationObserver((mutations, obs) => {
+      // We are looking for the addition of nodes.
+      const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
+      if (hasAddedNodes) {
+        // Check if headings are now present.
+        const headings = mainContent.querySelectorAll('h2, h3, h4, h5, h6');
+        if (headings.length > 0) {
+          updateToc();
+          // Once we've found the headings and updated the TOC, we don't need to observe anymore.
+          obs.disconnect();
+        }
+      }
+    });
+
+    // Start observing the main content element for changes to its child list.
+    observer.observe(mainContent, {
+      childList: true,
+      subtree: true,
+    });
   };
 
   // This event handles Astro's client-side navigation.
