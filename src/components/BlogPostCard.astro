@@ -17,9 +17,7 @@ const postUrl = `${URLS.posts}/${post.slug}/`;
   
   <div class="flex flex-col flex-grow">
     <header class="mb-4">
-      <a href={postUrl} class="block">
-        <h2 class="font-bold text-xl text-text-primary transition-colors duration-300">{post.data.title}</h2>
-      </a>
+      <h2 class="font-bold text-xl text-text-primary transition-colors duration-300 group-hover:text-accent">{post.data.title}</h2>
     </header>
     
     <div class="flex-grow"></div>

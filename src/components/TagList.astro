@@ -13,6 +13,7 @@ const tags = await getAllTags();
       <a 
         href={`${URLS.tags}/${tag.slug}/`}
         class="block px-2 py-1 rounded-md transition-colors"
+        aria-label={`查看关于 ${tag.name} 标签的文章`}
       >
         {tag.name} <span class="opacity-70">({tag.count})</span>
       </a>

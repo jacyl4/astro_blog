@@ -6,7 +6,7 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
 <nav class="flex items-center justify-between px-4 md:px-8 relative">
   <!-- Mobile Menu Button -->
   <div class="md:hidden">
-    <button id="mobile-menu-button" class="p-2 text-text-color">
+    <button id="mobile-menu-button" class="p-2 text-text-color" aria-label="主导航菜单" aria-expanded="false" aria-controls="mobile-menu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
     </button>
   </div>
@@ -40,17 +40,19 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
     // Initialize button click handler
     if (menuButton && mobileMenu && !menuButton.dataset.menuButtonInitialized) {
       menuButton.addEventListener('click', () => {
-        const state = mobileMenu.getAttribute('data-state');
-        mobileMenu.setAttribute('data-state', state === 'closed' ? 'open' : 'closed');
+        const isOpen = mobileMenu.getAttribute('data-state') === 'open';
+        mobileMenu.setAttribute('data-state', isOpen ? 'closed' : 'open');
+        menuButton.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
       });
       menuButton.dataset.menuButtonInitialized = 'true';
     }
 
     // Initialize link click handlers to close menu on navigation
-    if (mobileMenu && !mobileMenu.dataset.menuLinksInitialized) {
+    if (mobileMenu && menuButton && !mobileMenu.dataset.menuLinksInitialized) {
       mobileMenu.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
           mobileMenu.setAttribute('data-state', 'closed');
+          menuButton.setAttribute('aria-expanded', 'false');
         });
       });
       mobileMenu.dataset.menuLinksInitialized = 'true';
