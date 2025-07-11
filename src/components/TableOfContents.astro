@@ -11,7 +11,9 @@
 <script>
   const updateToc = () => {
     const tocContainer = document.getElementById('table-of-contents');
-    if (!tocContainer) return;
+    if (!tocContainer) {
+      return;
+    }
 
     const isPostPage = window.location.pathname.startsWith('/posts/');
 
@@ -92,7 +94,8 @@
 
   const initToc = () => {
     // Use a timeout to ensure the main content, especially headings from markdown, is fully rendered.
-    setTimeout(updateToc, 100);
+    // Increased delay to 300ms for more reliability on slow loads.
+    setTimeout(updateToc, 300);
   };
 
   // This event handles Astro's client-side navigation.
