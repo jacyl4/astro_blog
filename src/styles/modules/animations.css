@@ -1,10 +1,11 @@
-.toc-hidden {
+#table-of-contents {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(20px);
   pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.toc-visible {
+#table-of-contents.is-visible {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;
