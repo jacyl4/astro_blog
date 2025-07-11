@@ -5,6 +5,7 @@ import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
 
 interface Props {
   title: string;
@@ -63,6 +64,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <link rel="preload" as="image" href="/avatar.webp">
   </head>
   <body>
+    {Astro.url.pathname.startsWith('/posts/') && <TableOfContents />}
     <div class="content-wrapper">
       <div class="mx-auto md:my-[21px] max-w-[1152px] relative">
         <div id="header-container">
