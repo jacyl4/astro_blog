@@ -1,7 +1,7 @@
 ---
 // src/components/TableOfContents.astro
 ---
-<nav id="table-of-contents" class="hidden xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+2rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+<nav id="table-of-contents" class="toc-hidden xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+2rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border transition-all duration-300" style="background-color: var(--card-bg); border-color: var(--border-color);">
   <h3 class="font-bold text-lg mb-2 whitespace-nowrap" style="color: var(--text-color);">目录</h3>
   <ul id="toc-list" class="space-y-1">
     <!-- Links will be injected here by script -->
@@ -18,7 +18,7 @@
     if (isPostPage) {
       const mainContent = document.querySelector('main');
       if (!mainContent) {
-        tocContainer.style.display = 'none';
+        tocContainer.classList.remove('toc-visible');
         return;
       }
 
@@ -26,7 +26,7 @@
       const tocList = document.getElementById('toc-list');
 
       if (headings.length > 0 && tocList) {
-        tocContainer.style.display = ''; // Use default display (from class)
+        tocContainer.classList.add('toc-visible');
         tocList.innerHTML = '';
 
         const observer = new IntersectionObserver(
@@ -83,10 +83,10 @@
           });
         });
       } else {
-        tocContainer.style.display = 'none';
+        tocContainer.classList.remove('toc-visible');
       }
     } else {
-      tocContainer.style.display = 'none';
+      tocContainer.classList.remove('toc-visible');
     }
   };
 
