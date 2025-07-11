@@ -1,8 +1,8 @@
 ---
 // src/components/TableOfContents.astro
 ---
-<nav id="table-of-contents" class="hidden xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+2rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
-  <h3 class="font-bold text-lg mb-2 text-text-primary whitespace-nowrap">目录</h3>
+<nav id="table-of-contents" class="hidden xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+2rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+  <h3 class="font-bold text-lg mb-2 whitespace-nowrap" style="color: var(--text-color);">目录</h3>
   <ul id="toc-list" class="space-y-1">
     <!-- Links will be injected here by script -->
   </ul>
@@ -37,14 +37,16 @@
               const id = visibleEntries[0].target.getAttribute('id');
 
               document.querySelectorAll('#toc-list a').forEach((link) => {
-                link.classList.remove('text-accent', 'font-bold');
-                link.classList.add('text-text-secondary');
+                if (link instanceof HTMLElement) {
+                  link.style.color = 'var(--text-color)';
+                  link.style.fontWeight = 'normal';
+                }
               });
 
-              const activeLink = document.querySelector(`#toc-list a[href="#${id}"]`);
+              const activeLink = document.querySelector<HTMLElement>(`#toc-list a[href="#${id}"]`);
               if (activeLink) {
-                activeLink.classList.remove('text-text-secondary');
-                activeLink.classList.add('text-accent', 'font-bold');
+                activeLink.style.color = 'var(--accent-color)';
+                activeLink.style.fontWeight = 'bold';
               }
             }
           },
@@ -63,7 +65,8 @@
 
           link.href = `#${heading.id}`;
           link.textContent = heading.textContent;
-          link.className = 'block w-full text-text-secondary hover:text-accent transition-colors duration-200 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis';
+          link.className = 'block w-full hover:text-accent transition-colors duration-200 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis';
+          link.style.color = 'var(--text-color)';
 
           const level = parseInt(heading.tagName.substring(1), 10);
           listItem.style.marginLeft = `${(level - 2) * 0.75}rem`;
@@ -87,7 +90,14 @@
     }
   };
 
-  document.addEventListener('astro:page-load', () => {
+  const initToc = () => {
+    // Use a timeout to ensure the main content, especially headings from markdown, is fully rendered.
     setTimeout(updateToc, 100);
-  });
+  };
+
+  // This event handles Astro's client-side navigation.
+  document.addEventListener('astro:page-load', initToc);
+  
+  // This event handles the initial hard refresh of the page.
+  document.addEventListener('DOMContentLoaded', initToc);
 </script>
