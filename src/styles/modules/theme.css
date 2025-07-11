@@ -7,7 +7,7 @@
   --text-color: #343a40; /* Dark gray, less harsh than black */
   --nav-text-color: var(--text-color);
   --link-color: #007bff; /* A pleasant blue for links */
-  --accent-color: #007bff; /* A pleasant blue for accents */
+  --accent-color: #000000; /* Black for light theme */
   
   --divider-shadow-dark: rgba(0, 0, 0, 0.15);
   --divider-shadow-light: #ffffff;
@@ -36,7 +36,7 @@ html.dark {
   --text-color: #e0e0e0;
   --nav-text-color: var(--text-color);
   --link-color: #3391ff; /* A slightly brighter blue for dark mode */
-  --accent-color: #3391ff; /* A slightly brighter blue for dark mode */
+  --accent-color: #ffffff; /* White for dark theme */
 
   --divider-shadow-dark: rgba(0, 0, 0, 0.5);
   --divider-shadow-light: rgba(255, 255, 255, 0.15);
