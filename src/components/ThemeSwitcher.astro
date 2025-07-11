@@ -32,35 +32,29 @@
 </style>
 
 <script is:inline>
-  // This script only handles the click event for the theme toggle button.
-  // The initial theme is set in MainLayout.astro to prevent flashing.
-  const initThemeSwitcher = () => {
-    const themeToggle = document.getElementById('themeToggle');
-    if (!themeToggle) return;
+  // Ensure the theme switcher initialization function is defined only once.
+  if (typeof window.initThemeSwitcher !== 'function') {
+    window.initThemeSwitcher = function() {
+      const themeToggle = document.getElementById('themeToggle');
+      if (!themeToggle) return;
 
-    const handleClick = () => {
-      // 1. Determine the new theme.
-      const isDark = document.documentElement.classList.contains('dark');
-      const newTheme = isDark ? 'light' : 'dark';
+      const handleClick = () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.classList.toggle('dark', !isDark);
+        localStorage.setItem('theme', newTheme);
+      };
 
-      // 2. Apply the new theme to the <html> element.
-      document.documentElement.classList.toggle('dark', !isDark);
-
-      // 3. Save the user's preference to localStorage.
-      localStorage.setItem('theme', newTheme);
+      // Remove any existing listener before adding a new one.
+      themeToggle.removeEventListener('click', window.themeSwitcherClickHandler);
+      window.themeSwitcherClickHandler = handleClick;
+      themeToggle.addEventListener('click', window.themeSwitcherClickHandler);
     };
+  }
 
-    themeToggle.addEventListener('click', handleClick);
+  // Initialize or re-initialize the switcher.
+  window.initThemeSwitcher();
 
-    // Clean up the event listener when the component is unmounted (during page transitions).
-    document.addEventListener('astro:before-swap', () => {
-      themeToggle.removeEventListener('click', handleClick);
-    }, { once: true });
-  };
-
-  // Initialize the switcher on initial page load.
-  initThemeSwitcher();
-
-  // Re-initialize the switcher after every Astro view transition.
-  document.addEventListener('astro:after-swap', initThemeSwitcher);
+  // Re-initialize after Astro swaps.
+  document.addEventListener('astro:after-swap', window.initThemeSwitcher);
 </script>

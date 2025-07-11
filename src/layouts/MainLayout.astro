@@ -19,36 +19,33 @@ const { title, description = '我的Astro博客' } = Astro.props;
 <html lang="zh-CN">
   <head>
     <script is:inline>
-      // This script is executed before the page is rendered to prevent theme flashing.
-      const theme = (() => {
-        // 1. Check for a theme in localStorage.
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        // 2. Check for the system's preferred color scheme.
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        // 3. Default to 'light' theme.
-        return 'light';
-      })();
+      // Ensure the theme initialization function is defined only once.
+      if (typeof window.initTheme !== 'function') {
+        window.initTheme = function() {
+          const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+              return localStorage.getItem('theme');
+            }
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              return 'dark';
+            }
+            return 'light';
+          })();
 
-      // Apply the theme to the <html> element.
-      if (theme === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
+          if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+          } else {
+            document.documentElement.classList.add('dark');
+          }
+        };
       }
 
-      // This is the final, simplified implementation based on the user's new logic.
-      document.addEventListener('astro:after-swap', () => {
-        // Re-apply theme.
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme) {
-          document.documentElement.classList.toggle('dark', storedTheme === 'dark');
-        }
+      // Initialize the theme on initial page load.
+      window.initTheme();
 
-        // On page transitions, scroll to the top for better consistency.
+      // Handle theme and other updates after page swaps.
+      document.addEventListener('astro:after-swap', () => {
+        window.initTheme();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     </script>
