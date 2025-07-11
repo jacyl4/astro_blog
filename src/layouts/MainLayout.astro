@@ -1,5 +1,7 @@
 ---
 // 全站主布局，包含头部导航、内容插槽
+import { Image } from 'astro:assets';
+import avatar from '/public/avatar.webp';
 import '@/styles/global.css';
 import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
@@ -59,7 +61,6 @@ const { title, description = '我的Astro博客' } = Astro.props;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="preload" as="image" href="/images/head.webp">
     <link rel="preload" as="image" href="/images/wallpaper.webp">
-    <link rel="preload" as="image" href="/avatar.webp">
   </head>
   <body>
     {Astro.url.pathname.startsWith('/posts/') && <TableOfContents />}
@@ -92,7 +93,7 @@ const { title, description = '我的Astro博客' } = Astro.props;
           </p>
         </footer>
         
-        <img id="avatar" src="/avatar.webp" alt="Avatar" width="96" height="96" class="hidden md:block absolute top-[468px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-soft-lg z-10">
+        <Image id="avatar" src={avatar} alt="Avatar" width="96" height="96" class="hidden md:block absolute top-[468px] left-3/4 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-soft-lg z-10" loading="eager" />
       </div>
     </div>
   </body>

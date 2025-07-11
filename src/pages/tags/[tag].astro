@@ -7,17 +7,15 @@ import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {
   const tags = await getAllTags();
-  // 使用原始标签名作为路由参数，与链接生成逻辑保持一致
   return tags
-    .filter(tag => tag.name && tag.name.trim() !== '')
+    .filter(tag => tag.slug)
     .map(tag => ({
-      params: { tag: tag.name },
+      params: { tag: tag.slug },
       props: { tagName: tag.name }
     }));
 }
 
-const { tag } = Astro.params;
-const tagName = tag; // tag 参数就是原始名称
+const { tagName } = Astro.props;
 const posts: ProcessedBlogPost[] = await getPostsByTag(tagName);
 ---
 
