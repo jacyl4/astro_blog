@@ -157,28 +157,31 @@ client:\*指令为一个React组件注水时，它只为该组件创建了一个
 
 ### **4.2 “巨型孤岛”模式：一种变通方案**
 
-使用React Context最直接的解决方案是确保提供者（provider）和所有消费者（consumer）都属于*同一个*孤岛。这需要创建一个更大的、单一的React组件来包裹所有需要交互的部分，然后在Astro中用一个client:\*指令渲染这个单一组件 19。
+使用 React Context 最直接的解决方案是确保 provider 和所有 consumer 都属于 *同一个* 孤岛。这需要创建一个更大的、单一的 React 组件来包裹所有需要交互的部分，然后在 Astro 中用一个 client:* 指令渲染这个单一组件。
 
-JavaScript
-
-// MyMegaIsland.jsx  
-export default function MyMegaIsland() {  
-  return (  
-    \<MyContextProvider\>  
-      \<ComponentA /\>  
-      \<ComponentB /\>  
-    \</MyContextProvider\>  
-  );  
+```jsx
+// MyMegaIsland.jsx
+export default function MyMegaIsland() {
+  return (
+    <MyContextProvider>
+      <ComponentA />
+      <ComponentB />
+    </MyContextProvider>
+  );
 }
+```
 
-代码段
+---
 
-\---  
-import MyMegaIsland from '../components/MyMegaIsland.jsx';  
-\---  
-\<MyMegaIsland client:load /\>
+```js
+import MyMegaIsland from '../components/MyMegaIsland.jsx';
+```
 
-这种模式虽然可行，但应谨慎使用，因为它与Astro的最小化JS哲学相悖，可能导致不必要的JavaScript包体积增大，本质上是重新创建了一个微型SPA 19。
+```astro
+<MyMegaIsland client:load />
+```
+
+这种模式虽然可行，但应谨慎使用，因为它与 Astro 的最小化 JS 哲学相悖，可能导致不必要的 JavaScript 包体积增大，本质上是重新创建了一个微型 SPA。
 
 ### **4.3 推荐架构：全局、框架无关的状态存储**
 
@@ -214,13 +217,21 @@ astro build时，Astro会做两件事：
 
 ### **5.3 部署演练：在Cloudflare Pages上部署Astro SSR**
 
-* **步骤1：在Astro中启用SSR。** 在astro.config.mjs中，设置output: 'server'（用于完全动态的站点）或output: 'hybrid'（用于混合静态和动态页面）31。  
-* **步骤2：安装Cloudflare适配器。** 运行npx astro add cloudflare 32。这将安装  
-  @astrojs/cloudflare并更新你的astro.config.mjs以使用该适配器。  
-* **步骤3：配置你的项目。** 适配器会处理大部分配置。对于高级绑定（如KV存储或D1数据库），你可能需要一个wrangler.toml文件，但对于一个基础的SSR应用，适配器通常就足够了 8。  
-* **步骤4：部署。** 将你的Git仓库连接到Cloudflare Pages。Cloudflare将检测到Astro项目，运行astro build命令，并将你dist/文件夹中的静态资源和由适配器生成的服务端函数一同部署到其全球网络 30。当用户请求一个动态页面时，该请求将被路由到最近的Cloudflare Worker进行按需渲染。
+* **步骤1：在 Astro 中启用 SSR。**
+  在 `astro.config.mjs` 中，设置 `output: 'server'`（用于完全动态的站点）或 `output: 'hybrid'`（用于混合静态和动态页面）。
+* **步骤2：安装 Cloudflare 适配器。**
+  运行：
+  ```shell
+  npx astro add cloudflare
+  ```
+  这将安装 `@astrojs/cloudflare` 并更新你的 `astro.config.mjs` 以使用该适配器。
+* **步骤3：配置你的项目。**
+  适配器会处理大部分配置。对于高级绑定（如 KV 存储或 D1 数据库），你可能需要一个 `wrangler.toml` 文件，但对于一个基础的 SSR 应用，适配器通常就足够了。
+* **步骤4：部署。**
+  将你的 Git 仓库连接到 Cloudflare Pages。Cloudflare 会检测到 Astro 项目，运行 `astro build` 命令，并将你 `dist/` 文件夹中的静态资源和由适配器生成的服务端函数一同部署到其全球网络。当用户请求一个动态页面时，该请求将被路由到最近的 Cloudflare Worker 进行按需渲染。
 
-Astro CLI、适配器和像Vercel/Cloudflare这样的平台代表了开发者本地工具与云基础设施之间的紧密集成。astro add \<adapter\>命令不仅仅是安装一个库，它从根本上改变了构建输出以匹配特定云服务的架构。这种紧密耦合极大地简化了部署（Git推送即可部署），但同时也使得在项目生命周期早期选择托管平台成为一个更重要的架构决策 7。  
+Astro CLI、适配器和像 Vercel/Cloudflare 这样的平台代表了开发者本地工具与云基础设施之间的紧密集成。`astro add <adapter>` 命令不仅仅是安装一个库，它从根本上改变了构建输出以匹配特定云服务的架构。这种紧密耦合极大地简化了部署（Git 推送即可部署），但同时也使得在项目生命周期早期选择托管平台成为一个更重要的架构决策。
+
 ---
 
 ## **第六部分：综合与战略建议**
@@ -229,22 +240,22 @@ Astro CLI、适配器和像Vercel/Cloudflare这样的平台代表了开发者本
 
 ### **6.1 决策框架**
 
-在选择渲染策略（CSR vs. SSG vs. SSR/混合）和框架（Astro vs. Next.js vs. 传统SPA）时，应基于项目的核心需求，如性能、SEO、交互性和内容动态性。
+在选择渲染策略（CSR vs. SSG vs. SSR/混合）和框架（Astro vs. Next.js vs. 传统 SPA）时，应基于项目的核心需求，如性能、SEO、交互性和内容动态性。
 
-* **内容为王、性能至上**: 如果你的项目是博客、文档或营销网站，内容是核心，性能是关键，那么Astro的“默认静态”哲学是理想选择。从SSG开始，仅在需要时添加交互孤岛。  
-* **高度动态的应用**: 如果项目是一个复杂的、数据驱动的仪表盘或社交应用，其中大部分UI都是动态和个性化的，那么像Next.js这样的React全栈框架或传统的CSR方法可能更直接。  
-* **两全其美**: 如果项目介于两者之间，例如一个带有动态产品列表和用户评论的电商网站，Astro的混合模式（output: 'hybrid'）或Next.js的ISR/RSC功能都提供了强大的解决方案。
+* **内容为王、性能至上**：如果你的项目是博客、文档或营销网站，内容是核心，性能是关键，那么 Astro 的“默认静态”哲学是理想选择。从 SSG 开始，仅在需要时添加交互孤岛。
+* **高度动态的应用**：如果项目是一个复杂的、数据驱动的仪表盘或社交应用，其中大部分 UI 都是动态和个性化的，那么像 Next.js 这样的 React 全栈框架或传统的 CSR 方法可能更直接。
+* **两全其美**：如果项目介于两者之间，例如一个带有动态产品列表和用户评论的电商网站，Astro 的混合模式（`output: 'hybrid'`）或 Next.js 的 ISR/RSC 功能都提供了强大的解决方案。
 
-### **6.2 Astro架构最佳实践**
+### **6.2 Astro 架构最佳实践**
 
-* 从静态开始（output: 'static'或'hybrid'），并根据每个组件/页面的需要选择性地加入交互性和服务端渲染。  
-* 对于非关键组件，使用client:visible作为默认的注水策略，以最大化初始加载性能。  
-* 对于跨孤岛状态共享，优先使用全局、框架无关的存储（如Nano Stores、Zustand），而不是“巨型孤岛”模式。  
-* 利用Astro的多框架支持来为特定任务选择最佳工具，但要注意依赖项增加可能带来的包体积问题。
+* 从静态开始（`output: 'static'` 或 `hybrid`），并根据每个组件/页面的需要选择性地加入交互性和服务端渲染。
+* 对于非关键组件，使用 `client:visible` 作为默认的注水策略，以最大化初始加载性能。
+* 对于跨孤岛状态共享，优先使用全局、框架无关的存储（如 Nano Stores、Zustand），而不是“巨型孤岛”模式。
+* 利用 Astro 的多框架支持来为特定任务选择最佳工具，但要注意依赖项增加可能带来的包体积问题。
 
 ### **6.3 未来轨迹：向边缘的不可阻挡的迈进**
 
-当前的趋势——组件级渲染、部分注水、无服务器计算和基础设施即代码——都在网络边缘汇合。未来的Web架构将是一个动态逻辑和静态内容无缝融合，并从全球网络以最小延迟交付的模式。像Astro这样的框架正处于这场运动的最前沿，它们不仅是构建网站的工具，更是驾驭这种新兴架构复杂性的编译器和部署协调器。
+当前的趋势——组件级渲染、部分注水、无服务器计算和基础设施即代码——都在网络边缘汇合。未来的 Web 架构将是一个动态逻辑和静态内容无缝融合，并从全球网络以最小延迟交付的模式。像 Astro 这样的框架正处于这场运动的最前沿，它们不仅是构建网站的工具，更是驾驭这种新兴架构复杂性的编译器和部署协调器。
 
 #### **引用的著作**
 
