@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import remarkFootnotes from 'remark-footnotes';
 import tailwindcss from '@tailwindcss/vite';
 import swup from '@swup/astro';
 import SwupMorphPlugin from 'swup-morph-plugin';
@@ -77,7 +78,7 @@ export default defineConfig({
       wrap: true,
     },
     smartypants: true,
-    remarkPlugins: [],
+    remarkPlugins: [remarkFootnotes],
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
   },
 
