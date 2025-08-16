@@ -131,6 +131,7 @@ astro add 命令简化了集成过程，显著改善了开发者体验并减少�
 \<slot /\> 机制，将不同页面的特定内容注入到预设的框架中。
 
 * **创建基本布局:** 一个典型的布局文件（例如 src/layouts/Layout.astro）会包含 \<html\>, \<head\>, \<body\> 标签，以及一个或多个 \<slot /\> 元素，用于指示页面内容的插入位置。  
+
 ```html
 ---
 // src/layouts/BaseLayout.astro
@@ -158,8 +159,9 @@ const { title } = Astro.props; // 接收页面传入的 title
 * **向布局传递 Props:** 页面可以向其使用的布局传递 props，例如 title 和 description，用于动态设置 \<head\> 中的元数据 15。  
 * **页面如何使用布局:**
 
-  * 对于 Markdown (.md) 或 MDX (.mdx) 文件，可以在其 frontmatter 中指定布局：      
+  * 对于 Markdown (.md) 或 MDX (.mdx) 文件，可以在其 frontmatter 中指定布局：
   * 对于 .astro 页面，可以将内容包裹在布局组件中：  
+
 ```html
 ---
 // src/pages/about.astro
@@ -189,6 +191,7 @@ Astro 的路由机制以其简单直观而著称，主要依赖于文件系统�
   * **文件名中的方括号:** 使用方括号 \`\` 在文件名中定义参数。例如，src/pages/blog/\[slug\].astro 会创建一个动态路由，其中 slug 部分是可变的。slug 会成为一个可以在页面组件内部访问的参数 16。  
   * **getStaticPaths() 函数:** 对于静态构建的动态路由（这是博客的常见情况），必须导出一个名为 getStaticPaths 的异步函数。此函数需要返回一个对象数组，每个对象定义了该路由的 params (用于构成 URL) 和 props (传递给页面的数据) 5。  
     代码段  
+
 ```html
 ---
 // src/pages/blog/[slug].astro
@@ -239,30 +242,32 @@ Astro 孤岛 (Astro Islands) 是 Astro 架构中的一个核心概念，指的�
 
 1. 确保已添加 React 集成 (npx astro add react)。  
 2. 创建 React 组件 LikeButton.jsx:  
-```js
-// src/components/LikeButton.jsx
-import React, { useState } from 'react';
 
-export default function LikeButton() {
-  const [likes, setLikes] = useState(0);
-  return (
-    <button onClick={() => setLikes(likes + 1)}>
-      👍 {likes}
-    </button>
-  );
-}
-```
+  ```js
+  // src/components/LikeButton.jsx
+  import React, { useState } from 'react';
+
+  export default function LikeButton() {
+    const [likes, setLikes] = useState(0);
+    return (
+      <button onClick={() => setLikes(likes + 1)}>
+        👍 {likes}
+      </button>
+    );
+  }
+  ```
 
 3. 在您的 .astro 页面或组件中使用它：  
-```html
----
-import LikeButton from '../components/LikeButton.jsx';
----
-<div>
-  <p>喜欢这篇文章吗？</p>
-  <LikeButton client:visible /> {/* 当按钮滚动到可见区域时加载并激活 */}
-</div>
-```
+
+  ```html
+  ---
+  import LikeButton from '../components/LikeButton.jsx';
+  ---
+  <div>
+    <p>喜欢这篇文章吗？</p>
+    <LikeButton client:visible /> {/* 当按钮滚动到可见区域时加载并激活 */}
+  </div>
+  ```
 
 client:\* 指令赋予开发者对 JavaScript 加载和执行的精细控制权，这是性能优化的强大工具。Astro 不是采用一刀切的水合策略，而是让开发者能够有意识地决定每个交互组件*何时*以及*如何*加载其 JavaScript 3。例如，对于位于长篇博文底部的图片轮播使用  
 client:visible，意味着未滚动到该处的用户永远不会下载或执行其 JS。即使在添加交互性时，这种意图性也是保持 Astro “默认零 JS”精神的关键。  
@@ -282,6 +287,7 @@ Markdown 是博客写作的流行选择，因其简洁易读的语法而广受�
 * **MDX (.mdx):**  
   * MDX 是 Markdown 的超集，它允许您在 Markdown 文件中直接导入和使用 JSX 组件（可以是 Astro 组件或 UI 框架组件，如 React 组件）2。  
   * 这对于在博文中嵌入交互式元素、自定义样式的组件或复杂的数据可视化非常有用。  
+
 ```mdx
 ---
 title: '在 MDX 中使用交互式组件'
@@ -315,6 +321,7 @@ src/content/ 与内容集合 5 提供了模式验证、类型安全和更强大�
   * 在该文件夹内创建一个配置文件，通常命名为 config.ts (推荐使用 TypeScript 以获得最佳类型支持) 或 config.js / config.mjs。  
   * 在此文件中，您需要从 astro:content 导入 defineCollection 和 z (Zod 库的导出) 5。  
   * 使用 defineCollection 来定义您的内容集合。例如，可以创建一个名为 blog 的集合来存放所有博客文章。  
+
 ```ts
 // src/content/config.ts
 import { defineCollection, z } from 'astro:content';
@@ -368,21 +375,26 @@ export const collections = {
     * data: 解析后的 frontmatter 数据，其结构与您在 Zod 模式中定义的相对应。  
     * body: 原始的 Markdown 或 MDX 内容字符串（未经渲染）。  
   * **排序:** 获取到的条目数组可以使用标准的 JavaScript 数组方法进行排序，例如按发布日期倒序排列 20：  
+
 ```js
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ```
-  * **过滤:** 同样可以使用 .filter() 方法来筛选文章，例如排除草稿或根据标签筛选 5：  
+
+* **过滤:** 同样可以使用 .filter() 方法来筛选文章，例如排除草稿或根据标签筛选 5：  
+
 ```js
 const publishedPosts = (await getCollection('blog')).filter(post =>!post.data.draft);
 ```
+
 * **getEntry('collectionName', 'entryId') 或 getEntryBySlug('collectionName', 'entrySlug'):**  
   * 这两个函数（getEntry 使用 id，getEntryBySlug 使用 slug）用于获取集合中单个特定的条目 5。  
 * **渲染内容:**  
   * **访问 Frontmatter:** 可以直接通过 entry.data 对象访问解析后的 frontmatter 数据，例如 post.data.title。  
   * **渲染 Markdown/MDX 主体:** 要将 Markdown 或 MDX 的 body 渲染为 HTML，需要调用条目对象上的 render() 方法。这是一个异步方法，返回一个包含 \<Content /\> 组件的对象，该组件可以直接在模板中使用以输出渲染后的 HTML 5。21 特别强调了对于集合中的 MDX 内容，使用  
     render() 的必要性。  
+
 ```html
 ---
 // 假设 'entry' 是通过 getEntry() 获取的单个博文条目
@@ -409,6 +421,7 @@ entry.render() 方法对于将内容获取与内容渲染解耦至关重要，�
    * 调用 const allPosts \= await getCollection('blog'); 来获取所有博文。  
    * 对博文进行排序，通常是按发布日期 (pubDate) 的倒序排列，最新的文章显示在最前面 20。  
      代码段  
+
 ```html
 ---
 // src/pages/blog/index.astro
@@ -429,6 +442,7 @@ const pageTitle = "我的博客";
    * 遍历 posts 数组（例如，使用 posts.map(post \=\> (...))）。  
    * 为每篇文章显示其标题、发布日期、简短摘要（如果 frontmatter 中有定义）以及一个指向完整文章页面的链接。  
    * 链接结构通常是 href={/blog/${post.slug}/} (如果 slug 是 URL 友好的标识符) 20。  
+
 ```html
 <BaseLayout title={pageTitle}>
   <h1>{pageTitle}</h1>
@@ -451,7 +465,7 @@ const pageTitle = "我的博客";
 </BaseLayout>
 ```
 
-   * 20 提供了一个来自  
+* 20 提供了一个来自  
      withastro/astro 官方仓库的优秀博客首页示例，演示了使用内容集合的最佳实践。
 
 博客首页是 Astro 服务器端数据获取和模板功能协同工作的实际演示。await getCollection('blog') 调用 20 在服务器端（对于静态站点则在构建时）发生。获取并排序的数据随后直接可用于类似 HTML 的模板进行渲染。整个过程产生一个包含博客文章列表的静态 HTML 页面，确保了快速的加载时间和 SEO 友好性，而无需任何客户端 JavaScript 来获取或显示列表。  
@@ -466,6 +480,7 @@ const pageTitle = "我的博客";
    * 导入 getCollection。  
    * 获取所有博文：const posts \= await getCollection('blog');  
    * 遍历博文数组，为 getStaticPaths 返回一个包含 params 和 props 的对象数组：  
+
 ```html
 ---
 // src/pages/blog/[slug].astro
@@ -484,6 +499,7 @@ export async function getStaticPaths() {
 ```
 
 3. **访问博文数据:** 在组件脚本部分，通过 Astro.props 接收从 getStaticPaths 传递过来的 post 对象 16。  
+
 ```html
 ---
 //... (getStaticPaths 函数如上)
@@ -497,7 +513,7 @@ const { Content } = await post.render(); // 渲染 Markdown/MDX 内容
    * 显示其他 frontmatter 信息，如发布日期、作者等。  
    * 渲染博文主体内容：使用 \<Content /\> 组件。  
    * 通常会使用一个专门为博文设计的布局组件（例如 BlogPostLayout），它可以包含作者信息、标签云、评论区等特定元素 18。  
- 
+
 动态路由文件中 getStaticPaths 和 Astro.props 的组合是 Astro 在构建时以类型安全、高性能的方式生成独立内容页面的核心机制。getStaticPaths 17 决定了  
 *哪些*页面需要构建以及每个页面需要*什么数据*（通过 props）。然后，Astro 遍历这个列表，为每个项目渲染 \[slug\].astro 模板，并注入特定的 props。由于 post 是作为 prop 传递的 18，模板可以立即访问所有必要的数据，而无需客户端获取，从而实现了快速的静态页面。如果使用 TypeScript 和模式，  
 Astro.props 将是类型化的。  
@@ -518,6 +534,7 @@ post.slug（通常从文件名或 frontmatter 字段派生）直接转换为像 
   * 在 .astro 组件内部，您可以直接使用 \<style\> 标签来编写 CSS。默认情况下，这些样式是**作用域化**的。这意味着 Astro 会处理这些样式，确保它们只应用于当前组件内的元素，不会泄露出去影响其他组件或全局样式。这通过为选择器添加唯一的哈希属性来实现。  
   * 这种机制允许您为组件编写特定的样式，而无需担心类名冲突或样式覆盖问题，极大地提高了样式管理的便捷性和模块化程度。  
     代码段  
+
 ```html
 ---
 // src/components/MyButton.astro
@@ -562,6 +579,7 @@ Tailwind CSS 是一个非常流行的“实用优先”CSS 框架，它通过提
   2. **配置 tailwind.config.js:**  
      * 确保 content 数组包含了所有可能使用 Tailwind 类名的文件路径，例如：'./src/\*\*/\*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}' 9。这是 Tailwind 用来扫描并生成所需 CSS 的依据。  
      * 您可以根据需要在此文件中自定义主题（颜色、字体、断点等）23。  
+
 ```js
 // tailwind.config.cjs (或.mjs)  
 /\*\* @type {import('tailwindcss').Config} \*/  
@@ -571,12 +589,12 @@ module.exports \= {
  \],  
  theme: {  
    extend: {  
-	 colors: {  
-	   'brand-primary': '\#FF6347', // 自定义品牌色  
-	 },  
-	 fontFamily: {  
-	   'sans': \['Inter', 'sans-serif'\], // 自定义字体  
-	 }  
+  colors: {  
+    'brand-primary': '\#FF6347', // 自定义品牌色  
+  },  
+  fontFamily: {  
+    'sans': \['Inter', 'sans-serif'\], // 自定义字体  
+  }  
    },  
  },  
  plugins:,  
@@ -593,7 +611,9 @@ module.exports \= {
 
        9  
      * 将此 CSS 文件导入到您的主布局组件中（例如，在 BaseLayout.astro 的 \<head\> 中或脚本区域）9。  
+
 * **使用实用类:** 完成上述步骤后，您就可以在 .astro 组件、MDX 文件或任何集成的 UI 框架组件的模板中直接使用 Tailwind 的实用类了。  
+
 ```html
 <h1 class="text-3xl font-bold text-brand-primary underline decoration-wavy"\>  
 我的 Tailwind 博客标题\!  
@@ -620,11 +640,14 @@ Tailwind 的实用优先方法与 Astro 基于组件的架构很好地互补，�
 RSS (Really Simple Syndication) 订阅源允许用户通过 RSS阅读器（如 Feedly, The Old Reader 等）订阅您的博客更新，当您发布新文章时，他们会收到通知。这对于内容分发和用户留存非常重要 25。
 
 * 安装: 使用您偏好的包管理器安装 @astrojs/rss 包：  
+
 ```shell
 npm install @astrojs/rss 25  
 ```
+
 * **配置:**  
   1. **站点 URL:** 确保在您的 astro.config.mjs 文件中配置了 site 属性。这个 URL 将用于生成 RSS 条目中的链接 25。  
+
 ```js
  // astro.config.mjs  
  import { defineConfig } from 'astro/config';
@@ -637,6 +660,7 @@ npm install @astrojs/rss 25
 
   2. **创建 RSS 端点:** 在 src/pages/ 目录下创建一个 API 端点文件，通常命名为 rss.xml.js 或 feed.xml.js。这将是您 RSS 订阅源的 URL 25。例如，  
      src/pages/rss.xml.js 将在 your-blog-domain.com/rss.xml 生成订阅源。  
+
 * **生成订阅源:**  
   * 在该 .xml.js 文件中，从 @astrojs/rss 导入 rss 辅助函数。  
   * 导出一个异步的 GET 函数，该函数调用 rss() 并返回其结果。  
@@ -649,6 +673,7 @@ npm install @astrojs/rss 25
     * stylesheet (可选): 指向一个 XSL 样式表的 URL，用于在浏览器中更好地显示 XML 订阅源 25。  
 * **生成 items 数组:**  
   * **使用内容集合:** 这是推荐的方式。首先使用 getCollection('blog') 获取所有博文，然后将每篇文章映射为 RSS 条目所需的格式。每个条目对象至少应包含 link (文章的完整 URL)、title 和 pubDate。description (摘要) 和 content (完整的 HTML 内容) 也是强烈推荐的 25。  
+
 ```js
 // src/pages/rss.xml.js  
 import rss from '@astrojs/rss';  
@@ -660,25 +685,26 @@ const parser \= new MarkdownIt();
 export async function GET(context) {  
   const blogPosts \= await getCollection('blog');  
   return rss({  
-	title: '我的 Astro 博客',  
-	description: '分享关于 Astro 和 Web 开发的最新动态与技巧',  
-	site: context.site,  
-	items: blogPosts.map((post) \=\> ({  
-	  title: post.data.title,  
-	  pubDate: post.data.pubDate,  
-	  description: post.data.description,  
-	  link: \`/blog/${post.slug}/\`, // 确保这是文章的正确链接  
-	  // 如果想包含完整内容，需要将 Markdown 转换为 HTML 并清理  
-	  // content: sanitizeHtml(parser.render(post.body)),  
-	})),  
-	customData: \`\<language\>zh-CN\</language\>\`,  
-	// stylesheet: '/rss-styles.xsl', // 可选的 XSL 样式表  
+ title: '我的 Astro 博客',  
+ description: '分享关于 Astro 和 Web 开发的最新动态与技巧',  
+ site: context.site,  
+ items: blogPosts.map((post) \=\> ({  
+   title: post.data.title,  
+   pubDate: post.data.pubDate,  
+   description: post.data.description,  
+   link: \`/blog/${post.slug}/\`, // 确保这是文章的正确链接  
+   // 如果想包含完整内容，需要将 Markdown 转换为 HTML 并清理  
+   // content: sanitizeHtml(parser.render(post.body)),  
+ })),  
+ customData: \`\<language\>zh-CN\</language\>\`,  
+ // stylesheet: '/rss-styles.xsl', // 可选的 XSL 样式表  
   });  
+}
 ```
-    }
 
-  * **使用 pagesGlobToRssItems() (旧方法):** 如果您的内容仍在 src/pages/ 目录下（例如 src/pages/blog/\*\*/\*.md），可以使用 pagesGlobToRssItems(import.meta.glob('./blog/\*\*/\*.md')) 来生成 items 25。但请注意，此方法可能不如使用内容集合灵活和类型安全。  
+* **使用 pagesGlobToRssItems() (旧方法):** 如果您的内容仍在 src/pages/ 目录下（例如 src/pages/blog/\*\*/\*.md），可以使用 pagesGlobToRssItems(import.meta.glob('./blog/\*\*/\*.md')) 来生成 items 25。但请注意，此方法可能不如使用内容集合灵活和类型安全。  
 * **自动发现:** 为了让浏览器和 RSS 阅读器能够自动发现您的订阅源，请在您网站所有页面的 \<head\> 部分（通常在主布局文件中）添加一个 \<link\> 标签 25：  
+
 ```html
 <link rel="alternate" type="application/rss+xml" title="我的博客 RSS 订阅" href="/rss.xml"\>
 ```
@@ -697,6 +723,7 @@ getCollection 25，因为它利用了已定义的模式和结构化数据，从�
 * **Astro 的 \<Image /\> 组件:**  
   * **自动优化:** \<Image /\> 组件会自动对图片进行多种优化，包括调整大小、压缩，并根据浏览器支持情况提供现代图片格式（如 WebP、AVIF）27。  
   * **必需属性:** 对于本地图片，通常需要提供 src (通过 import 从 src/assets/ 导入图片) 和 alt (替代文本)。为了防止布局偏移 (CLS)，强烈建议提供 width 和 height 属性。  
+
 ```html
 ---  
 import myImage from '../assets/my-blog-image.png';  
@@ -705,12 +732,12 @@ import { Image } from 'astro:assets';
 <Image src={myImage} width={800} height={400} alt="一篇精彩博文的配图" /\>
 ```
 
-  * 常用 Props 27:  
-    * format: 指定输出图片的格式，例如 'webp', 'avif', 'jpeg', 'png'。默认为 WebP。  
-    * quality: 定义图片质量。可以是预设值 ('low', 'mid', 'high', 'max') 或一个数字 (0-100，不同格式解释可能不同)。  
-    * widths: 一个包含多个图片宽度的数组，Astro 会据此生成带有 srcset 属性的图片，以实现响应式图片。  
-    * densities: 类似于 widths，但基于设备像素密度。  
-  * **远程图片:** \<Image /\> 组件也可以处理远程图片。您需要提供完整的 URL 作为 src。为了安全，需要在 astro.config.mjs 中配置允许的远程图片域名 (image.domains) 或模式 (image.remotePatterns)。对于远程图片，如果无法预知尺寸，可以使用 inferSize: true 来尝试推断，但这可能会有性能开销 27。  
+* 常用 Props 27:  
+  * format: 指定输出图片的格式，例如 'webp', 'avif', 'jpeg', 'png'。默认为 WebP。  
+  * quality: 定义图片质量。可以是预设值 ('low', 'mid', 'high', 'max') 或一个数字 (0-100，不同格式解释可能不同)。  
+  * widths: 一个包含多个图片宽度的数组，Astro 会据此生成带有 srcset 属性的图片，以实现响应式图片。  
+  * densities: 类似于 widths，但基于设备像素密度。  
+* **远程图片:** \<Image /\> 组件也可以处理远程图片。您需要提供完整的 URL 作为 src。为了安全，需要在 astro.config.mjs 中配置允许的远程图片域名 (image.domains) 或模式 (image.remotePatterns)。对于远程图片，如果无法预知尺寸，可以使用 inferSize: true 来尝试推断，但这可能会有性能开销 27。  
 * **Astro 的 \<Picture /\> 组件:**  
   * 当需要更精细的艺术指导（例如，为不同屏幕尺寸或格式提供完全不同的图片版本）时，可以使用 \<Picture /\> 组件。它允许您使用 HTML 的 \<source\> 元素来指定多个图片源 27。  
   * 常用 Props 27:  
@@ -748,6 +775,7 @@ public/ 中的图片按原样提供。这种选择会影响性能。对于博客
   此命令会自动安装必要的依赖，并在您的 astro.config.mjs 文件中添加 React 集成配置。  
 * 创建 React 组件:  
   您可以像平常一样创建一个 React 组件。例如，一个简单的计数器：  
+
 ```js
 // src/components/ReactCounter.jsx  
 import React, { useState } from 'react';
@@ -757,9 +785,9 @@ const \[count, setCount\] \= useState(startCount);
 
 return (  
   \<div\>  
-	\<p\>当前计数: {count}\</p\>  
-	\<button onClick={() \=\> setCount(count \- 1)}\>-\</button\>  
-	\<button onClick={() \=\> setCount(count \+ 1)}\>+\</button\>  
+ \<p\>当前计数: {count}\</p\>  
+ \<button onClick={() \=\> setCount(count \- 1)}\>-\</button\>  
+ \<button onClick={() \=\> setCount(count \+ 1)}\>+\</button\>  
   \</div\>  
 );  
 }
@@ -769,6 +797,7 @@ return (
   1. 导入您的 React 组件。  
   2. 在模板中使用该组件，并附带一个 client:\* 指令来控制其水合（即在客户端激活）14。  
      代码段  
+
 ```html
 ---  
 import ReactCounter from '../components/ReactCounter.jsx';  
@@ -908,4 +937,4 @@ Astro 正在不断发展，增加了像视图转换和服务器端功能这样�
 
 通过本指南的系统化学习，您应该已经对如何使用 Astro 从零开始构建一个功能齐全、性能卓越的现代化博客有了深入的理解。Astro 凭借其“内容优先”的理念、默认零 JavaScript 的性能优势、创新的孤岛架构以及对 Markdown 和内容集合的强大支持，为博客开发者提供了一个独特且高效的解决方案。  
 从搭建开发环境、掌握 .astro 组件和布局、理解路由机制，到利用内容集合管理博文、应用 Tailwind CSS 进行样式设计，再到集成 RSS 订阅和图片优化等增强功能，每一步都旨在为您打下坚实的基础。最终，通过 Vercel、Netlify 等现代化平台进行部署，您的 Astro 博客便能轻松上线，触达全球读者。  
-Astro 的魅力不仅在于其当前提供的强大功能，更在于其持续演进的生态系统和活跃的社区。随着视图转换、服务器端点等高级特性的不断成熟，Astro 正逐渐成为一个能够应对更广泛 Web 开发需求的通用框架。  
+Astro 的魅力不仅在于其当前提供的强大功能，更在于其持续演进的生态系统和活跃的社区。随着视图转换、服务器端点等高级特性的不断成熟，Astro 正逐渐成为一个能够应对更广泛 Web 开发需求的通用框架。

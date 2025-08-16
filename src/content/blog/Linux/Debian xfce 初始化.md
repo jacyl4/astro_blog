@@ -6,8 +6,22 @@ tags:
   - "#shell-scripting"
 created: 2025-04-20
 ---
+# Debian XFCE 初始化
+
+禁用休眠屏保与显示器关闭
+
+```bash
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -s 0
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-sleep -s 0
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -s 0
+
+xset -dpms
+xset s off
+```
+
 自动登录
 编辑/etc/lightdm/lightdm.conf
+
 ```bash
 [Seat:*]
 autologin-user=aabbcc
@@ -17,10 +31,13 @@ systemctl restart lightdm
 ```
 
 rime
+
 ```bash
 apt install --reinstall fcitx5 fcitx5-rime fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-frontend-qt6 fonts-noto-cjk
 ```
+
 编辑 ~/.profile
+
 ```bash
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
@@ -28,6 +45,7 @@ export XMODIFIERS=@im=fcitx
 ```
 
 Firefox-devedition
+
 ```bash
 install -d -m 0755 /etc/apt/keyrings
 
@@ -47,14 +65,15 @@ apt purge firefox-esr
 ```
 
 sublime-text
+
 ```bash
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/sublimehq-archive.gpg > /dev/null
 echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 apt update && apt install sublime-text
 ```
 
-
 wireguard_toggle
+
 ```bash
 #!/bin/bash
 # 定义 WireGuard 接口名称
@@ -81,8 +100,9 @@ else
     fi
 fi
 ```
+
 启动命令，以便输密码
+
 ```bash
 pkexec /path/to/your/wireguard_toggle.sh
 ```
-
