@@ -106,3 +106,15 @@ fi
 ```bash
 pkexec /path/to/your/wireguard_toggle.sh
 ```
+
+配置 NetworkManager 和 resolvconf 协同工作
+```bash
+rm -rf /etc/resolv.conf
+ln -s /run/resolvconf/resolv.conf /etc/resolv.conf
+
+nano /etc/NetworkManager/NetworkManager.conf
+[main] dns=resolvconf
+
+systemctl restart NetworkManager
+resolvconf -u
+```
