@@ -118,3 +118,6 @@ nano /etc/NetworkManager/NetworkManager.conf
 systemctl restart NetworkManager
 resolvconf -u
 ```
+
+禁用窗口吸附
+`Window Manager` - `Advanced` - `Windows snapping` 去掉勾选 “To screen borders”
