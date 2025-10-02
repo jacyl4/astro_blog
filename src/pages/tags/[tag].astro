@@ -21,7 +21,7 @@ const posts: ProcessedBlogPost[] = await getPostsByTag(tagName);
 
 <MainLayout title={`${tagName} - ${PAGE_TITLES.tags} - ${SITE_TITLE}`}>
   <h1 class="text-3xl font-bold mb-4">{tagName}</h1>
-  <p class="text-gray-400 mb-8">
+  <p class="mb-8" style="color: var(--meta-tag-color);">
     {UI_TEXT.postsInTag(posts.length)}
   </p>
   
@@ -33,7 +33,7 @@ const posts: ProcessedBlogPost[] = await getPostsByTag(tagName);
   
   {posts.length === 0 && (
     <div class="text-center py-12">
-      <p class="text-xl text-gray-400">{UI_TEXT.noPostsInTag}</p>
+      <p class="text-xl" style="color: var(--meta-label-color);">{UI_TEXT.noPostsInTag}</p>
     </div>
   )}
   

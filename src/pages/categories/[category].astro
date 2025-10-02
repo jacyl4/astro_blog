@@ -23,7 +23,7 @@ const posts: ProcessedBlogPost[] = await getPostsByCategory(categoryName);
 
 <MainLayout title={`${categoryName} - ${PAGE_TITLES.categories} - ${SITE_TITLE}`}>
   <h1 class="text-3xl font-bold mb-4">{categoryName}</h1>
-  <p class="text-gray-400 mb-8">
+  <p class="mb-8" style="color: var(--meta-category-color);">
     {UI_TEXT.postsInCategory(posts.length)}
   </p>
   
@@ -35,7 +35,7 @@ const posts: ProcessedBlogPost[] = await getPostsByCategory(categoryName);
   
   {posts.length === 0 && (
     <div class="text-center py-12">
-      <p class="text-xl text-gray-400">{UI_TEXT.noPostsInCategory}</p>
+      <p class="text-xl" style="color: var(--meta-label-color);">{UI_TEXT.noPostsInCategory}</p>
     </div>
   )}
   
