@@ -17,10 +17,6 @@
   --code-highlight: rgba(244, 231, 208, 0.22);
 }
 
-.astro-code code {
-  filter: brightness(1.5);
-}
-
 .astro-code {
   position: relative;
   overflow-x: auto;
