@@ -28,7 +28,7 @@ export const UI_TEXT = {
     go_back_home: '返回首页',
     postsInCategory: (count: number) => `该分类共有 ${count} 篇文章`,
     noPostsInCategory: '该分类下暂无文章',
-    postsInTag: (count: number) => `该分类共有 ${count} 篇文章`,
+    postsInTag: (count: number) => `该标签共有 ${count} 篇文章`,
     noPostsInTag: '该标签下暂无文章',
     unknownDate: '未知日期',
     untitledPost: '无标题文章',

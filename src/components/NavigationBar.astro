@@ -1,6 +1,26 @@
 ---
 import { NAVIGATION_LINKS } from '@/consts';
 import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
+
+const currentPathname = Astro.url.pathname;
+
+const normalizePath = (path: string) => {
+  if (!path.endsWith('/')) {
+    return `${path}/`;
+  }
+  return path;
+};
+
+const isActiveLink = (href: string) => {
+  const normalizedHref = normalizePath(href);
+  const normalizedCurrent = normalizePath(currentPathname);
+
+  if (normalizedHref === '/') {
+    return normalizedCurrent === '/';
+  }
+
+  return normalizedCurrent.startsWith(normalizedHref);
+};
 ---
 
 <nav class="flex items-center justify-between px-4 md:px-8 relative">
@@ -13,9 +33,20 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
 
   <!-- Desktop Menu -->
   <ul class="hidden md:flex items-center justify-start h-full gap-6">
-    {NAVIGATION_LINKS.map(link => (
-      <li><a href={link.href} class="h-full flex items-center font-semibold transition-colors duration-200">{link.text}</a></li>
-    ))}
+    {NAVIGATION_LINKS.map(link => {
+      const active = isActiveLink(link.href);
+      return (
+        <li>
+          <a
+            href={link.href}
+            class={`h-full flex items-center transition-colors duration-200 ${active ? 'text-accent font-semibold' : 'opacity-80 hover:opacity-100'}`}
+            aria-current={active ? 'page' : undefined}
+          >
+            {link.text}
+          </a>
+        </li>
+      );
+    })}
   </ul>
 
   <div class="flex items-center">
@@ -25,9 +56,20 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
   <!-- Mobile Menu -->
   <div id="mobile-menu" data-state="closed" class="absolute bottom-full left-0 w-full bg-main-content/90 md:hidden transition-all duration-300 ease-in-out">
     <ul class="flex flex-col items-center">
-      {NAVIGATION_LINKS.map(link => (
-        <li><a href={link.href} class="block w-full text-center py-2 px-6 font-semibold transition-colors duration-200">{link.text}</a></li>
-      ))}
+      {NAVIGATION_LINKS.map(link => {
+        const active = isActiveLink(link.href);
+        return (
+          <li>
+            <a
+              href={link.href}
+              class={`block w-full text-center py-2 px-6 font-semibold transition-colors duration-200 ${active ? 'text-accent' : ''}`}
+              aria-current={active ? 'page' : undefined}
+            >
+              {link.text}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </nav>

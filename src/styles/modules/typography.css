@@ -2,6 +2,7 @@
   .prose {
     font-size: theme('fontSize.base');
     color: var(--text);
+    font-family: var(--font-body);
   }
 
   .prose h1,

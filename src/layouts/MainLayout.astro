@@ -8,13 +8,14 @@ import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
+import { SITE_DESCRIPTION } from '@/consts';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = '我的Astro博客' } = Astro.props;
+const { title, description = SITE_DESCRIPTION } = Astro.props;
 ---
 
 <!DOCTYPE html>

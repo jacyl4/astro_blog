@@ -17,8 +17,8 @@ export default {
       },
     },
     fontFamily: {
-      sans: ['sans-serif'],
-      mono: ['monospace'],
+      sans: ['var(--font-ui)', 'system-ui', 'sans-serif'],
+      mono: ['var(--font-body)', 'monospace'],
     },
     boxShadow: {
       'soft': '0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07)',

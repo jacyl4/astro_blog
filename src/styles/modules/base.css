@@ -5,6 +5,7 @@ html {
 body {
   background-color: var(--background-color);
   color: var(--text-color);
+  font-family: var(--font-body);
   margin: 0;
   padding: 0;
   min-height: 100vh;
@@ -12,6 +13,18 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+}
+
+nav,
+#sidebar,
+button,
+input,
+select,
+textarea,
+#header-container,
+#footer,
+#table-of-contents {
+  font-family: var(--font-ui);
 }
 
 a {

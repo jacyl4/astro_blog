@@ -27,6 +27,28 @@ export interface BlogTag {
 
 // 缓存所有已排序的文章，避免在单次构建/请求中重复处理
 let sortedPosts: ProcessedBlogPost[] | null = null;
+let cachedCategories: BlogCategory[] | null = null;
+let cachedTags: BlogTag[] | null = null;
+let cachedArchiveMonths: string[] | null = null;
+
+const collator = new Intl.Collator('zh-CN');
+
+function clearDerivedCaches() {
+  cachedCategories = null;
+  cachedTags = null;
+  cachedArchiveMonths = null;
+}
+
+function logDebug(message: string) {
+  if (import.meta.env.DEV) {
+    console.log(message);
+  }
+}
+
+export function resetBlogCache() {
+  sortedPosts = null;
+  clearDerivedCaches();
+}
 
 /**
  * 获取所有博客文章，并按创建日期降序排序。
@@ -72,9 +94,9 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
       return dateB - dateA;
     });
 
-    console.log(`[BlogService] Fetched, processed, and sorted ${posts.length} posts.`);
-    // 缓存结果
+    clearDerivedCaches();
     sortedPosts = posts;
+    logDebug(`[BlogService] Fetched, processed, and sorted ${posts.length} posts.`);
     return posts;
   } catch (error) {
     console.error('Error fetching or sorting blog posts:', error);
@@ -88,15 +110,26 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
  */
 export async function getPostsByCategory(category: string): Promise<ProcessedBlogPost[]> {
   const allPosts = await getAllPosts();
-  return allPosts.filter(post => 
-    post.data.category.toLowerCase() === category.toLowerCase()
-  );
+  const normalizedCategorySlug = slugify(category);
+  const normalizedCategoryName = category.trim().toLowerCase();
+
+  return allPosts.filter(post => {
+    const postCategory = post.data.category.trim();
+    return (
+      slugify(postCategory) === normalizedCategorySlug ||
+      postCategory.toLowerCase() === normalizedCategoryName
+    );
+  });
 }
 
 /**
  * 获取所有文章的归档月份列表 (YYYY-MM)
  */
 export async function getArchiveMonths(): Promise<string[]> {
+  if (cachedArchiveMonths) {
+    return [...cachedArchiveMonths];
+  }
+
   const allPosts = await getAllPosts();
   const months = new Set<string>();
 
@@ -108,7 +141,8 @@ export async function getArchiveMonths(): Promise<string[]> {
     }
   });
 
-  return Array.from(months).sort().reverse();
+  cachedArchiveMonths = Array.from(months).sort().reverse();
+  return [...cachedArchiveMonths];
 }
 
 /**
@@ -135,6 +169,10 @@ export async function getPostBySlug(slug: string): Promise<ProcessedBlogPost | u
  * 获取所有分类及其文章数量
  */
 export async function getAllCategories(): Promise<BlogCategory[]> {
+  if (cachedCategories) {
+    return cachedCategories.map(category => ({ ...category }));
+  }
+
   const allPosts = await getAllPosts();
   const categoriesMap = new Map<string, number>();
   
@@ -146,20 +184,35 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
   
   const categories: BlogCategory[] = [];
   categoriesMap.forEach((count, name) => {
-    categories.push({
-      name,
-      slug: slugify(name),
-      count
-    });
+    const slug = slugify(name);
+    if (slug) {
+      categories.push({
+        name,
+        slug,
+        count
+      });
+    }
   });
-  
-  return categories;
+
+  categories.sort((a, b) => {
+    if (b.count !== a.count) {
+      return b.count - a.count;
+    }
+    return collator.compare(a.name, b.name);
+  });
+
+  cachedCategories = categories;
+  return cachedCategories.map(category => ({ ...category }));
 }
 
 /**
  * 获取所有标签及其文章数量
  */
 export async function getAllTags(): Promise<BlogTag[]> {
+  if (cachedTags) {
+    return cachedTags.map(tag => ({ ...tag }));
+  }
+
   const allPosts = await getAllPosts();
   const tagsMap = new Map<string, number>();
   
@@ -183,8 +236,16 @@ export async function getAllTags(): Promise<BlogTag[]> {
       });
     }
   });
-  
-  return tags;
+
+  tags.sort((a, b) => {
+    if (b.count !== a.count) {
+      return b.count - a.count;
+    }
+    return collator.compare(a.name, b.name);
+  });
+
+  cachedTags = tags;
+  return cachedTags.map(tag => ({ ...tag }));
 }
 
 /**
@@ -192,10 +253,16 @@ export async function getAllTags(): Promise<BlogTag[]> {
  */
 export async function getPostsByTag(tag: string): Promise<ProcessedBlogPost[]> {
   const allPosts = await getAllPosts();
-  const lowercasedTag = tag.toLowerCase();
+  const normalizedTagSlug = slugify(tag);
+  const normalizedTagName = tag.trim().toLowerCase();
+
   return allPosts.filter(post => 
-    post.data.tags?.some(t => 
-      t.toLowerCase() === lowercasedTag || slugify(t) === lowercasedTag
-    )
+    post.data.tags?.some(t => {
+      const trimmedTag = t.trim();
+      return (
+        slugify(trimmedTag) === normalizedTagSlug ||
+        trimmedTag.toLowerCase() === normalizedTagName
+      );
+    }) ?? false
   );
 }

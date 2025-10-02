@@ -3,8 +3,9 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import { getAllPosts, getPostBySlug } from '@/services/BlogService';
 import { render } from 'astro:content';
-import { UI_TEXT, DATE_FORMAT, URLS } from '@/consts';
+import { UI_TEXT, URLS } from '@/consts';
 import { slugify } from '@/utils/stringUtils';
+import { formatDate } from '@/utils/dateUtils';
 
 export async function getStaticPaths() {
   const allPosts = await getAllPosts();
@@ -30,9 +31,7 @@ if (!post) {
 
 const { Content } = await render(post);
 
-const formattedDate: string = post.data.created
-  ? post.data.created.toLocaleDateString(DATE_FORMAT.locale, DATE_FORMAT.options as Intl.DateTimeFormatOptions)
-  : UI_TEXT.unknownDate;
+const formattedDate = formatDate(post.data.created);
 
 ---
 

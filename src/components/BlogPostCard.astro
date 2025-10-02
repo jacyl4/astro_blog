@@ -1,8 +1,10 @@
 ---
 // 博客文章卡片组件，展示标题、摘要、分类等
 import type { ProcessedBlogPost } from '@/services/BlogService';
-import { POST_READ_MORE_TEXT, URLS } from '@/consts';
+import { POST_READ_MORE_TEXT, URLS, UI_TEXT } from '@/consts';
 import { Icon } from 'astro-icon/components';
+import { formatDate } from '@/utils/dateUtils';
+import { slugify } from '@/utils/stringUtils';
 
 interface Props {
   post: ProcessedBlogPost;
@@ -10,6 +12,9 @@ interface Props {
 
 const { post } = Astro.props;
 const postUrl = `${URLS.posts}/${post.slug}/`;
+const formattedDate = formatDate(post.data.created);
+const category = post.data.category?.trim();
+const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : undefined;
 ---
 
 <article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary transition-all duration-300 dark:hover:shadow-soft-lg hover:-translate-y-1">
@@ -19,8 +24,18 @@ const postUrl = `${URLS.posts}/${post.slug}/`;
     <header class="mb-4">
       <h2 class="font-bold text-xl text-text-primary transition-colors duration-300 group-hover:text-accent">{post.data.title}</h2>
     </header>
-    
-    <div class="flex-grow"></div>
+    <div class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>{UI_TEXT.publishDate}: {formattedDate}</span>
+        {categoryUrl && (
+          <span>
+            {UI_TEXT.category}:
+            <a href={categoryUrl} class="ml-1 text-link hover:underline relative z-20">{category}</a>
+          </span>
+        )}
+      </div>
+
+    </div>
   </div>
   
   <footer class="mt-auto">

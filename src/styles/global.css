@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
+@import "./modules/fonts.css";
 
 @theme {
   --color-background: var(--background-color);
