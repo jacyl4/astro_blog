@@ -1,55 +1,9 @@
 /*
-  Shiki syntax highlighting tuned to Gruvbox Material palette (see add/theme.css).
-  Colors stick to Obsidian theme variants and adapt to light/dark automatically.
+  Shiki syntax highlighting tuned to Gruvbox Material palette.
 */
 
-/* Gruvbox Material reference colors */
 :root {
-  --light-bg: #fbf1c7;
-  --light-bg-soft: #f2e5bc;
-  --light-border: #d5c4a1;
-  --light-foreground: #3c3836;
-  --light-comment: #928374;
-  --light-red: #9d0006;
-  --light-orange: #af3a03;
-  --light-yellow: #b57614;
-  --light-green: #6c782e;
-  --light-blue: #076678;
-  --light-purple: #8f3f71;
-  --light-aqua: #689d6a;
-
-  --dark-bg-hard: #1d2021;
-  --dark-bg: #282828;
-  --dark-bg-soft: #32302f;
-  --dark-border: #504945;
-  --dark-foreground: #f4e7d0;
-  --dark-comment: #d5c4a1;
-  --dark-red: #fb4934;
-  --dark-orange: #fe8019;
-  --dark-yellow: #fabd2f;
-  --dark-green: #b8bb26;
-  --dark-blue: #83a598;
-  --dark-purple: #d3869b;
-  --dark-aqua: #8ec07c;
-}
-
-:root {
-  --code-surface: var(--light-bg);
-  --code-foreground: var(--light-foreground);
-  --code-border: rgba(60, 56, 54, 0.18);
-  --code-comment: var(--light-comment);
-  --code-punctuation: var(--light-foreground);
-  --code-literal: var(--light-yellow);
-  --code-string: var(--light-aqua);
-  --code-keyword: var(--light-red);
-  --code-function: var(--light-blue);
-  --code-type: var(--light-purple);
-  --code-constant: var(--light-orange);
-  --code-highlight: rgba(217, 136, 37, 0.18);
-}
-
-html.dark {
-  --code-surface: var(--dark-bg);
+  --code-surface: #282828;
   --code-foreground: #f4e7d0;
   --code-border: rgba(244, 231, 208, 0.36);
   --code-comment: #bdae93;
@@ -63,7 +17,7 @@ html.dark {
   --code-highlight: rgba(244, 231, 208, 0.22);
 }
 
-html.dark .astro-code code {
+.astro-code code {
   filter: brightness(1.5);
 }
 

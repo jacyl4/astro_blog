@@ -1,8 +1,8 @@
 :root {
-  --callout-border: #d1d5db;
-  --callout-bg: #f9fafb;
-  --callout-title-bg: #f3f4f6;
-  --callout-text: #111827;
+  --callout-border: #374151;
+  --callout-bg: #0b0f14;
+  --callout-title-bg: #0e141b;
+  --callout-text: #e5e7eb;
 
   --callout-note: #3b82f6;
   --callout-info: #06b6d4;
@@ -15,13 +15,6 @@
   --callout-example: #6366f1;
   --callout-question: #22c55e;
   --callout-success: #16a34a;
-}
-
-.dark {
-  --callout-border: #374151;
-  --callout-bg: #0b0f14;
-  --callout-title-bg: #0e141b;
-  --callout-text: #e5e7eb;
 }
 
 .callout {

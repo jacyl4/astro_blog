@@ -80,6 +80,7 @@ a:hover {
   white-space: nowrap;
   font-weight: 600;
   color: var(--meta-label-color);
+  align-self: flex-start;
 }
 
 .post-meta-values {

@@ -20,27 +20,6 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
 <html lang="zh-CN">
   <head>
     <script is:inline>
-      // Ensure the theme initialization function is defined only once.
-      if (typeof window.initTheme !== 'function') {
-        window.initTheme = function() {
-          const theme = (() => {
-            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-              return localStorage.getItem('theme');
-            }
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-              return 'dark';
-            }
-            return 'light';
-          })();
-
-          if (theme === 'light') {
-            document.documentElement.classList.remove('dark');
-          } else {
-            document.documentElement.classList.add('dark');
-          }
-        };
-      }
-
       if (typeof window.normalizeFootnotes !== 'function') {
         window.normalizeFootnotes = function() {
           const adjustLinks = (selector) => {
@@ -64,13 +43,10 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
         };
       }
 
-      // Initialize the theme on initial page load.
-      window.initTheme();
       window.normalizeFootnotes();
 
-      // Handle theme and other updates after page swaps.
+      // Handle footnote updates after page swaps.
       document.addEventListener('astro:after-swap', () => {
-        window.initTheme();
         window.normalizeFootnotes();
 
         const { documentElement } = document;
@@ -125,7 +101,7 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
           </aside>
         </div>
 
-        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end md:rounded-b-xl" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-dark);">
+        <footer id="footer" class="h-[39px] p-4 flex items-center justify-end md:rounded-b-xl" style="background-color: var(--footer-bg); border-top: 1px solid var(--divider-shadow-strong);">
           <p class="text-sm">
             <a href="https://astro.build/" target="_blank" rel="noopener noreferrer" class="font-light text-text-primary footer-link">Self-designed, Astro-driven.</a>
           </p>

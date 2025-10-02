@@ -16,7 +16,7 @@ const searchInputId = 'tag-search';
       <input
         id={searchInputId}
         type="search"
-        class="w-full rounded-md border border-gray-300 bg-white/80 px-3 py-2 text-sm transition-colors focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-black/20"
+        class="w-full rounded-md border border-gray-600 bg-black/20 px-3 py-2 text-sm transition-colors focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
         placeholder={UI_TEXT.tagSearchPlaceholder}
         data-tag-search
         inputmode="search"
@@ -40,7 +40,7 @@ const searchInputId = 'tag-search';
       <p class="text-sm text-gray-500 hidden" data-tag-empty>{UI_TEXT.tagSearchNoResults}</p>
     </>
   ) : (
-    <p class="text-gray-600">{UI_TEXT.noTags}</p>
+    <p class="text-gray-400">{UI_TEXT.noTags}</p>
   )}
 </div>
 

@@ -1,6 +1,5 @@
 ---
 import { NAVIGATION_LINKS } from '@/consts';
-import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
 
 const currentPathname = Astro.url.pathname;
 
@@ -47,10 +46,6 @@ const isActiveLink = (href: string) => {
       );
     })}
   </ul>
-
-  <div class="flex items-center">
-    <ThemeSwitcher />
-  </div>
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" data-state="closed" class="absolute bottom-full left-0 w-full bg-main-content/90 md:hidden transition-all duration-300 ease-in-out">
@@ -160,21 +155,13 @@ const isActiveLink = (href: string) => {
     backdrop-filter: blur(4px);
     height: 2.25rem; /* 36px */
     background-color: rgba(var(--main-content-bg-rgb), 0.85);
-    border-top: 1px solid var(--divider-shadow-dark);
-    border-bottom: 1px solid var(--divider-shadow-dark);
+    border-top: 1px solid var(--divider-shadow-strong);
+    border-bottom: 1px solid var(--divider-shadow-strong);
   }
 
   a {
     color: var(--nav-text-color);
     background-color: transparent;
-  }
-
-  html:not(.dark) a {
-    color: var(--text-color);
-  }
-
-  html.dark a {
-    color: var(--text-color);
   }
 
   a:hover {

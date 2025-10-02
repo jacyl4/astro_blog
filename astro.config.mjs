@@ -84,10 +84,7 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      themes: {
-        light: 'gruvbox-light-medium',
-        dark: 'gruvbox-dark-medium',
-      },
+      theme: 'gruvbox-dark-medium',
       wrap: true,
     },
     smartypants: true,

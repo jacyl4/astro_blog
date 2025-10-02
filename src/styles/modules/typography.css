@@ -279,18 +279,6 @@
     background-color: var(--table-stripe-bg);
   }
 
-  /* Dark mode styles for prose */
-  .dark .prose {
-    color: var(--text);
-  }
-
-  .dark .prose th {
-    background-color: var(--surface-secondary-color);
-  }
-
-  .dark .prose tbody tr:nth-child(even) {
-    background-color: var(--background-color);
-  }
 }
 
 
