@@ -90,7 +90,7 @@
           listItem.appendChild(link);
           tocList.appendChild(listItem);
 
-          link.addEventListener('click', (event) => {
+          link.addEventListener('click', () => {
             const target = document.getElementById(heading.id);
             if (target) {
               target.scrollIntoView({ behavior: 'smooth', block: 'start' });

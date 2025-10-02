@@ -1,8 +1,7 @@
 ---
 // 博客文章卡片组件，展示标题、摘要、分类等
 import type { ProcessedBlogPost } from '@/services/BlogService';
-import { POST_READ_MORE_TEXT, URLS, UI_TEXT } from '@/consts';
-import { Icon } from 'astro-icon/components';
+import { URLS, UI_TEXT } from '@/consts';
 import { formatDate } from '@/utils/dateUtils';
 import { slugify } from '@/utils/stringUtils';
 
@@ -38,10 +37,5 @@ const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : unde
     </div>
   </div>
   
-  <footer class="mt-auto">
-    <a href={postUrl} class="relative z-20 text-link font-semibold inline-flex items-center gap-x-2 group/link">
-      {POST_READ_MORE_TEXT}
-      <Icon name="lucide:arrow-right" class="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1" />
-    </a>
-  </footer>
+  <footer class="mt-auto"></footer>
 </article>
