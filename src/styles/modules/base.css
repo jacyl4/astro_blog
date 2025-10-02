@@ -52,3 +52,14 @@ a:hover {
     font-size: 16px;
   }
 }
+
+
+#table-of-contents a {
+  text-decoration: none !important;
+}
+#table-of-contents a:hover {
+  text-decoration: none !important;
+}
+#table-of-contents a:visited {
+  text-decoration: none !important;
+}

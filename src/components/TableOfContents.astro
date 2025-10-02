@@ -1,12 +1,22 @@
 ---
 // src/components/TableOfContents.astro
 ---
-<nav id="table-of-contents" class="xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+1rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+<nav id="table-of-contents" class="xl:block fixed top-1/2 -translate-y-1/2 right-[calc(50%+576px+1rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border z-50" style="background-color: var(--card-bg); border-color: var(--border-color);">
   <h3 class="font-bold text-lg mb-2 whitespace-nowrap" style="color: var(--text-color);">目录</h3>
   <ul id="toc-list" class="space-y-1">
     <!-- Links will be injected here by script -->
   </ul>
 </nav>
+
+<style>
+  #table-of-contents a {
+    text-decoration: none;
+  }
+
+  #table-of-contents a:hover {
+    text-decoration: none;
+  }
+</style>
 
 <script>
   const updateToc = () => {
@@ -67,8 +77,10 @@
 
           link.href = `#${heading.id}`;
           link.textContent = heading.textContent;
-          link.className = 'block w-full hover:text-accent transition-colors duration-200 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis';
+          link.className = 'block w-full transition-colors duration-200 cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis';
           link.style.color = 'var(--text-color)';
+          link.style.textDecoration = 'none';
+          link.setAttribute('data-no-swup', 'true');
 
           const level = parseInt(heading.tagName.substring(1), 10);
           listItem.style.marginLeft = `${(level - 2) * 0.75}rem`;
@@ -76,11 +88,10 @@
           listItem.appendChild(link);
           tocList.appendChild(listItem);
 
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById(heading.id);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth' });
+          link.addEventListener('click', (event) => {
+            const target = document.getElementById(heading.id);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           });
         });
@@ -127,7 +138,6 @@
 
   // This event handles Astro's client-side navigation.
   document.addEventListener('astro:page-load', initToc);
-  
-  // This event handles the initial hard refresh of the page.
+  document.addEventListener('astro:after-swap', initToc);
   document.addEventListener('DOMContentLoaded', initToc);
 </script>

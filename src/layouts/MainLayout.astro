@@ -41,18 +41,51 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
         };
       }
 
+      if (typeof window.normalizeFootnotes !== 'function') {
+        window.normalizeFootnotes = function() {
+          const adjustLinks = (selector) => {
+            document.querySelectorAll(selector).forEach((link) => {
+              const href = link.getAttribute('href');
+              if (!href || !href.startsWith('#')) return;
+              const id = href.slice(1);
+              let target = document.getElementById(id);
+              if (!target) {
+                target = document.querySelector(`[id$='${CSS.escape(id)}']`);
+                if (target) {
+                  link.setAttribute('href', `#${target.id}`);
+                }
+              }
+              link.setAttribute('data-no-swup', 'true');
+            });
+          };
+
+          adjustLinks('a[data-footnote-ref]');
+          adjustLinks('.footnotes a[data-footnote-backref]');
+        };
+      }
+
       // Initialize the theme on initial page load.
       window.initTheme();
+      window.normalizeFootnotes();
 
       // Handle theme and other updates after page swaps.
       document.addEventListener('astro:after-swap', () => {
         window.initTheme();
+        window.normalizeFootnotes();
 
         const { documentElement } = document;
         const previousBehavior = documentElement.style.scrollBehavior;
         documentElement.style.scrollBehavior = 'auto';
         window.scrollTo({ top: 0, left: 0 });
         documentElement.style.scrollBehavior = previousBehavior;
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        window.normalizeFootnotes();
+      });
+
+      document.addEventListener('astro:page-load', () => {
+        window.normalizeFootnotes();
       });
     </script>
     <meta charset="UTF-8" />

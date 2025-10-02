@@ -38,27 +38,27 @@ const formattedDate = formatDate(post.data.created);
 <MainLayout title={post.data.title || UI_TEXT.untitledPost}>
   <article class="prose prose-lg dark:prose-invert max-w-4xl mx-auto mb-4 text-justify">
     <h1 class="mt-0 text-4xl leading-normal">{post.data.title}</h1>
-    <div class="post-meta text-gray-500 mb-8">
+    <div class="post-meta mb-8">
       {formattedDate && (
-        <div class="flex mb-1">
-          <span class="font-bold w-12 shrink-0">{UI_TEXT.publishDate}:</span>
-          <span>{formattedDate}</span>
+        <div class="flex mb-1 items-baseline gap-2">
+          <span class="font-semibold text-sm" style="color: var(--meta-label-color);">{UI_TEXT.publishDate}:</span>
+          <span class="text-sm" style="color: var(--meta-date-color);">{formattedDate}</span>
         </div>
       )}
       {post.data.category && (
-        <div class="flex mb-1">
-          <span class="font-bold w-12 shrink-0">{UI_TEXT.category}:</span>
-          <a href={`${URLS.categories}/${slugify(post.data.category)}/`} class="category-link text-gray-500 hover:underline">
+        <div class="flex mb-1 items-baseline gap-2">
+          <span class="font-semibold text-sm" style="color: var(--meta-label-color);">{UI_TEXT.category}:</span>
+          <a href={`${URLS.categories}/${slugify(post.data.category)}/`} class="text-sm hover:underline" style="color: var(--meta-category-color);">
             {post.data.category}
           </a>
         </div>
       )}
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="flex">
-          <span class="font-bold w-12 shrink-0">{UI_TEXT.tag}:</span>
-          <div class="flex flex-wrap gap-x-2 gap-y-1">
+          <span class="font-semibold text-sm" style="color: var(--meta-label-color);">{UI_TEXT.tag}:</span>
+          <div class="flex flex-wrap gap-x-3 gap-y-1 pl-3">
             {post.data.tags.map((tag: string) => (
-              <a href={`${URLS.tags}/${slugify(tag)}/`} class="tag-link text-gray-500 hover:underline">
+              <a href={`${URLS.tags}/${slugify(tag)}/`} class="tag-link text-sm hover:underline" style="color: var(--meta-tag-color);">
                 {tag}
               </a>
             ))}

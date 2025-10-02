@@ -24,17 +24,17 @@ const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : unde
     <header class="mb-4">
       <h2 class="font-bold text-xl text-text-primary transition-colors duration-300 group-hover:text-accent">{post.data.title}</h2>
     </header>
-    <div class="space-y-3 text-sm text-gray-500 dark:text-gray-400">
-      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <span>{UI_TEXT.publishDate}: {formattedDate}</span>
+    <div class="space-y-3 text-sm">
+      <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span class="font-semibold" style="color: var(--meta-label-color);">{UI_TEXT.publishDate}:</span>
+        <span style="color: var(--meta-date-color);">{formattedDate}</span>
         {categoryUrl && (
           <span>
-            {UI_TEXT.category}:
-            <a href={categoryUrl} class="ml-1 text-link hover:underline relative z-20">{category}</a>
+            <span class="font-semibold" style="color: var(--meta-label-color);">{UI_TEXT.category}:</span>
+            <a href={categoryUrl} class="ml-1 hover:underline relative z-20" style="color: var(--meta-category-color);">{category}</a>
           </span>
         )}
       </div>
-
     </div>
   </div>
   

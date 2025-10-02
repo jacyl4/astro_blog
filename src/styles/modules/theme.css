@@ -32,6 +32,11 @@
   --heading-h6-color: #89b482; /* neutral aqua */
   --heading-shadow-color: rgba(60, 56, 54, 0.12);
 
+  --meta-date-color: #b57614; /* warm amber */
+  --meta-category-color: #7daea3; /* calm teal */
+  --meta-tag-color: #d3869b; /* soft magenta */
+  --meta-label-color: #504945;
+
   --head-car-bg: url('/images/head.webp');
   --wallpaper-bg: url('/images/wallpaper.webp');
 }
@@ -68,4 +73,9 @@ html.dark {
   --heading-h5-color: #d3869b;
   --heading-h6-color: #8ec07c;
   --heading-shadow-color: rgba(0, 0, 0, 0.5);
+
+  --meta-date-color: #fabd2f; /* bright amber */
+  --meta-category-color: #83c092; /* aqua */
+  --meta-tag-color: #d3869b; /* mauve */
+  --meta-label-color: #d4be98;
 }
