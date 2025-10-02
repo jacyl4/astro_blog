@@ -16,7 +16,7 @@ const category = post.data.category?.trim();
 const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : undefined;
 ---
 
-<article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary transition-all duration-300 dark:hover:shadow-soft-lg hover:-translate-y-1">
+<article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary post-card">
   <a href={postUrl} class="absolute inset-0 z-10" aria-label={`阅读更多关于 ${post.data.title} 的文章`}></a>
   
   <div class="flex flex-col flex-grow">
@@ -39,3 +39,37 @@ const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : unde
   
   <footer class="mt-auto"></footer>
 </article>
+
+<style>
+  .post-card {
+    box-shadow: var(--card-shadow);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    will-change: transform, box-shadow;
+  }
+
+  .post-card:hover,
+  .post-card:focus-within {
+    transform: translateY(-6px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--card-border-hover);
+  }
+
+  .post-card:focus-within {
+    outline: none;
+  }
+
+  .post-card > a:focus-visible {
+    outline: 2px solid var(--card-border-hover);
+    outline-offset: 4px;
+    border-radius: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-card,
+    .post-card:hover,
+    .post-card:focus-within {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
