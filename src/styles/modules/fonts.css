@@ -56,6 +56,6 @@
 }
 
 :root {
-  --font-body: 'Cascadia', 'Cascadia Code', 'Cascadia Mono', 'Courier New', monospace;
+  --font-body: 'Geist', 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --font-ui: 'Geist', 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
