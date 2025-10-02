@@ -63,3 +63,43 @@ a:hover {
 #table-of-contents a:visited {
   text-decoration: none !important;
 }
+
+.post-meta {
+  font-size: 0.875rem;
+}
+
+.post-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+}
+
+.post-meta-label {
+  flex: none;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--meta-label-color);
+}
+
+.post-meta-values {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.post-meta-value {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+a.category-link,
+a.category-link:hover,
+a.category-link:focus,
+a.category-link:focus-visible {
+  text-decoration: none;
+}

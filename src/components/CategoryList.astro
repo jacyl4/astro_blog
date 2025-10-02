@@ -12,7 +12,7 @@ const categories = await getAllCategories();
     {categories.map((category: BlogCategory) => (
       <a
         href={`${URLS.categories}/${category.slug}/`}
-        class="block px-2 py-1 rounded-md hover:text-accent transition-colors"
+        class="block px-2 py-1 rounded-md transition-colors hover:text-accent category-link"
         aria-label={`查看关于 ${category.name} 分类的文章`}
       >
         {category.name} <span class="opacity-70">({category.count})</span>
