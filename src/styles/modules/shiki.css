@@ -50,17 +50,21 @@
 
 html.dark {
   --code-surface: var(--dark-bg);
-  --code-foreground: #f9f0d6;
-  --code-border: rgba(240, 220, 180, 0.45);
-  --code-comment: #e2d3b3;
-  --code-punctuation: var(--dark-foreground);
-  --code-literal: #fcd277;
-  --code-string: #c5da6d;
-  --code-keyword: #ff6b5a;
-  --code-function: #9fe3c0;
-  --code-type: #e3a3c7;
-  --code-constant: #ff9d6e;
-  --code-highlight: rgba(250, 189, 47, 0.22);
+  --code-foreground: #f4e7d0;
+  --code-border: rgba(244, 231, 208, 0.36);
+  --code-comment: #bdae93;
+  --code-punctuation: #f4e7d0;
+  --code-literal: #f2c97d;
+  --code-string: #c1de72;
+  --code-keyword: #f36c6c;
+  --code-function: #90c7c7;
+  --code-type: #d79acb;
+  --code-constant: #eea76a;
+  --code-highlight: rgba(244, 231, 208, 0.22);
+}
+
+html.dark .astro-code code {
+  filter: brightness(1.5);
 }
 
 .astro-code {
@@ -73,10 +77,6 @@ html.dark {
   border: 1px solid var(--code-border);
   box-shadow: inset 0 0 0 1px rgba(12, 12, 12, 0.02);
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-html.dark .astro-code code {
-  filter: brightness(1.2);
 }
 
 .astro-code code {
