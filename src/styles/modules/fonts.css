@@ -47,6 +47,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Intel One Mono';
+  src: url('/fonts/intel-one-mono/IntelOneMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-body: 'Cascadia', 'Cascadia Code', 'FangSong', 'STFangsong', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --font-ui: 'Geist', 'FangSong', 'STFangsong', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;

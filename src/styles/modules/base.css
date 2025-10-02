@@ -6,6 +6,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-body);
+  font-weight: 350;
   margin: 0;
   padding: 0;
   min-height: 100vh;
