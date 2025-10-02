@@ -10,6 +10,7 @@ export type BlogPost = CollectionEntry<'blog'>;
 export type ProcessedBlogPost = Omit<BlogPost, 'data'> & {
   data: BlogPost['data'] & {
     category: string;
+    originalTitle: string;
   };
 };
 
@@ -64,23 +65,41 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
   try {
     const allEntries = await getCollection('blog');
     
+    const slugTracker = new Map<string, number>();
+    const getUniqueSlug = (base: string) => {
+      const count = slugTracker.get(base) ?? 0;
+      slugTracker.set(base, count + 1);
+      return count === 0 ? base : `${base}-${count + 1}`;
+    };
+
     // 注入 category 和 title（如果缺失），并按创建日期降序排序
-    const postsWithCategory = allEntries.map(post => {
+    const postsWithCategory = allEntries.map((post, index) => {
       const pathSegments = post.id.split('/');
+      const fileSegment = pathSegments[pathSegments.length - 1] ?? post.id;
       // 如果路径是 'folder/file.md'，分类就是 'folder'
       const category = pathSegments.length > 1 ? pathSegments[0] : 'Uncategorized';
-      
-      // 从文件名推断 title（如果 frontmatter 中没有提供）
-      const inferredTitle = post.data.title || pathSegments.pop()?.replace(/\.mdx?$/, '') || post.id;
+
+      const fileTitle = fileSegment.replace(/\.mdx?$/, '');
+      const frontmatterTitle = post.data.title?.trim() || '';
+      const displayTitle = fileTitle || frontmatterTitle || post.id;
+
+      const titleSlug = frontmatterTitle ? slugify(frontmatterTitle) : '';
+      const fallbackSlug = slugify(displayTitle)
+        || slugify(post.slug)
+        || slugify(pathSegments.join('-'))
+        || `post-${index + 1}`;
+      const slugCandidate = titleSlug || fallbackSlug;
+      const uniqueSlug = getUniqueSlug(slugCandidate);
 
       // 返回一个符合 ProcessedBlogPost 类型的新对象
       return {
         ...post,
-        // 使用 slugify 将 Astro 从文件路径生成的默认 slug（可能含中文）转换为全拼音 slug
-        slug: slugify(post.slug),
+        // 依据文章标题生成英文 slug，必要时回退至原始路径并确保全局唯一
+        slug: uniqueSlug,
         data: {
           ...post.data,
-          title: inferredTitle, // 确保 title 存在
+          title: displayTitle, // 页面展示使用文件名（通常为中文）
+          originalTitle: frontmatterTitle || displayTitle,
           category: category,
           // 在这里处理标签，去除 '#'
           tags: post.data.tags?.map(tag => tag.startsWith('#') ? tag.slice(1) : tag) || [],
