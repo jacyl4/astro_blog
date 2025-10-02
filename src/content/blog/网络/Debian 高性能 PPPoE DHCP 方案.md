@@ -15,8 +15,6 @@ tags:
 created: 2025-02-25
 title: High-Performance PPPoE DHCP Solution for Debian
 ---
-
-
 # Debian 平台高性能 PPPoE 与 DHCP 解决方案深度解析
 
 ## I. 执行摘要

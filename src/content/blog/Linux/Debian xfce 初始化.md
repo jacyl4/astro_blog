@@ -7,8 +7,6 @@ tags:
 created: 2025-04-20
 title: debian xfce Initialization
 ---
-# Debian XFCE 初始化
-
 禁用休眠屏保与显示器关闭
 
 ```bash
