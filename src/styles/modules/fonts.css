@@ -56,6 +56,6 @@
 }
 
 :root {
-  --font-body: 'Cascadia', 'Cascadia Code', 'FangSong', 'STFangsong', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  --font-ui: 'Geist', 'FangSong', 'STFangsong', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Cascadia', 'Cascadia Code', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-ui: 'Geist', 'PingFang SC', 'Noto Sans SC', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }

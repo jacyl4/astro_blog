@@ -34,7 +34,9 @@
         return;
       }
 
-      const headings = Array.from(mainContent.querySelectorAll('h2, h3, h4, h5, h6'));
+      const headings = Array
+        .from(mainContent.querySelectorAll('h2, h3, h4, h5, h6'))
+        .filter((heading) => !heading.closest('.footnotes'));
       const tocList = document.getElementById('toc-list');
 
       if (headings.length > 0 && tocList) {

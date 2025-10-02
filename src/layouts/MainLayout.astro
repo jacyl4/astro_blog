@@ -64,6 +64,33 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
         };
       }
 
+      const scrollToContent = () => {
+        const navElement = document.getElementById('main-navigation');
+        if (!navElement) {
+          window.scrollTo({ top: 0, left: 0 });
+          return;
+        }
+
+        const navTop = navElement.getBoundingClientRect().top + window.scrollY;
+        const targetTop = Math.max(navTop - 39, 0);
+        window.scrollTo({ top: targetTop, left: 0 });
+      };
+
+      const alignViewToContent = () => {
+        if (window.location.hash) {
+          return;
+        }
+
+        const { documentElement } = document;
+        const previousBehavior = documentElement.style.scrollBehavior;
+        documentElement.style.scrollBehavior = 'auto';
+
+        requestAnimationFrame(() => {
+          scrollToContent();
+          documentElement.style.scrollBehavior = previousBehavior;
+        });
+      };
+
       // Initialize the theme on initial page load.
       window.initTheme();
       window.normalizeFootnotes();
@@ -72,20 +99,17 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
       document.addEventListener('astro:after-swap', () => {
         window.initTheme();
         window.normalizeFootnotes();
-
-        const { documentElement } = document;
-        const previousBehavior = documentElement.style.scrollBehavior;
-        documentElement.style.scrollBehavior = 'auto';
-        window.scrollTo({ top: 0, left: 0 });
-        documentElement.style.scrollBehavior = previousBehavior;
+        alignViewToContent();
       });
 
       document.addEventListener('DOMContentLoaded', () => {
         window.normalizeFootnotes();
+        alignViewToContent();
       });
 
       document.addEventListener('astro:page-load', () => {
         window.normalizeFootnotes();
+        alignViewToContent();
       });
     </script>
     <meta charset="UTF-8" />

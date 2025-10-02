@@ -8,7 +8,6 @@ import icon from 'astro-icon';
 
 // Markdown/HTML 处理插件
 import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import { defaultSchema } from 'hast-util-sanitize';
@@ -127,10 +126,6 @@ export default defineConfig({
         },
       ],
       rehypeSlug, // 为标题生成 id
-      [
-        rehypeAutolinkHeadings,
-        { behavior: 'wrap' },
-      ],
       rehypeKatex, // 将 remark-math 渲染为 KaTeX
     ],
   },

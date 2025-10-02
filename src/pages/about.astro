@@ -11,8 +11,8 @@ const { Content } = await about.render();
 ---
 
 <MainLayout title={`${about.data.title} - ${SITE_TITLE}`}>
+  <h1 class="text-3xl font-bold mb-8">{about.data.title}</h1>
   <article class="prose prose-invert max-w-none">
-    <h1 class="text-3xl font-bold mb-8">{about.data.title}</h1>
     <Content />
   </article>
 </MainLayout>

@@ -302,14 +302,6 @@
 }
 
 
-#table-of-contents a {
-  text-decoration: none !important;
-}
-#table-of-contents a:hover {
-  text-decoration: none !important;
-}
-
-
 .prose .footnotes ol {
   list-style-position: outside;
   padding-left: 1.5rem;
