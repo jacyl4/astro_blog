@@ -10,6 +10,7 @@ tags:
   - "#astro-tutorial"
   - "#blog-development"
 created: 2025-05-23
+title: Astro Systematic Blog Construction Guide
 ---
 # **系统化学习 Astro：从零开始构建现代化博客**
 

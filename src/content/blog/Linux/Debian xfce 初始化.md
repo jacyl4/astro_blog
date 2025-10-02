@@ -5,7 +5,7 @@ tags:
   - "#package-management"
   - "#shell-scripting"
 created: 2025-04-20
-title_en: debian xfce init
+title: debian xfce Initialization
 ---
 # Debian XFCE 初始化
 

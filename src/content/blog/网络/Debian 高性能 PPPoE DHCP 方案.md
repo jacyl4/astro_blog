@@ -13,6 +13,7 @@ tags:
   - radius
   - network-architecture
 created: 2025-02-25
+title: High-Performance PPPoE DHCP Solution for Debian
 ---
 
 

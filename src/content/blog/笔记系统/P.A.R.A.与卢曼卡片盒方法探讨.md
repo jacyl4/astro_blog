@@ -4,6 +4,7 @@ tags:
   - "#zettelkasten"
   - "#knowledge-management"
 created: 2025-08-07
+title: Exploring the P.A.R.A. Method and Luhmann's Zettelkasten
 ---
 # 从行动到关联：在Obsidian中整合P.A.R.A.与卢曼卡片盒笔记法的框架
 

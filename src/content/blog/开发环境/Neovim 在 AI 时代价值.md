@@ -10,6 +10,7 @@ tags:
   - "#vscode"
   - "#cursor"
 created: 2025-07-01
+title: The Value of Neovim in the AI Era
 ---
 # 现代开发者十字路口：Neovim 的不朽哲学与 AI 革命的对决
 

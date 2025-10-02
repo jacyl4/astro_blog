@@ -1,18 +1,18 @@
-# Astro 孤岛架构渲染详解
-
-tags:
-
-- "#cloudflare-workers"
-- "#astrojs"
-- "#static-site-generator"
-- "#serverless"
-- "#static-site-generation"
-- "#web-architecture"
-- "#web-development"
-created: 2025-07-15
-
 ---
-
+created: 2025-07-15
+tags:
+  - "#web-development"
+  - "#web-architecture"
+  - "#performance-tuning"
+  - "#static-site-generator"
+  - "#serverless"
+  - "#cloudflare-workers"
+  - "#astrojs"
+  - "#static-site-generation"
+  - "#astro-architecture"
+  - "#rendering-paradigms"
+title: Astro Islands Architecture Rendering Explanation
+---
 ## **构建现代网络：深入探讨渲染范式、Astro孤岛及高级部署策略**
 
 ---

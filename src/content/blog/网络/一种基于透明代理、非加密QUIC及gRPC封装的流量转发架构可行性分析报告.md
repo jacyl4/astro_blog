@@ -14,6 +14,7 @@ tags:
   - network-architecture-analysis
   - protocol-evaluation
 created: 2025-05-06
+title: Feasibility Analysis Report on a Traffic Forwarding Architecture Based on Transparent Proxy, Unencrypted QUIC, and gRPC Encapsulation
 ---
 ## I. 执行摘要
 
