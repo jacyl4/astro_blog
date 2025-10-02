@@ -75,13 +75,13 @@ const isActiveLink = (href: string) => {
 </nav>
 
 <script>
-  function normalize(path) {
+  function normalize(path: string): string {
     return path.endsWith('/') ? path : `${path}/`;
   }
 
   const blogContexts = ['/posts/', '/categories/', '/tags/', '/archive/'];
 
-  function isActiveHref(targetHref, currentPath) {
+  function isActiveHref(targetHref: string, currentPath: string): boolean {
     const normalizedHref = normalize(targetHref);
     const normalizedCurrent = normalize(currentPath);
 
@@ -97,7 +97,11 @@ const isActiveLink = (href: string) => {
     const currentPath = window.location.pathname;
     const normalizedCurrent = normalize(currentPath);
 
-    document.querySelectorAll('[data-nav-link]').forEach(anchor => {
+    document.querySelectorAll('[data-nav-link]').forEach((anchor) => {
+      if (!(anchor instanceof HTMLElement)) {
+        return;
+      }
+
       const href = anchor.getAttribute('data-nav-link') || '/';
       const isActive = isActiveHref(href, normalizedCurrent);
 
