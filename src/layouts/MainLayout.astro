@@ -47,7 +47,12 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
       // Handle theme and other updates after page swaps.
       document.addEventListener('astro:after-swap', () => {
         window.initTheme();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        const { documentElement } = document;
+        const previousBehavior = documentElement.style.scrollBehavior;
+        documentElement.style.scrollBehavior = 'auto';
+        window.scrollTo({ top: 0, left: 0 });
+        documentElement.style.scrollBehavior = previousBehavior;
       });
     </script>
     <meta charset="UTF-8" />

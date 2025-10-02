@@ -4,19 +4,17 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.astro';
 
 const currentPathname = Astro.url.pathname;
 
-const normalizePath = (path: string) => {
-  if (!path.endsWith('/')) {
-    return `${path}/`;
-  }
-  return path;
-};
+const normalizePath = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+
+const blogContexts = ['/posts/', '/categories/', '/tags/', '/archive/'];
 
 const isActiveLink = (href: string) => {
   const normalizedHref = normalizePath(href);
   const normalizedCurrent = normalizePath(currentPathname);
 
   if (normalizedHref === '/') {
-    return normalizedCurrent === '/';
+    if (normalizedCurrent === '/') return true;
+    return blogContexts.some((segment) => normalizedCurrent.startsWith(segment));
   }
 
   return normalizedCurrent.startsWith(normalizedHref);
@@ -39,7 +37,8 @@ const isActiveLink = (href: string) => {
         <li>
           <a
             href={link.href}
-            class={`h-full flex items-center transition-colors duration-200 ${active ? 'text-accent font-semibold' : 'opacity-80 hover:opacity-100'}`}
+            class={`nav-link h-full flex items-center font-semibold transition-colors duration-200 ${active ? 'text-accent' : 'opacity-80 hover:opacity-100'}`}
+            data-nav-link={link.href}
             aria-current={active ? 'page' : undefined}
           >
             {link.text}
@@ -62,7 +61,8 @@ const isActiveLink = (href: string) => {
           <li>
             <a
               href={link.href}
-              class={`block w-full text-center py-2 px-6 font-semibold transition-colors duration-200 ${active ? 'text-accent' : ''}`}
+              class={`nav-link block w-full text-center py-2 px-6 font-semibold transition-colors duration-200 ${active ? 'text-accent' : 'opacity-80 hover:opacity-100'}`}
+              data-nav-link={link.href}
               aria-current={active ? 'page' : undefined}
             >
               {link.text}
@@ -75,6 +75,44 @@ const isActiveLink = (href: string) => {
 </nav>
 
 <script>
+  function normalize(path) {
+    return path.endsWith('/') ? path : `${path}/`;
+  }
+
+  const blogContexts = ['/posts/', '/categories/', '/tags/', '/archive/'];
+
+  function isActiveHref(targetHref, currentPath) {
+    const normalizedHref = normalize(targetHref);
+    const normalizedCurrent = normalize(currentPath);
+
+    if (normalizedHref === '/') {
+      if (normalizedCurrent === '/') return true;
+      return blogContexts.some(segment => normalizedCurrent.startsWith(segment));
+    }
+
+    return normalizedCurrent.startsWith(normalizedHref);
+  }
+
+  function updateActiveNav() {
+    const currentPath = window.location.pathname;
+    const normalizedCurrent = normalize(currentPath);
+
+    document.querySelectorAll('[data-nav-link]').forEach(anchor => {
+      const href = anchor.getAttribute('data-nav-link') || '/';
+      const isActive = isActiveHref(href, normalizedCurrent);
+
+      anchor.classList.toggle('text-accent', isActive);
+      anchor.classList.toggle('opacity-80', !isActive);
+      anchor.classList.toggle('hover:opacity-100', !isActive);
+
+      if (isActive) {
+        anchor.setAttribute('aria-current', 'page');
+      } else {
+        anchor.removeAttribute('aria-current');
+      }
+    });
+  }
+
   function setupMobileMenu() {
     const menuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
@@ -103,9 +141,14 @@ const isActiveLink = (href: string) => {
 
   // Run on initial page load
   setupMobileMenu();
+  updateActiveNav();
 
   // Run after view transitions
-  document.addEventListener('astro:after-swap', setupMobileMenu);
+  document.addEventListener('astro:after-swap', () => {
+    setupMobileMenu();
+    updateActiveNav();
+  });
+  document.addEventListener('astro:page-load', updateActiveNav);
 </script>
 
 <style>

@@ -1,55 +1,71 @@
 :root {
-  /* A softer, warmer light theme to reduce eye strain */
-  --background-color: #f5f5f5; /* Softer gray */
-  --card-bg: #ffffff;
-  --main-content-bg: #f5f5f5; /* Softer gray */
-  --footer-bg: #f5f5f5; /* Softer gray */
-  --text-color: #343a40; /* Dark gray, less harsh than black */
+  /* Light theme aligned with Gruvbox Material palette */
+  --background-color: #fbf1c7; /* light0 */
+  --card-bg: #f2e5bc;        /* light0-soft */
+  --main-content-bg: #f2e5bc;
+  --footer-bg: #f9f5d7;      /* light0-hard */
+  --text-color: #3c3836;      /* dark1 */
   --nav-text-color: var(--text-color);
-  --link-color: #007bff; /* A pleasant blue for links */
-  --accent-color: #000000; /* Black for light theme */
-  
-  --divider-shadow-dark: rgba(0, 0, 0, 0.15);
-  --divider-shadow-light: #ffffff;
-  --text-inset-shadow: none; /* Removed shadow for better clarity */
-  
-  --shadow-color: rgba(0, 0, 0, 0.04);
-  --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-dark), inset 2px 0 0 var(--divider-shadow-light);
+  --link-color: #7daea3;      /* neutral blue */
+  --accent-color: #d3869b;    /* neutral purple */
 
-  --main-content-bg-rgb: 245, 245, 245;
+  --divider-shadow-dark: rgba(60, 56, 54, 0.22);
+  --divider-shadow-light: rgba(249, 245, 215, 0.8);
+  --text-inset-shadow: none;
 
-  --border-color: #dee2e6; /* gray-300 */
-  --border-secondary-color: #dee2e6; /* gray-300 */
-  --surface-secondary-color: #eeeeee; /* gray-200 */
-  --table-stripe-bg: #fafafa; /* gray-50 */
-  --code-bg: #e9ecef;
+  --shadow-color: rgba(60, 56, 54, 0.12);
+  --divider-box-shadow: inset 1px 0 0 rgba(60, 56, 54, 0.12), inset 2px 0 0 rgba(249, 245, 215, 0.6);
+
+  --main-content-bg-rgb: 242, 229, 188;
+
+  --border-color: #d5c4a1;         /* light2 */
+  --border-secondary-color: #ebdbb2; /* light1 */
+  --surface-secondary-color: #f4e4bc;
+  --table-stripe-bg: rgba(237, 213, 158, 0.55);
+  --code-bg: rgba(235, 219, 178, 0.86);
+
+  --heading-h1-color: #ea6962; /* neutral red */
+  --heading-h2-color: #e78a4e; /* neutral yellow */
+  --heading-h3-color: #a9b665; /* neutral green */
+  --heading-h4-color: #7daea3; /* neutral blue */
+  --heading-h5-color: #d3869b; /* neutral purple */
+  --heading-h6-color: #89b482; /* neutral aqua */
+  --heading-shadow-color: rgba(60, 56, 54, 0.12);
 
   --head-car-bg: url('/images/head.webp');
   --wallpaper-bg: url('/images/wallpaper.webp');
 }
 
 html.dark {
-  --background-color: #121212;
-  --card-bg: #1e1e1e;
-  --main-content-bg: #1e1e1e;
-  --footer-bg: #1e1e1e;
-  --text-color: #e0e0e0;
+  --background-color: #1d2021;    /* dark0-hard */
+  --card-bg: #282828;             /* dark0 */
+  --main-content-bg: #282828;
+  --footer-bg: #1d2021;
+  --text-color: #d4be98;          /* light text */
   --nav-text-color: var(--text-color);
-  --link-color: #3391ff; /* A slightly brighter blue for dark mode */
-  --accent-color: #ffffff; /* White for dark theme */
+  --link-color: #7daea3;
+  --accent-color: #ea6962;        /* neutral red */
 
-  --divider-shadow-dark: rgba(0, 0, 0, 0.5);
-  --divider-shadow-light: rgba(255, 255, 255, 0.15);
-  --text-inset-shadow: -1px -1px 1px rgba(0, 0, 0, 0.4), 1px 1px 1px rgba(255, 255, 255, 0.15);
+  --divider-shadow-dark: rgba(0, 0, 0, 0.55);
+  --divider-shadow-light: rgba(212, 190, 152, 0.18);
+  --text-inset-shadow: none;
 
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --divider-box-shadow: inset 1px 0 0 var(--divider-shadow-light), inset 2px 0 0 var(--divider-shadow-dark);
+  --shadow-color: rgba(0, 0, 0, 0.45);
+  --divider-box-shadow: inset 1px 0 0 rgba(212, 190, 152, 0.18), inset 2px 0 0 rgba(0, 0, 0, 0.35);
 
-  --main-content-bg-rgb: 30, 30, 30;
+  --main-content-bg-rgb: 40, 40, 40;
 
-  --border-color: #374151; /* gray-700 */
-  --border-secondary-color: #374151; /* gray-700 */
-  --surface-secondary-color: #1f2937; /* gray-800 */
-  --table-stripe-bg: #1f2937; /* gray-800 */
-  --code-bg: #2c3e50;
+  --border-color: #3c3836;           /* dark1 */
+  --border-secondary-color: #504945;  /* dark2 */
+  --surface-secondary-color: #1f1f1f;
+  --table-stripe-bg: rgba(60, 56, 54, 0.45);
+  --code-bg: rgba(29, 32, 33, 0.92);
+
+  --heading-h1-color: #f2594b;
+  --heading-h2-color: #ff9a3c;
+  --heading-h3-color: #b8bb26;
+  --heading-h4-color: #83a598;
+  --heading-h5-color: #d3869b;
+  --heading-h6-color: #8ec07c;
+  --heading-shadow-color: rgba(0, 0, 0, 0.5);
 }

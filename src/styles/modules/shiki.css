@@ -1,123 +1,138 @@
 /*
-  Core styles for Shiki to enable themes and fix layout.
+  Shiki syntax highlighting tuned to Gruvbox Material palette (see add/theme.css).
+  Colors stick to Obsidian theme variants and adapt to light/dark automatically.
 */
+
+:root {
+  --code-surface: #f7edd2; /* close to light0 */
+  --code-foreground: #3c3836; /* dark1 */
+  --code-border: rgba(60, 56, 54, 0.18);
+  --code-comment: #a89984; /* light4 */
+  --code-punctuation: #3c3836;
+  --code-literal: #e78a4e; /* neutral yellow */
+  --code-string: #89b482;  /* neutral aqua */
+  --code-keyword: #ea6962; /* neutral red */
+  --code-function: #7daea3; /* neutral blue */
+  --code-type: #d3869b;    /* neutral purple */
+  --code-constant: #a9b665; /* neutral green */
+  --code-highlight: rgba(233, 196, 106, 0.24);
+}
+
+html.dark {
+  --code-surface: #282828; /* dark0 */
+  --code-foreground: #ebdbb2; /* light1 */
+  --code-border: rgba(235, 219, 178, 0.32);
+  --code-comment: #bdae93;
+  --code-punctuation: #f4e7d0;
+  --code-literal: #fe8019;
+  --code-string: #b8bb26;
+  --code-keyword: #fabd2f;
+  --code-function: #8ec07c;
+  --code-type: #d3869b;
+  --code-constant: #83a598;
+  --code-highlight: rgba(214, 189, 148, 0.32);
+}
 
 .astro-code {
   position: relative;
   overflow-x: auto;
-  padding: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.9rem;
+  background: var(--code-surface) !important;
+  color: var(--code-foreground) !important;
+  border: 1px solid var(--code-border);
+  box-shadow: inset 0 0 0 1px rgba(12, 12, 12, 0.02);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .astro-code code {
   display: block;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-all;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
-/* Custom Light theme based on user-provided image */
-html:not(.dark) .astro-code {
-  background-color: #fbf1c7;
-  color: #3c3836;
-}
-html:not(.dark) .astro-code .token.comment,
-html:not(.dark) .astro-code .token.prolog,
-html:not(.dark) .astro-code .token.doctype,
-html:not(.dark) .astro-code .token.cdata {
-  color: #928374;
-}
-html:not(.dark) .astro-code .token.punctuation {
-  color: #3c3836;
-}
-html:not(.dark) .astro-code .token.property,
-html:not(.dark) .astro-code .token.tag,
-html:not(.dark) .astro-code .token.boolean,
-html:not(.dark) .astro-code .token.number,
-html:not(.dark) .astro-code .token.constant,
-html:not(.dark) .astro-code .token.symbol,
-html:not(.dark) .astro-code .token.deleted {
-  color: #9d0006;
-}
-html:not(.dark) .astro-code .token.selector,
-html:not(.dark) .astro-code .token.attr-name,
-html:not(.dark) .astro-code .token.string,
-html:not(.dark) .astro-code .token.char,
-html:not(.dark) .astro-code .token.builtin,
-html:not(.dark) .astro-code .token.inserted {
-  color: #79740e;
-}
-html:not(.dark) .astro-code .token.operator,
-html:not(.dark) .astro-code .token.entity,
-html:not(.dark) .astro-code .token.url,
-html:not(.dark) .astro-code .language-css .token.string,
-html:not(.dark) .astro-code .style .token.string {
-  color: #b57614;
-}
-html:not(.dark) .astro-code .token.atrule,
-html:not(.dark) .astro-code .token.attr-value,
-html:not(.dark) .astro-code .token.keyword {
-  color: #9d0006;
-}
-html:not(.dark) .astro-code .token.function,
-html:not(.dark) .astro-code .token.class-name {
-  color: #8f3f71;
-}
-html:not(.dark) .astro-code .token.regex,
-html:not(.dark) .astro-code .token.important,
-html:not(.dark) .astro-code .token.variable {
-  color: #427b58;
+.astro-code .line {
+  display: block;
+  padding-inline: 0.25rem;
 }
 
-/* Custom Dark theme based on user-provided image, with !important to override inline styles */
-html.dark .astro-code {
-  background-color: #282828 !important;
-  color: #ebdbb2 !important;
+.astro-code .line.highlighted {
+  background: var(--code-highlight);
+  margin-inline: -0.35rem;
+  border-radius: 0.6rem;
 }
-html.dark .astro-code .token.comment,
-html.dark .astro-code .token.prolog,
-html.dark .astro-code .token.doctype,
-html.dark .astro-code .token.cdata {
-  color: #928374 !important;
+
+/* Token colors */
+.astro-code .token.comment,
+.astro-code .token.prolog,
+.astro-code .token.doctype,
+.astro-code .token.cdata {
+  color: var(--code-comment) !important;
+  font-style: italic;
 }
-html.dark .astro-code .token.punctuation {
-  color: #ebdbb2 !important;
+
+.astro-code .token.punctuation {
+  color: var(--code-punctuation) !important;
 }
-html.dark .astro-code .token.property,
-html.dark .astro-code .token.tag,
-html.dark .astro-code .token.boolean,
-html.dark .astro-code .token.number,
-html.dark .astro-code .token.constant,
-html.dark .astro-code .token.symbol,
-html.dark .astro-code .token.deleted {
-  color: #fb4934 !important;
+
+.astro-code .token.number,
+.astro-code .token.boolean,
+.astro-code .token.constant,
+.astro-code .token.symbol,
+.astro-code .token.tag,
+.astro-code .token.property {
+  color: var(--code-literal) !important;
 }
-html.dark .astro-code .token.selector,
-html.dark .astro-code .token.attr-name,
-html.dark .astro-code .token.string,
-html.dark .astro-code .token.char,
-html.dark .astro-code .token.builtin,
-html.dark .astro-code .token.inserted {
-  color: #b8bb26 !important;
+
+.astro-code .token.selector,
+.astro-code .token.attr-name,
+.astro-code .token.string,
+.astro-code .token.char,
+.astro-code .token.builtin,
+.astro-code .token.inserted {
+  color: var(--code-string) !important;
 }
-html.dark .astro-code .token.operator,
-html.dark .astro-code .token.entity,
-html.dark .astro-code .token.url,
-html.dark .astro-code .language-css .token.string,
-html.dark .astro-code .style .token.string {
-  color: #fabd2f !important;
+
+.astro-code .token.keyword,
+.astro-code .token.control,
+.astro-code .token.operator,
+.astro-code .token.atrule,
+.astro-code .token.attr-value {
+  color: var(--code-keyword) !important;
 }
-html.dark .astro-code .token.atrule,
-html.dark .astro-code .token.attr-value,
-html.dark .astro-code .token.keyword {
-  color: #fb4934 !important;
+
+.astro-code .token.function,
+.astro-code .token.class-name,
+.astro-code .token.method {
+  color: var(--code-function) !important;
 }
-html.dark .astro-code .token.function,
-html.dark .astro-code .token.class-name {
-  color: #d3869b !important;
+
+.astro-code .token.regex,
+.astro-code .token.important,
+.astro-code .token.variable,
+.astro-code .token.parameter {
+  color: var(--code-constant) !important;
 }
-html.dark .astro-code .token.regex,
-html.dark .astro-code .token.important,
-html.dark .astro-code .token.variable {
-  color: #8ec07c !important;
+
+.astro-code .token.deleted {
+  color: var(--code-keyword) !important;
+  text-decoration: line-through;
+}
+
+.astro-code .token.bold {
+  font-weight: 700;
+}
+
+.astro-code .token.italic {
+  font-style: italic;
+}
+
+/* Toolbar/Copy button compatibility if added later */
+.astro-code [data-rehype-pretty-code-title] {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  color: var(--code-comment);
 }
