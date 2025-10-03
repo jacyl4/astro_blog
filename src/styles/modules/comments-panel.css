@@ -59,7 +59,7 @@
     @apply max-h-[calc(100%-140px)];
   }
 
-  /* 滚动条样式 */
+  /* 滚动条样式 - 默认隐藏 */
   #comments-panel ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -70,16 +70,27 @@
   }
 
   #comments-panel ::-webkit-scrollbar-thumb {
-    background: #333;
+    background: transparent;
     border-radius: 4px;
+    transition: background 0.3s ease;
   }
 
-  #comments-panel ::-webkit-scrollbar-thumb:hover {
+  /* 鼠标悬停时显示滚动条 */
+  #comments-panel:hover ::-webkit-scrollbar-thumb {
+    background: #333;
+  }
+
+  #comments-panel:hover ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
 
-  /* Firefox */
+  /* Firefox - 默认隐藏 */
   #comments-panel * {
+    scrollbar-width: none;
+  }
+
+  /* Firefox - 鼠标悬停时显示 */
+  #comments-panel:hover * {
     scrollbar-width: thin;
     scrollbar-color: #333 transparent;
   }

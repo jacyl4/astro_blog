@@ -43,7 +43,7 @@ type Comment = {
 };
 
 const CORS_HEADERS_BASE = {
-  'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+  'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Vary': 'Origin'
 };
@@ -354,10 +354,10 @@ export default {
         return new Response(null, { status: 302, headers });
       }
 
-      if (url.pathname === '/auth/logout' && request.method === 'GET') {
+      if (url.pathname === '/auth/logout' && (request.method === 'GET' || request.method === 'POST')) {
         const headers = new Headers(withCORS(origin, env, { 'Cache-Control': 'no-store' }));
         headers.append('Set-Cookie', setCookie(SESSION_COOKIE, '', { path: '/', httpOnly: true, secure: true, sameSite: 'None', maxAge: 0 }));
-        return new Response('Logged out', { status: 200, headers });
+        return json({ success: true }, { status: 200, headers });
       }
 
       return new Response('Not found', { status: 404, headers: withCORS(origin, env, { 'Cache-Control': 'no-store' }) });
