@@ -1,15 +1,9 @@
 // Remark plugin to transform Obsidian-style callouts
 // Syntax: > [!note] Optional title\n> content...
 import { visit } from 'unist-util-visit';
+import type { Root, Blockquote, Paragraph, Text } from 'mdast';
 
-/**
- * @typedef {import('mdast').Blockquote} Blockquote
- * @typedef {import('mdast').Paragraph} Paragraph
- * @typedef {import('mdast').Text} Text
- * @typedef {import('mdast').PhrasingContent} PhrasingContent
- */
-
-const TYPE_MAP = {
+const TYPE_MAP: Record<string, string> = {
   note: 'note',
   info: 'info',
   tip: 'tip',
@@ -24,30 +18,24 @@ const TYPE_MAP = {
   success: 'success',
 };
 
-/**
- * @param {string} s
- */
-function capitalize(s) {
+function capitalize(s: string): string {
   return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : s;
 }
 
-/**
- * @returns {(tree: import('mdast').Root) => void}
- */
 export default function remarkCallouts() {
-  return (tree) => {
-    visit(tree, 'blockquote', (node /** @type {Blockquote} */) => {
+  return (tree: Root) => {
+    visit(tree, 'blockquote', (node: Blockquote) => {
       if (!node.children || node.children.length === 0) return;
       const first = node.children[0];
       if (first.type !== 'paragraph') return;
 
-      const para = /** @type {Paragraph} */ (first);
+      const para = first as Paragraph;
       if (!para.children || para.children.length === 0) return;
 
       const firstText = para.children[0];
       if (firstText.type !== 'text') return;
 
-      const value = /** @type {Text} */ (firstText).value.trim();
+      const value = (firstText as Text).value.trim();
       const match = value.match(/^\[!([A-Za-z]+)\](?:\s*(.*))?$/);
       if (!match) return;
 
@@ -71,8 +59,7 @@ export default function remarkCallouts() {
       }
 
       // Build a title paragraph node
-      /** @type {Paragraph} */
-      const titleNode = {
+      const titleNode: Paragraph = {
         type: 'paragraph',
         data: { hName: 'div', hProperties: { className: ['callout-title'] } },
         children: [{ type: 'text', value: title }],

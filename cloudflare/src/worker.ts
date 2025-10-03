@@ -89,6 +89,13 @@ function base64UrlEncode(input: ArrayBuffer | Uint8Array): string {
   return btoa(str).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
+function base64UrlDecode(input: string): Uint8Array {
+  let s = input.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  return Uint8Array.from(bin, c => c.charCodeAt(0));
+}
+
 async function signJWT(payload: Record<string, unknown>, secret: string, expSec = 60 * 60 * 24 * 7) {
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
@@ -115,9 +122,11 @@ async function verifyJWT(token: string, secret: string): Promise<Record<string, 
   const data = `${headerB64}.${payloadB64}`;
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-  const valid = await crypto.subtle.verify('HMAC', key, Uint8Array.from(atob(sigB64.replace(/-/g,'+').replace(/_/g,'/')), c=>c.charCodeAt(0)), enc.encode(data));
+  const sigBytes = base64UrlDecode(sigB64);
+  const valid = await crypto.subtle.verify('HMAC', key, sigBytes as BufferSource, enc.encode(data));
   if (!valid) return null;
-  const payloadStr = new TextDecoder().decode(Uint8Array.from(atob(payloadB64.replace(/-/g,'+').replace(/_/g,'/')), c=>c.charCodeAt(0)));
+  const payloadBytes = base64UrlDecode(payloadB64);
+  const payloadStr = new TextDecoder().decode(payloadBytes);
   const payload = JSON.parse(payloadStr);
   if (payload.exp && Math.floor(Date.now()/1000) > payload.exp) return null;
   return payload;
@@ -292,8 +301,17 @@ export default {
 
         const cookies = parseCookies(request);
         const stateCookie = cookies[OAUTH_STATE_COOKIE] || '';
-        const [savedState, redirectEncoded] = stateCookie.split('|');
-        const redirectUri = sanitizeRedirect(decodeURIComponent(redirectEncoded || '/'), env);
+        let savedState = '';
+        let redirectUri = '/';
+        try {
+          const metaBytes = base64UrlDecode(stateCookie);
+          const metaStr = new TextDecoder().decode(metaBytes);
+          const meta = JSON.parse(metaStr);
+          savedState = meta.s || '';
+          redirectUri = sanitizeRedirect(meta.r || '/', env);
+        } catch {
+          return new Response('Invalid state cookie', { status: 400 });
+        }
         if (savedState !== state) return new Response('State mismatch', { status: 400 });
 
         const tokenRes = await fetch('https://github.com/login/oauth/access_token', {

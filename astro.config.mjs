@@ -19,7 +19,7 @@ import remarkBreaks from 'remark-breaks';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import remarkWikiLink from 'remark-wiki-link';
 import { slugify as slugifyTrans } from 'transliteration';
-import remarkCallouts from './src/utils/remark-callouts.js';
+import remarkCallouts from './src/utils/remark-callouts.ts';
 
 // https://astro.build/config
 export default defineConfig({

@@ -260,7 +260,7 @@
     display: block;
     overflow-x: auto;
     max-width: 100%;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -268,8 +268,8 @@
   .prose td {
     border-width: 1px;
     border-color: var(--border-secondary-color);
-    padding: theme('spacing.3') theme('spacing.4');
-    font-size: 0.9375rem;
+    padding: theme('spacing.2') theme('spacing.3');
+    font-size: 0.875rem;
   }
 
   .prose th {
@@ -285,7 +285,16 @@
 
   @media (max-width: 768px) {
     .prose table {
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .prose th,
+    .prose td {
+      font-size: 0.8125rem;
+      padding: theme('spacing.2') theme('spacing.2');
     }
 
     .prose th,
