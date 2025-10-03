@@ -87,14 +87,44 @@
     }
 
     const head = document.createElement('div');
-    head.className = 'comment-author text-sm';
+    head.className = 'comment-author';
     const authorName = comment?.author?.login || 'User';
-    const avatar = comment?.author?.avatar_url
-      ? `<img class="comment-avatar" src="${comment.author.avatar_url}" alt="${authorName}"/>`
-      : `<span class="comment-avatar comment-avatar-fallback">${authorName.slice(0, 1).toUpperCase()}</span>`;
+
+    const avatarWrapper = document.createElement('div');
+    avatarWrapper.className = 'comment-avatar-wrapper';
+    if (comment?.author?.avatar_url) {
+      const img = document.createElement('img');
+      img.src = comment.author.avatar_url;
+      img.alt = authorName;
+      img.className = 'comment-avatar';
+      avatarWrapper.appendChild(img);
+    } else {
+      const fallback = document.createElement('span');
+      fallback.className = 'comment-avatar-fallback';
+      fallback.textContent = authorName.slice(0, 1).toUpperCase();
+      avatarWrapper.appendChild(fallback);
+    }
+
+    const meta = document.createElement('div');
+    meta.className = 'comment-meta';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'comment-author-name';
+    nameEl.textContent = authorName;
+
+    const timeEl = document.createElement('div');
+    timeEl.className = 'comment-timestamp';
     const timestamp = new Date(comment?.created_at || '');
     const timestampText = Number.isNaN(timestamp.valueOf()) ? '' : timestamp.toLocaleString();
-    head.innerHTML = `${avatar} <span style="color: var(--text-secondary);">${authorName}</span> <span class="ml-auto text-xs" style="color: var(--text-secondary);">${timestampText}</span>`;
+    timeEl.textContent = timestampText;
+
+    meta.appendChild(nameEl);
+    if (timestampText) {
+      meta.appendChild(timeEl);
+    }
+
+    head.appendChild(avatarWrapper);
+    head.appendChild(meta);
 
     const body = document.createElement('div');
     body.className = 'comment-body prose prose-sm prose-invert';

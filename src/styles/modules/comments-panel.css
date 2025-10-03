@@ -1,0 +1,53 @@
+@layer components {
+  #comments-panel {
+    max-height: min(1240px, calc(100vh - 160px));
+  }
+
+  #comments-panel a {
+    @apply no-underline;
+  }
+
+  #comments-panel a:hover {
+    @apply no-underline;
+  }
+
+  #comments-panel .comment-item {
+    @apply border border-[color:var(--border-color)] rounded-lg p-3 text-[var(--text-color)] bg-[var(--card-bg)] flex flex-col gap-3;
+  }
+
+  #comments-panel .comment-item p {
+    @apply my-1;
+  }
+
+  #comments-panel .comment-author {
+    @apply flex items-start gap-3 flex-nowrap;
+  }
+
+  #comments-panel .comment-avatar-wrapper {
+    @apply w-12 h-12 shrink-0 flex items-center justify-center rounded-full overflow-hidden;
+  }
+
+  #comments-panel .comment-avatar {
+    @apply w-12 h-12 max-w-12 max-h-12 object-cover rounded-full;
+  }
+
+  #comments-panel .comment-avatar-fallback {
+    @apply flex items-center justify-center w-12 h-12 text-lg rounded-full bg-[var(--divider-shadow-soft)] text-[var(--text-color)];
+  }
+
+  #comments-panel .comment-meta {
+    @apply flex flex-col flex-1 items-start justify-center gap-1 min-w-0;
+  }
+
+  #comments-panel .comment-author-name {
+    @apply font-semibold text-[var(--text-color)];
+  }
+
+  #comments-panel .comment-timestamp {
+    @apply text-sm text-[var(--text-secondary)];
+  }
+
+  #comments-list {
+    @apply max-h-[calc(100%-140px)];
+  }
+}

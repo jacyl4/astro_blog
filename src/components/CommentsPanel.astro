@@ -11,51 +11,20 @@ const commentsPanelConfig = JSON.stringify({
 <nav
   id="comments-panel"
   data-config={commentsPanelConfig}
-  class="xl:block fixed top-1/2 -translate-y-1/2 left-[calc(50%+576px+1rem)] w-[320px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border z-50"
-  style="background-color: var(--card-bg); border-color: var(--border-color); display: none; overflow-y: auto;"
+  class="hidden xl:block fixed top-1/2 -translate-y-1/2 left-[calc(50%+576px+1rem)] w-[320px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border overflow-y-auto z-50 bg-[var(--card-bg)] border-[color:var(--border-color)]"
 >
-  <h3 class="font-bold text-lg mb-3" style="color: var(--text-color);">{UI_TEXT.commentsTitle}</h3>
-  <div id="comments-session" class="mb-3 text-sm" style="color: var(--text-secondary);"></div>
-  <div id="comments-status" class="text-sm" style="color: var(--text-secondary); display: none;"></div>
+  <h3 class="font-bold text-lg mb-3 text-[var(--text-color)]">{UI_TEXT.commentsTitle}</h3>
+  <div id="comments-session" class="mb-3 text-sm text-[var(--text-secondary)]"></div>
+  <div id="comments-status" class="text-sm text-[var(--text-secondary)] hidden"></div>
   <div id="comments-list" class="space-y-4 overflow-auto pr-1"></div>
 
   <div id="comments-editor" class="mt-4">
-    <textarea id="comment-input" class="w-full p-2 rounded border bg-transparent resize-y" rows="3" placeholder={UI_TEXT.commentPlaceholder} style="border-color: var(--border-color); color: var(--text-color);"></textarea>
+    <textarea id="comment-input" class="w-full p-2 rounded border border-[color:var(--border-color)] bg-transparent text-[var(--text-color)] resize-y" rows="3" placeholder={UI_TEXT.commentPlaceholder}></textarea>
     <div class="mt-2 flex items-center justify-between">
-      <a id="login-link" href="#" class="text-sm hover:underline" style="color: var(--accent-color); display:none;">{UI_TEXT.loginWithGitHub}</a>
-      <button id="comment-submit" class="ml-auto px-3 py-1 rounded border hover:shadow-soft-md" style="border-color: var(--border-color); color: var(--text-color);">{UI_TEXT.commentSubmit}</button>
+      <a id="login-link" href="#" class="hidden text-sm text-[var(--accent-color)] hover:underline">{UI_TEXT.loginWithGitHub}</a>
+      <button id="comment-submit" class="ml-auto px-3 py-1 rounded border border-[color:var(--border-color)] text-[var(--text-color)] hover:shadow-soft-md">{UI_TEXT.commentSubmit}</button>
     </div>
   </div>
 </nav>
-
-<style>
-  #comments-panel {
-    max-height: min(1240px, calc(100vh - 160px));
-  }
-  #comments-panel a { text-decoration: none; }
-  #comments-panel a:hover { text-decoration: none; }
-  #comments-panel .comment-item p { margin: 0.25rem 0; }
-  #comments-panel .comment-author { display: flex; align-items: center; gap: 0.4rem; }
-  #comments-panel .comment-avatar {
-    width: 12px;
-    height: 12px;
-    border-radius: 9999px;
-    flex-shrink: 0;
-  }
-  #comments-panel .comment-avatar-fallback {
-    width: 12px;
-    height: 12px;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.5rem;
-    color: var(--text-color);
-    background-color: var(--divider-shadow-soft);
-  }
-  #comments-list {
-    max-height: calc(100% - 140px);
-  }
-</style>
 
 <script is:inline type="module" src="/scripts/comments-panel.js"></script>
