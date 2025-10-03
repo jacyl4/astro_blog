@@ -53,5 +53,8 @@
 - 前端环境变量: `PUBLIC_COMMENTS_API_BASE="https://astro-blog-comments.seso.icu"`
 - **重要**：必须在 Cloudflare Dashboard 配置 Worker 环境变量（GITHUB_CLIENT_ID、GITHUB_CLIENT_SECRET、JWT_SECRET）
 - **重要**：必须在 Cloudflare Pages 配置环境变量（PUBLIC_COMMENTS_API_BASE）并重新部署
+- **当前问题**：自定义域名路由返回 404，可能需要在 Dashboard 中绑定域名或检查路由配置
 - 详细配置指南: [docs/worker-setup.md](./docs/worker-setup.md)
 - 部署检查清单: [docs/deployment-checklist.md](./docs/deployment-checklist.md)
+- 重新部署指南: [docs/redeploy-pages.md](./docs/redeploy-pages.md)
+- 问题诊断: [docs/debug-deployment.md](./docs/debug-deployment.md)

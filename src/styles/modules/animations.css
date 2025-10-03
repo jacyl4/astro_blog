@@ -3,7 +3,8 @@
   opacity: 0;
   transform: translateX(20px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  will-change: opacity, transform;
 }
 
 #table-of-contents.is-visible {
@@ -17,13 +18,25 @@
   opacity: 0;
   transform: translateX(-20px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  will-change: opacity, transform;
 }
 
 #comments-panel.is-visible {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;
+}
+
+/* Force animation on Swup page transitions */
+html.is-changing #table-of-contents:not(.is-visible),
+html.is-changing #comments-panel:not(.is-visible) {
+  opacity: 0;
+}
+
+html.is-animating #table-of-contents.is-visible,
+html.is-animating #comments-panel.is-visible {
+  transition: opacity 0.4s ease-out 0.1s, transform 0.4s ease-out 0.1s;
 }
 
 /* Article content fade-in animation */
