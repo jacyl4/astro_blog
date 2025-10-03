@@ -1,6 +1,14 @@
 @layer components {
   #comments-panel {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.4s ease-out 0.1s;
+  }
+
+  #comments-panel.is-visible {
     max-height: min(1240px, calc(100vh - 160px));
+    opacity: 1;
   }
 
   #comments-panel a {
@@ -49,5 +57,30 @@
 
   #comments-list {
     @apply max-h-[calc(100%-140px)];
+  }
+
+  /* 滚动条样式 */
+  #comments-panel ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  #comments-panel ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #comments-panel ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+
+  #comments-panel ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  /* Firefox */
+  #comments-panel * {
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
   }
 }

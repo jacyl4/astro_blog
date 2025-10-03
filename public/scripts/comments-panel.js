@@ -82,6 +82,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'comment-item p-2 rounded border';
     wrapper.style.borderColor = 'var(--border-color)';
+    wrapper.style.opacity = '0';
+    wrapper.style.transform = 'translateY(10px)';
+    wrapper.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
     if (typeof comment?.id !== 'undefined' && comment?.id !== null) {
       wrapper.dataset.commentId = String(comment.id);
     }
@@ -247,6 +250,14 @@
         nodes.push(renderComment(comment));
       }
       list.replaceChildren(...nodes);
+      
+      // 逐个淡入评论
+      nodes.forEach((node, index) => {
+        setTimeout(() => {
+          node.style.opacity = '1';
+          node.style.transform = 'translateY(0)';
+        }, index * 80);
+      });
       if (!nodes.length) {
         showStatus(uiText.noComments || '');
       }
@@ -315,10 +326,10 @@
       panel.style.display = 'none';
       panel.removeEventListener('transitionend', onEnd);
     };
-    panel.addEventListener('transitionend', onEnd);
+    panel.addEventListener('transitionend', onEnd, { once: true });
     panel.classList.remove('is-visible');
     // Fallback: ensure hiding even if transitionend doesn't fire.
-    setTimeout(onEnd, 500);
+    setTimeout(onEnd, 600);
   }
 
   function updateVisibility() {
