@@ -2,7 +2,7 @@
   if (typeof window === 'undefined') return;
   if (window.__tocInitialized) return;
 
-  const ITEMS_PER_PAGE = 39;
+  const ITEMS_PER_PAGE = 33;
   const TOC_ID = 'table-of-contents';
 
   const state = {
