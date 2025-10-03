@@ -329,11 +329,21 @@ export default {
           body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code })
         });
         if (!tokenRes.ok) {
-          console.error('OAuth token exchange failed', tokenRes.status, await tokenRes.text());
-          return new Response('OAuth failed', { status: 502 });
+          const errorText = await tokenRes.text();
+          console.error('OAuth token exchange failed', tokenRes.status, errorText);
+          
+          // GitHub 速率限制
+          if (tokenRes.status === 429) {
+            return new Response('GitHub 速率限制：请求过于频繁，请等待几分钟后再试', { status: 429 });
+          }
+          
+          return new Response(`OAuth failed: ${tokenRes.status} - ${errorText}`, { status: 502 });
         }
         const tokenJson = await tokenRes.json();
-        if (!tokenJson.access_token) return new Response('OAuth failed', { status: 400 });
+        if (!tokenJson.access_token) {
+          console.error('No access token in response', tokenJson);
+          return new Response(`OAuth failed: ${tokenJson.error || 'No access token'} - ${tokenJson.error_description || ''}`, { status: 400 });
+        }
 
         const userRes = await fetch('https://api.github.com/user', {
           headers: { 'Authorization': `Bearer ${tokenJson.access_token}`, 'User-Agent': 'astro-blog-comments-worker' }

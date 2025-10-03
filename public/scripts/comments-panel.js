@@ -175,11 +175,21 @@
       });
 
       if (res.status === 401) {
+        sessionEl.innerHTML = '';
         if (loginLink) {
           loginLink.href = loginUrl;
-          loginLink.style.display = 'inline';
+          loginLink.textContent = uiText.loginPrompt || '使用 GitHub 登录后可发表评论';
+          loginLink.style.display = 'inline-block';
+          loginLink.style.color = 'var(--accent-color)';
+          loginLink.style.textDecoration = 'none';
+          loginLink.addEventListener('mouseenter', () => {
+            loginLink.style.textDecoration = 'underline';
+          });
+          loginLink.addEventListener('mouseleave', () => {
+            loginLink.style.textDecoration = 'none';
+          });
+          sessionEl.appendChild(loginLink);
         }
-        sessionEl.textContent = uiText.loginPrompt || '';
         setEditorEnabled(false);
         return { authenticated: false };
       }
@@ -226,19 +236,27 @@
         return data;
       }
 
+      sessionEl.innerHTML = '';
       if (loginLink) {
         loginLink.href = loginUrl;
-        loginLink.style.display = 'inline';
+        loginLink.textContent = uiText.loginPrompt || '使用 GitHub 登录后可发表评论';
+        loginLink.style.display = 'inline-block';
+        loginLink.style.color = 'var(--accent-color)';
+        loginLink.style.textDecoration = 'none';
+        sessionEl.appendChild(loginLink);
       }
-      sessionEl.textContent = uiText.loginPrompt || '';
       setEditorEnabled(false);
       return { authenticated: false };
     } catch (error) {
       console.error('[comments] Session error', error);
-      sessionEl.textContent = uiText.sessionError || '';
+      sessionEl.innerHTML = '';
       if (loginLink) {
         loginLink.href = loginUrl;
-        loginLink.style.display = 'inline';
+        loginLink.textContent = uiText.loginPrompt || '使用 GitHub 登录后可发表评论';
+        loginLink.style.display = 'inline-block';
+        loginLink.style.color = 'var(--accent-color)';
+        loginLink.style.textDecoration = 'none';
+        sessionEl.appendChild(loginLink);
       }
       setEditorEnabled(false);
       return { authenticated: false };

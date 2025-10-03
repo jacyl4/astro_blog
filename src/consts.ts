@@ -43,7 +43,7 @@ export const UI_TEXT = {
     // Comments
     commentsTitle: '评论',
     loginWithGitHub: '使用 GitHub 登录',
-    loginPrompt: '登录后即可发表评论。',
+    loginPrompt: '使用 GitHub 登录后可发表评论',
     loggedInAs: '已登录：',
     logout: '登出',
     sessionError: '获取登录状态失败。',

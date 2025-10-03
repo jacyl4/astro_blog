@@ -20,9 +20,9 @@ const commentsPanelConfig = JSON.stringify({
 
   <div id="comments-editor" class="mt-4">
     <textarea id="comment-input" class="w-full p-2 rounded border border-[color:var(--border-color)] bg-transparent text-[var(--text-color)] resize-y" rows="3" placeholder={UI_TEXT.commentPlaceholder}></textarea>
-    <div class="mt-2 flex items-center justify-between">
-      <a id="login-link" href="#" class="hidden text-sm text-[var(--accent-color)] hover:underline">{UI_TEXT.loginWithGitHub}</a>
-      <button id="comment-submit" class="ml-auto px-3 py-1 rounded border border-[color:var(--border-color)] text-[var(--text-color)] hover:shadow-soft-md">{UI_TEXT.commentSubmit}</button>
+    <div class="mt-2 flex items-center justify-end">
+      <a id="login-link" href="#" class="hidden"></a>
+      <button id="comment-submit" class="px-3 py-1 rounded border border-[color:var(--border-color)] text-[var(--text-color)] hover:shadow-soft-md">{UI_TEXT.commentSubmit}</button>
     </div>
   </div>
 </nav>
