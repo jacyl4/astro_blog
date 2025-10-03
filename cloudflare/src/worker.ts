@@ -78,7 +78,8 @@ function sanitizeRedirect(target: string, env: Env): string {
   try {
     const url = new URL(target);
     const allowed = parseAllowedOrigins(env);
-    if (allowed.includes(url.origin)) {
+    // 允许通配符 * 或匹配的 origin
+    if (allowed.includes('*') || allowed.includes(url.origin)) {
       return url.toString();
     }
     return '/';
