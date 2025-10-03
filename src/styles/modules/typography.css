@@ -259,6 +259,9 @@
     border-collapse: collapse;
     display: block;
     overflow-x: auto;
+    max-width: 100%;
+    font-size: 0.9375rem;
+    -webkit-overflow-scrolling: touch;
   }
 
   .prose th,
@@ -266,6 +269,7 @@
     border-width: 1px;
     border-color: var(--border-secondary-color);
     padding: theme('spacing.3') theme('spacing.4');
+    font-size: 0.9375rem;
   }
 
   .prose th {
@@ -277,6 +281,19 @@
   /* Zebra striping for table rows */
   .prose tbody tr:nth-child(even) {
     background-color: var(--table-stripe-bg);
+  }
+
+  @media (max-width: 768px) {
+    .prose table {
+      font-size: 0.875rem;
+    }
+
+    .prose th,
+    .prose td {
+      padding: theme('spacing.2') theme('spacing.3');
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
   }
 
 }

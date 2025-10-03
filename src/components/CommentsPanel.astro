@@ -1,12 +1,23 @@
 ---
 // src/components/CommentsPanel.astro
 import { COMMENTS_CONFIG, UI_TEXT } from '@/consts';
+
+const apiBase = import.meta.env.PUBLIC_COMMENTS_API_BASE ?? COMMENTS_CONFIG?.API_BASE ?? '';
+const commentsPanelConfig = JSON.stringify({
+  apiBase,
+  uiText: UI_TEXT,
+});
 ---
-<nav id="comments-panel" class="xl:block fixed top-1/2 -translate-y-1/2 left-[calc(50%+576px+1rem)] w-auto max-w-[350px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border z-50" style="background-color: var(--card-bg); border-color: var(--border-color); display: none;">
+<nav
+  id="comments-panel"
+  data-config={commentsPanelConfig}
+  class="xl:block fixed top-1/2 -translate-y-1/2 left-[calc(50%+576px+1rem)] w-[320px] space-y-2 p-4 rounded-lg shadow-lg backdrop-blur-md border z-50"
+  style="background-color: var(--card-bg); border-color: var(--border-color); display: none;"
+>
   <h3 class="font-bold text-lg mb-3" style="color: var(--text-color);">{UI_TEXT.commentsTitle}</h3>
   <div id="comments-session" class="mb-3 text-sm" style="color: var(--text-secondary);"></div>
   <div id="comments-status" class="text-sm" style="color: var(--text-secondary); display: none;"></div>
-  <div id="comments-list" class="space-y-4 max-h-[320px] overflow-auto pr-1"></div>
+  <div id="comments-list" class="space-y-4 max-h-[420px] overflow-auto pr-1"></div>
 
   <div id="comments-editor" class="mt-4">
     <textarea id="comment-input" class="w-full p-2 rounded border bg-transparent resize-y" rows="3" placeholder={UI_TEXT.commentPlaceholder} style="border-color: var(--border-color); color: var(--text-color);"></textarea>
@@ -36,176 +47,4 @@ import { COMMENTS_CONFIG, UI_TEXT } from '@/consts';
   }
 </style>
 
-<script>
-  const API_BASE = import.meta.env.PUBLIC_COMMENTS_API_BASE || (COMMENTS_CONFIG?.API_BASE ?? '');
-
-  function onNavEvents(handler) {
-    document.addEventListener('astro:page-load', handler);
-    document.addEventListener('astro:after-swap', handler);
-    document.addEventListener('DOMContentLoaded', handler);
-  }
-
-  function isPostPage() {
-    return window.location.pathname.startsWith('/posts/');
-  }
-
-  function currentPostId() {
-    // Use the full path as postId, which is stable across builds
-    return window.location.pathname.replace(/\/$/, '') || '/';
-  }
-
-  function el(id) { return document.getElementById(id); }
-
-  async function fetchJSON(url, opts = {}) {
-    const res = await fetch(url, { credentials: 'include', ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) } });
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
-  }
-
-  function setEditorEnabled(enabled) {
-    const input = el('comment-input');
-    const submit = el('comment-submit');
-    if (input) {
-      input.disabled = !enabled;
-      input.style.opacity = enabled ? '1' : '0.5';
-    }
-    if (submit) {
-      submit.disabled = !enabled;
-      submit.style.opacity = enabled ? '1' : '0.5';
-    }
-  }
-
-  function renderComment(c) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'comment-item p-2 rounded border';
-    wrapper.style.borderColor = 'var(--border-color)';
-    const head = document.createElement('div');
-    head.className = 'comment-author text-sm';
-    const authorName = c.author?.login || 'User';
-    const avatar = c.author?.avatar_url
-      ? `<img src="${c.author.avatar_url}" alt="${authorName}"/>`
-      : `<span class="comment-avatar-fallback">${authorName.slice(0, 1).toUpperCase()}</span>`;
-    const timestamp = new Date(c.created_at);
-    const timestampText = Number.isNaN(timestamp.valueOf()) ? '' : timestamp.toLocaleString();
-    head.innerHTML = `${avatar} <span style="color: var(--text-secondary);">${authorName}</span> <span class="ml-auto text-xs" style="color: var(--text-secondary);">${timestampText}</span>`;
-    const body = document.createElement('div');
-    body.className = 'comment-body prose prose-sm prose-invert';
-    body.innerHTML = c.html || '';
-    wrapper.appendChild(head);
-    wrapper.appendChild(body);
-    return wrapper;
-  }
-
-  function updateVisibility() {
-    const panel = el('comments-panel');
-    if (!panel) return false;
-    const isLargeScreen = window.matchMedia('(min-width: 1280px)').matches;
-    const visible = isPostPage() && Boolean(API_BASE) && isLargeScreen;
-    panel.style.display = visible ? 'block' : 'none';
-    return visible;
-  }
-
-  async function loadSession() {
-    const sessionEl = el('comments-session');
-    const loginLink = el('login-link');
-    if (!API_BASE) {
-      sessionEl.textContent = '评论服务未配置';
-      if (loginLink) loginLink.style.display = 'none';
-      setEditorEnabled(false);
-      return { authenticated: false };
-    }
-    try {
-      const data = await fetchJSON(`${API_BASE}/auth/session`);
-      if (data.authenticated) {
-        sessionEl.innerHTML = `${UI_TEXT.loggedInAs} <strong style="color: var(--text-color);">${data.user.login}</strong>`;
-        if (loginLink) loginLink.style.display = 'none';
-        setEditorEnabled(true);
-      } else {
-        const redirect = encodeURIComponent(window.location.href);
-        if (loginLink) {
-          loginLink.href = `${API_BASE}/auth/github/login?redirect_uri=${redirect}`;
-          loginLink.style.display = 'inline';
-        }
-        sessionEl.textContent = UI_TEXT.loginPrompt;
-        setEditorEnabled(false);
-      }
-      return data;
-    } catch (e) {
-      sessionEl.textContent = UI_TEXT.sessionError;
-      setEditorEnabled(false);
-      return { authenticated: false };
-    }
-  }
-
-  function showStatus(message) {
-    const box = el('comments-status');
-    if (!box) return;
-    if (!message) {
-      box.style.display = 'none';
-      box.textContent = '';
-      return;
-    }
-    box.textContent = message;
-    box.style.display = 'block';
-  }
-
-  async function loadComments() {
-    const list = el('comments-list');
-    if (!list || !API_BASE) return;
-    list.innerHTML = '';
-    showStatus('');
-    try {
-      const data = await fetchJSON(`${API_BASE}/api/comments?postId=${encodeURIComponent(currentPostId())}`);
-      const comments = data.comments || [];
-      comments.forEach((c) => list.appendChild(renderComment(c)));
-    } catch (e) {
-      showStatus(UI_TEXT.loadError);
-    }
-  }
-
-  async function setupEditor() {
-    const submit = el('comment-submit');
-    const input = el('comment-input');
-    if (!submit || !input || submit.dataset.bound === 'true') return;
-    submit.dataset.bound = 'true';
-    submit.addEventListener('click', async () => {
-      const text = input.value.trim();
-      if (!text) return;
-      submit.disabled = true;
-      submit.textContent = UI_TEXT.commentSubmitting;
-      showStatus('');
-      try {
-        await fetchJSON(`${API_BASE}/api/comments`, {
-          method: 'POST',
-          body: JSON.stringify({ postId: currentPostId(), markdown: text })
-        });
-        input.value = '';
-        await loadComments();
-      } catch (e) {
-        showStatus(UI_TEXT.commentError);
-      } finally {
-        submit.disabled = false;
-        submit.textContent = UI_TEXT.commentSubmit;
-      }
-    });
-  }
-
-  async function initComments() {
-    const visible = updateVisibility();
-    if (!visible) return;
-    setEditorEnabled(false);
-    await loadSession();
-    await loadComments();
-    await setupEditor();
-  }
-
-  onNavEvents(initComments);
-  if (!Object.prototype.hasOwnProperty.call(window, '__commentsPanelResizeBound')) {
-    Object.defineProperty(window, '__commentsPanelResizeBound', {
-      value: true,
-      configurable: true,
-      writable: true,
-    });
-    window.addEventListener('resize', initComments);
-  }
-</script>
+<script type="module" src="/scripts/comments-panel.js" is:inline></script>

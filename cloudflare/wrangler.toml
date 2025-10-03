@@ -13,3 +13,4 @@ bindings = []
 binding = "DB"
 database_name = "astro-blog-comments-db"
 database_id = "d0dd86fc-8853-4a1d-a366-e0b6777b3205"
+

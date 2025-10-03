@@ -4,6 +4,20 @@
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
+type D1Result<T> = {
+  results: T[];
+};
+
+type D1PreparedStatement<T = unknown> = {
+  bind(...values: unknown[]): D1PreparedStatement<T>;
+  first<U = T>(): Promise<U | null>;
+  all(): Promise<D1Result<T>>;
+};
+
+type D1Database = {
+  prepare<T = unknown>(query: string): D1PreparedStatement<T>;
+};
+
 type Env = {
   DB: D1Database;
   GITHUB_CLIENT_ID: string;
@@ -66,22 +80,22 @@ function sanitizeRedirect(target: string, env: Env): string {
   }
 }
 
-const base64url = {
-  encode: (data: ArrayBuffer) => {
-    const bytes = new Uint8Array(data);
-    let str = '';
-    for (let i = 0; i < bytes.length; i++) str += String.fromCharCode(bytes[i]);
-    return btoa(str).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+function base64UrlEncode(input: ArrayBuffer | Uint8Array): string {
+  const bytes = input instanceof Uint8Array ? input : new Uint8Array(input);
+  let str = '';
+  for (let i = 0; i < bytes.length; i++) {
+    str += String.fromCharCode(bytes[i]);
   }
-};
+  return btoa(str).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+}
 
 async function signJWT(payload: Record<string, unknown>, secret: string, expSec = 60 * 60 * 24 * 7) {
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
   const body = { iat: now, exp: now + expSec, ...payload };
   const enc = new TextEncoder();
-  const headerB64 = base64url.encode(enc.encode(JSON.stringify(header)));
-  const payloadB64 = base64url.encode(enc.encode(JSON.stringify(body)));
+  const headerB64 = base64UrlEncode(enc.encode(JSON.stringify(header)));
+  const payloadB64 = base64UrlEncode(enc.encode(JSON.stringify(body)));
   const data = `${headerB64}.${payloadB64}`;
   const key = await crypto.subtle.importKey(
     'raw',
@@ -91,7 +105,7 @@ async function signJWT(payload: Record<string, unknown>, secret: string, expSec 
     ['sign']
   );
   const sig = await crypto.subtle.sign('HMAC', key, enc.encode(data));
-  const sigB64 = base64url.encode(sig);
+  const sigB64 = base64UrlEncode(new Uint8Array(sig));
   return `${data}.${sigB64}`;
 }
 
@@ -175,7 +189,7 @@ function renderMarkdown(md: string) {
       code: ['class']
     },
     transformTags: {
-      a: (tagName, attribs) => ({
+      a: (_tagName: string, attribs: Record<string, string>) => ({
         tagName: 'a',
         attribs: { ...attribs, rel: 'noopener noreferrer nofollow', target: '_blank' }
       })
@@ -195,7 +209,7 @@ function setCookie(name: string, value: string, opts: { httpOnly?: boolean; secu
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const origin = request.headers.get('Origin');
 
@@ -291,7 +305,7 @@ export default {
           console.error('OAuth token exchange failed', tokenRes.status, await tokenRes.text());
           return new Response('OAuth failed', { status: 502 });
         }
-        const tokenJson = await tokenRes.json<any>();
+        const tokenJson = await tokenRes.json();
         if (!tokenJson.access_token) return new Response('OAuth failed', { status: 400 });
 
         const userRes = await fetch('https://api.github.com/user', {
@@ -301,7 +315,7 @@ export default {
           console.error('Failed to fetch GitHub user', userRes.status, await userRes.text());
           return new Response('OAuth failed', { status: 502 });
         }
-        const ghUser = await userRes.json<any>();
+        const ghUser = await userRes.json();
         if (!ghUser?.id || !ghUser?.login) {
           return new Response('OAuth failed', { status: 502 });
         }

@@ -51,6 +51,7 @@ export const UI_TEXT = {
     commentSubmitting: '发送中…',
     commentError: '发送失败，请稍后重试。',
     loadError: '加载评论失败。',
+    noComments: '暂无评论。',
 };
 
 export const PAGE_TITLES = {
