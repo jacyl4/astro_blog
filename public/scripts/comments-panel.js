@@ -204,10 +204,11 @@
         const logoutLink = document.createElement('a');
         logoutLink.href = '#';
         logoutLink.textContent = uiText.logout || '登出';
-        logoutLink.style.marginLeft = '8px';
+        logoutLink.style.marginLeft = '0.5em';
         logoutLink.style.color = 'var(--accent-color)';
         logoutLink.style.textDecoration = 'none';
-        logoutLink.style.fontSize = '0.9em';
+        logoutLink.style.fontSize = 'inherit';
+        logoutLink.style.verticalAlign = 'baseline';
         logoutLink.addEventListener('click', async (e) => {
           e.preventDefault();
           try {
