@@ -27,3 +27,8 @@
 - `src/services/BlogService.ts` 维护分类、标签、归档缓存；如需新增聚合逻辑，请复用现有缓存结构或记得清理。
 - 目录组件 `TableOfContents` 依赖 `astro:page-load` / `astro:after-swap` 事件，修改时请确认 Swup 兼容性。
 - 代码风格倾向于简洁注释，避免过度说明显而易见的逻辑。
+
+## 新需求
+- 我需要给我的博客搭建一个评论系统，要求支持 Markdown 语法，并且可以通过 GitHub 账号登录。请帮我设计一个解决方案。
+- 使用 cloudflare D1 存储评论数据，使用 cloudflare workers 进行处理，
+- 评论系统界面放置在打开文章后的右侧，像TOC类似。

@@ -40,6 +40,17 @@ export const UI_TEXT = {
     tag: '标签',
     postList: '文章列表',
     noPosts: '暂无文章。',
+    // Comments
+    commentsTitle: '评论',
+    loginWithGitHub: '使用 GitHub 登录',
+    loginPrompt: '登录后即可发表评论。',
+    loggedInAs: '已登录：',
+    sessionError: '获取登录状态失败。',
+    commentPlaceholder: '写下你的评论… 支持 Markdown',
+    commentSubmit: '发送',
+    commentSubmitting: '发送中…',
+    commentError: '发送失败，请稍后重试。',
+    loadError: '加载评论失败。',
 };
 
 export const PAGE_TITLES = {
@@ -57,4 +68,9 @@ export const DATE_FORMAT = {
         month: 'long',
         day: 'numeric',
     },
+};
+
+// Comments configuration (Cloudflare Worker base URL)
+export const COMMENTS_CONFIG = {
+    API_BASE: import.meta.env?.PUBLIC_COMMENTS_API_BASE ?? '',
 };

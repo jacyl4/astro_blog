@@ -6,6 +6,7 @@ import CategoryList from '@/components/CategoryList.astro';
 import TagList from '@/components/TagList.astro';
 import ArchiveList from '@/components/ArchiveList.astro';
 import TableOfContents from '@/components/TableOfContents.astro';
+import CommentsPanel from '@/components/CommentsPanel.astro';
 import { SITE_DESCRIPTION } from '@/consts';
 
 interface Props {
@@ -78,6 +79,7 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
   </head>
   <body>
     <TableOfContents />
+    <CommentsPanel />
     <div class="content-wrapper">
       <div class="mx-auto md:my-[21px] max-w-[1152px] relative">
         <div id="header-container">
