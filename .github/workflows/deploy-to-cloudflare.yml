@@ -18,6 +18,8 @@ jobs:
   publish:
     # 运行环境：使用最新的 Ubuntu
     runs-on: ubuntu-latest
+    env:
+      PUBLIC_COMMENTS_API_BASE: ${{ vars.PUBLIC_COMMENTS_API_BASE || secrets.PUBLIC_COMMENTS_API_BASE }}
     
     # 权限设置：需要读取代码仓库和写入部署状态的权限
     permissions:
