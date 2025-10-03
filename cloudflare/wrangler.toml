@@ -4,10 +4,7 @@ compatibility_date = "2024-10-01"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-ALLOWED_ORIGINS = "https://blog.seso.icu"
-
-[durable_objects]
-bindings = []
+ALLOWED_ORIGINS = "*"
 
 [[d1_databases]]
 binding = "DB"

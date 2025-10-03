@@ -3,6 +3,7 @@
   if (window.__commentsPanelInitialized) return;
 
   const PANEL_ID = 'comments-panel';
+  let loadCommentsToken = 0;
 
   /**
    * @param {string | undefined} raw
@@ -81,13 +82,16 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'comment-item p-2 rounded border';
     wrapper.style.borderColor = 'var(--border-color)';
+    if (typeof comment?.id !== 'undefined' && comment?.id !== null) {
+      wrapper.dataset.commentId = String(comment.id);
+    }
 
     const head = document.createElement('div');
     head.className = 'comment-author text-sm';
     const authorName = comment?.author?.login || 'User';
     const avatar = comment?.author?.avatar_url
-      ? `<img src="${comment.author.avatar_url}" alt="${authorName}"/>`
-      : `<span class="comment-avatar-fallback">${authorName.slice(0, 1).toUpperCase()}</span>`;
+      ? `<img class="comment-avatar" src="${comment.author.avatar_url}" alt="${authorName}"/>`
+      : `<span class="comment-avatar comment-avatar-fallback">${authorName.slice(0, 1).toUpperCase()}</span>`;
     const timestamp = new Date(comment?.created_at || '');
     const timestampText = Number.isNaN(timestamp.valueOf()) ? '' : timestamp.toLocaleString();
     head.innerHTML = `${avatar} <span style="color: var(--text-secondary);">${authorName}</span> <span class="ml-auto text-xs" style="color: var(--text-secondary);">${timestampText}</span>`;
@@ -180,6 +184,7 @@
   }
 
   async function loadComments() {
+    const requestId = ++loadCommentsToken;
     const { apiBase, uiText } = readConfig();
     const list = /** @type {HTMLDivElement | null} */ (getElement('comments-list'));
     if (!list || !apiBase) return;
@@ -197,9 +202,22 @@
       }
 
       const data = await res.json();
+      if (requestId !== loadCommentsToken) {
+        return;
+      }
       const comments = Array.isArray(data?.comments) ? data.comments : [];
-      comments.forEach((comment) => list.appendChild(renderComment(comment)));
-      if (!comments.length) {
+      const nodes = [];
+      const seen = new Set();
+      for (const comment of comments) {
+        const key = comment && typeof comment.id !== 'undefined' && comment.id !== null
+          ? `id:${comment.id}`
+          : `hash:${JSON.stringify(comment)}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        nodes.push(renderComment(comment));
+      }
+      list.replaceChildren(...nodes);
+      if (!nodes.length) {
         showStatus(uiText.noComments || '');
       }
     } catch (error) {
@@ -245,14 +263,45 @@
     });
   }
 
+  function showPanel(panel) {
+    panel.style.display = 'block';
+    if (panel.classList.contains('is-visible')) {
+      return;
+    }
+    panel.classList.remove('is-visible');
+    // Force layout so transition runs when the class is added.
+    void panel.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      panel.classList.add('is-visible');
+    });
+  }
+
+  function hidePanel(panel) {
+    if (!panel.classList.contains('is-visible')) {
+      panel.style.display = 'none';
+      return;
+    }
+    const onEnd = () => {
+      panel.style.display = 'none';
+      panel.removeEventListener('transitionend', onEnd);
+    };
+    panel.addEventListener('transitionend', onEnd);
+    panel.classList.remove('is-visible');
+    // Fallback: ensure hiding even if transitionend doesn't fire.
+    setTimeout(onEnd, 500);
+  }
+
   function updateVisibility() {
     const { apiBase } = readConfig();
     const panel = /** @type {HTMLElement | null} */ (document.getElementById(PANEL_ID));
     if (!panel) return false;
     const isLargeScreen = window.matchMedia('(min-width: 1280px)').matches;
     const visible = window.location.pathname.startsWith('/posts/') && Boolean(apiBase) && isLargeScreen;
-    panel.classList.toggle('is-visible', visible);
-    panel.style.display = visible ? 'block' : 'none';
+    if (visible) {
+      showPanel(panel);
+    } else {
+      hidePanel(panel);
+    }
     return visible;
   }
 

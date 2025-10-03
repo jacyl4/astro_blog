@@ -59,7 +59,14 @@ function parseAllowedOrigins(env: Env): string[] {
 function withCORS(origin: string | null, env: Env, extra?: Record<string,string>) {
   const allowed = parseAllowedOrigins(env);
   const headers: Record<string, string> = { ...CORS_HEADERS_BASE, ...(extra || {}) };
-  if (origin && allowed.includes(origin)) {
+  if (allowed.includes('*')) {
+    if (origin) {
+      headers['Access-Control-Allow-Origin'] = origin;
+      headers['Access-Control-Allow-Credentials'] = 'true';
+    } else {
+      headers['Access-Control-Allow-Origin'] = '*';
+    }
+  } else if (origin && allowed.includes(origin)) {
     headers['Access-Control-Allow-Origin'] = origin;
     headers['Access-Control-Allow-Credentials'] = 'true';
   }
