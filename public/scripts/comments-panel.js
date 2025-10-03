@@ -201,13 +201,21 @@
         logoutLink.addEventListener('click', async (e) => {
           e.preventDefault();
           try {
-            await fetch(`${apiBase}/auth/logout`, {
+            const response = await fetch(`${apiBase}/auth/logout`, {
               method: 'POST',
               credentials: 'include',
+              headers: { 'Accept': 'application/json' },
             });
-            window.location.reload();
+            if (response.ok) {
+              // 强制清除缓存并重新加载
+              window.location.href = window.location.href.split('#')[0] + '?_=' + Date.now();
+            } else {
+              console.error('[comments] Logout failed', response.status);
+              window.location.reload();
+            }
           } catch (error) {
             console.error('[comments] Logout error', error);
+            window.location.reload();
           }
         });
         
