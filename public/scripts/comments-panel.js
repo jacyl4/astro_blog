@@ -191,7 +191,28 @@
 
       const data = await res.json();
       if (data?.authenticated) {
+        const logoutLink = document.createElement('a');
+        logoutLink.href = '#';
+        logoutLink.textContent = uiText.logout || '登出';
+        logoutLink.style.marginLeft = '8px';
+        logoutLink.style.color = 'var(--accent-color)';
+        logoutLink.style.textDecoration = 'none';
+        logoutLink.style.fontSize = '0.9em';
+        logoutLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try {
+            await fetch(`${apiBase}/auth/logout`, {
+              method: 'POST',
+              credentials: 'include',
+            });
+            window.location.reload();
+          } catch (error) {
+            console.error('[comments] Logout error', error);
+          }
+        });
+        
         sessionEl.innerHTML = `${uiText.loggedInAs || ''} <strong style="color: var(--text-color);">${data.user?.login || ''}</strong>`;
+        sessionEl.appendChild(logoutLink);
         if (loginLink) loginLink.style.display = 'none';
         setEditorEnabled(true);
         return data;

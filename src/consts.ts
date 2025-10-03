@@ -45,6 +45,7 @@ export const UI_TEXT = {
     loginWithGitHub: '使用 GitHub 登录',
     loginPrompt: '登录后即可发表评论。',
     loggedInAs: '已登录：',
+    logout: '登出',
     sessionError: '获取登录状态失败。',
     commentPlaceholder: '写下你的评论… 支持 Markdown',
     commentSubmit: '发送',
