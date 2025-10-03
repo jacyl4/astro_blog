@@ -36,17 +36,22 @@
 
 ### 最近更新（2025-10-03）
 1. 表格样式优化：字体从 0.9375rem 缩小到 0.875rem，移动端 0.8125rem 并增强横向滚动
-2. 评论系统修复：
+2. 评论系统完整修复：
    - 修复 JWT base64url 解码问题
-   - 优化 OAuth state 存储为 JSON 格式
-   - 确保 GitHub 回调流程正确
-   - **需要重新部署 Worker**: `cd cloudflare && wrangler deploy`
+   - 修复 OAuth state cookie 格式不一致导致的 "Invalid state cookie" 错误
+   - 移除阻止评论窗显示的 401 状态检查
+   - 添加评论面板展开/收起动画
+   - **已重新部署 Worker** (Version: a59d2b41)
 3. 文章内容添加 fadeIn 动画（0.6s 淡入 + 向上平移）
 4. TypeScript 迁移：remark-callouts.js → remark-callouts.ts
    - 注：public/scripts/ 下的脚本保留为 .js（浏览器直接执行）
+5. 新增测试脚本：`docs/test-comments.sh` - 快速验证评论系统配置
 
 ### 评论系统配置
 - Worker 域名: `https://astro-blog-comments.seso.icu`
 - GitHub OAuth 回调: `https://astro-blog-comments.seso.icu/auth/github/callback`
 - 前端环境变量: `PUBLIC_COMMENTS_API_BASE="https://astro-blog-comments.seso.icu"`
-- 详细部署文档见: [docs/deployment-checklist.md](./docs/deployment-checklist.md)
+- **重要**：必须在 Cloudflare Dashboard 配置 Worker 环境变量（GITHUB_CLIENT_ID、GITHUB_CLIENT_SECRET、JWT_SECRET）
+- **重要**：必须在 Cloudflare Pages 配置环境变量（PUBLIC_COMMENTS_API_BASE）并重新部署
+- 详细配置指南: [docs/worker-setup.md](./docs/worker-setup.md)
+- 部署检查清单: [docs/deployment-checklist.md](./docs/deployment-checklist.md)

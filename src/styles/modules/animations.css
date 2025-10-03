@@ -1,3 +1,4 @@
+/* TOC visibility animation */
 #table-of-contents {
   opacity: 0;
   transform: translateX(20px);
@@ -6,6 +7,20 @@
 }
 
 #table-of-contents.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Comments panel visibility animation */
+#comments-panel {
+  opacity: 0;
+  transform: translateX(-20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#comments-panel.is-visible {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;

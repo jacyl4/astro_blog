@@ -282,6 +282,7 @@ export default {
         const requestedRedirect = url.searchParams.get('redirect_uri') || '/';
         const redirectUri = sanitizeRedirect(requestedRedirect, env);
         const state = crypto.randomUUID();
+        const stateMeta = base64UrlEncode(new TextEncoder().encode(JSON.stringify({ s: state, r: redirectUri })));
         const params = new URLSearchParams({
           client_id: env.GITHUB_CLIENT_ID,
           redirect_uri: new URL('/auth/github/callback', url.origin).toString(),
@@ -290,7 +291,7 @@ export default {
         });
         const ghUrl = `https://github.com/login/oauth/authorize?${params.toString()}`;
         const headers = new Headers({ Location: ghUrl });
-        headers.append('Set-Cookie', setCookie(OAUTH_STATE_COOKIE, `${state}|${encodeURIComponent(redirectUri)}`, { path: '/', httpOnly: true, secure: true, sameSite: 'None', maxAge: 600 }));
+        headers.append('Set-Cookie', setCookie(OAUTH_STATE_COOKIE, stateMeta, { path: '/', httpOnly: true, secure: true, sameSite: 'None', maxAge: 600 }));
         return new Response(null, { status: 302, headers });
       }
 

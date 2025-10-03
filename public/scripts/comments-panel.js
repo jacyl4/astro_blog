@@ -191,11 +191,6 @@
         headers: { Accept: 'application/json' },
       });
 
-      if (res.status === 401) {
-        showStatus(uiText.loginPrompt || '');
-        return;
-      }
-
       if (!res.ok) {
         const message = await res.text();
         throw new Error(message || res.statusText);
@@ -256,6 +251,7 @@
     if (!panel) return false;
     const isLargeScreen = window.matchMedia('(min-width: 1280px)').matches;
     const visible = window.location.pathname.startsWith('/posts/') && Boolean(apiBase) && isLargeScreen;
+    panel.classList.toggle('is-visible', visible);
     panel.style.display = visible ? 'block' : 'none';
     return visible;
   }
