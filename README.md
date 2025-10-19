@@ -51,7 +51,7 @@ npm run build
 npm run preview
 ```
 
-若使用 `pnpm` / `bun` / `yarn`，可替换命令前缀。
+If you prefer another package manager like `bun` or `yarn`, replace the command prefix accordingly. This project defaults to using npm.
 
 ## 🧱 关键模块说明
 - `BlogService`：封装文章读取、排序、聚合逻辑，内置结果缓存；如需强制刷新，可在开发时调用 `resetBlogCache()`。

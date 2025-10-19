@@ -218,7 +218,7 @@
               headers: { 'Accept': 'application/json' },
             });
             if (response.ok) {
-              // 强制清除缓存并重新加载
+                // Force clear cache and reload
               window.location.href = window.location.href.split('#')[0] + '?_=' + Date.now();
             } else {
               console.error('[comments] Logout failed', response.status);
@@ -299,7 +299,7 @@
       }
       list.replaceChildren(...nodes);
       
-      // 逐个淡入评论
+  // Fade in comments one by one
       nodes.forEach((node, index) => {
         setTimeout(() => {
           node.style.opacity = '1';

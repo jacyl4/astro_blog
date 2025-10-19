@@ -1,5 +1,5 @@
 ---
-// 分类详情页，展示某分类下所有文章
+// Category detail page - displays all posts under a category
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
 import { getAllCategories, getPostsByCategory, type ProcessedBlogPost } from '@/services/BlogService';
@@ -8,7 +8,7 @@ import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 export async function getStaticPaths() {
   const categories = await getAllCategories();
   
-  // 过滤掉无效的类别
+  // Filter out invalid categories
   const validCategories = categories.filter(cat => cat.slug && cat.slug.trim() !== '');
   
   return validCategories.map((category) => ({

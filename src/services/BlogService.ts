@@ -1,12 +1,13 @@
-// 博客业务服务：负责 Markdown 读取、解析、聚合、标签分类等核心逻辑
-// 遵循单一职责与高内聚低耦合原则
+// Blog service: responsible for reading Markdown, parsing, aggregating,
+// categorizing tags, and other core logic.
+// Follows single-responsibility and high-cohesion / low-coupling principles.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify } from '../utils/stringUtils';
 
-// 使用 Astro 的 CollectionEntry 作为核心的文章类型
+// Use Astro's CollectionEntry as the core post type
 export type BlogPost = CollectionEntry<'blog'>;
 
-// 定义一个处理过的博客文章类型，其中 data 对象保证包含 category 字段
+// Define a processed blog post type where the data object is guaranteed to include a category field
 export type ProcessedBlogPost = Omit<BlogPost, 'data'> & {
   data: BlogPost['data'] & {
     category: string;
@@ -26,7 +27,7 @@ export interface BlogTag {
   count: number;
 }
 
-// 缓存所有已排序的文章，避免在单次构建/请求中重复处理
+// Cache all sorted posts to avoid repeated processing during a single build/request
 let sortedPosts: ProcessedBlogPost[] | null = null;
 let cachedCategories: BlogCategory[] | null = null;
 let cachedTags: BlogTag[] | null = null;
@@ -57,7 +58,7 @@ export function resetBlogCache() {
  * 此函数还会从文件路径中提取 category 并附加到文章数据中。
  */
 export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
-  // 如果已经缓存，直接返回
+  // If already cached, return immediately
   if (sortedPosts) {
     return sortedPosts;
   }
@@ -72,11 +73,11 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
       return count === 0 ? base : `${base}-${count + 1}`;
     };
 
-    // 注入 category 和 title（如果缺失），并按创建日期降序排序
+  // Inject category and title (if missing), and sort by created date descending
     const postsWithCategory = allEntries.map((post, index) => {
       const pathSegments = post.id.split('/');
       const fileSegment = pathSegments[pathSegments.length - 1] ?? post.id;
-      // 如果路径是 'folder/file.md'，分类就是 'folder'
+  // If path is 'folder/file.md', the category is 'folder'
       const category = pathSegments.length > 1 ? pathSegments[0] : 'Uncategorized';
 
       const fileTitle = fileSegment.replace(/\.mdx?$/, '');
@@ -91,17 +92,17 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
       const slugCandidate = titleSlug || fallbackSlug;
       const uniqueSlug = getUniqueSlug(slugCandidate);
 
-      // 返回一个符合 ProcessedBlogPost 类型的新对象
+  // Return a new object conforming to ProcessedBlogPost
       return {
         ...post,
-        // 依据文章标题生成英文 slug，必要时回退至原始路径并确保全局唯一
+  // Generate an English slug based on the article title, fallback to the original path if needed and ensure global uniqueness
         slug: uniqueSlug,
         data: {
           ...post.data,
-          title: displayTitle, // 页面展示使用文件名（通常为中文）
+          title: displayTitle, // Display title uses file name (often in Chinese)
           originalTitle: frontmatterTitle || displayTitle,
           category: category,
-          // 在这里处理标签，去除 '#'
+          // Handle tags here by removing any leading '#'
           tags: post.data.tags?.map(tag => tag.startsWith('#') ? tag.slice(1) : tag) || [],
         }
       };
@@ -119,7 +120,7 @@ export async function getAllPosts(): Promise<ProcessedBlogPost[]> {
     return posts;
   } catch (error) {
     console.error('Error fetching or sorting blog posts:', error);
-    // 在出错时返回空数组，防止下游消费者出错
+  // On error, return an empty array to prevent downstream failures
     return [];
   }
 }
@@ -174,7 +175,7 @@ export async function getPostBySlug(slug: string): Promise<ProcessedBlogPost | u
 
   const allPosts = await getAllPosts();
   
-  // 直接匹配我们自定义生成的 pinyin slug
+  // Directly match the pinyin slug we generate
   const post = allPosts.find(p => p.slug === slug);
 
   if (!post) {

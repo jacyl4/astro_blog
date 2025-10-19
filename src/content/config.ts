@@ -5,8 +5,8 @@ const blogCollection = defineCollection({
   schema: () =>
     z.object({
       title: z.string().optional(),
-      created: z.coerce.date().optional(), // 创建日期
-      tags: z.array(z.string()).optional(), // 标签
+      created: z.coerce.date().optional(), // creation date
+      tags: z.array(z.string()).optional(), // tags
     }),
 });
 

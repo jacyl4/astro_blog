@@ -1,4 +1,4 @@
-// TypeScript 配置，继承 Astro 官方严格模式
+// TypeScript configuration - extends Astro's official strict config
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {

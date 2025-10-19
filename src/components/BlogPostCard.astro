@@ -1,5 +1,5 @@
 ---
-// 博客文章卡片组件，展示标题、摘要、分类等
+// Blog post card component - displays title, summary, category, etc.
 import type { ProcessedBlogPost } from '@/services/BlogService';
 import { URLS, UI_TEXT } from '@/consts';
 import { formatDate } from '@/utils/dateUtils';
@@ -17,7 +17,7 @@ const categoryUrl = category ? `${URLS.categories}/${slugify(category)}/` : unde
 ---
 
 <article class="group relative flex flex-col bg-card p-6 rounded-2xl border border-border-primary post-card">
-  <a href={postUrl} class="absolute inset-0 z-10" aria-label={`阅读更多关于 ${post.data.title} 的文章`}></a>
+  <a href={postUrl} class="absolute inset-0 z-10" aria-label={`Read more about ${post.data.title}`}></a>
   
   <div class="flex flex-col flex-grow">
     <header class="mb-4">

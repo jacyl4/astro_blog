@@ -1,4 +1,4 @@
-// Astro 配置文件，负责全局构建与 Markdown 渲染等设置
+// Astro configuration file - handles global build and Markdown rendering settings
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import swup from '@swup/astro';
@@ -6,7 +6,7 @@ import SwupMorphPlugin from 'swup-morph-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 import icon from 'astro-icon';
 
-// Markdown/HTML 处理插件
+// Markdown/HTML processing plugins
 import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
@@ -20,6 +20,20 @@ import remarkUnwrapImages from 'remark-unwrap-images';
 import remarkWikiLink from 'remark-wiki-link';
 import { slugify as slugifyTrans } from 'transliteration';
 import remarkCallouts from './src/utils/remark-callouts.ts';
+
+const IGNORE_REMOTE_IMPORTS_WARNING = (
+  warning,
+  defaultHandler
+) => {
+  if (
+    warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
+    warning.message?.includes('@astrojs/internal-helpers/remote') &&
+    warning.message?.includes('matchHostname')
+  ) {
+    return;
+  }
+  defaultHandler(warning);
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -35,6 +49,10 @@ export default defineConfig({
       plugins: [new SwupMorphPlugin()],
     }),
   ],
+  server: {
+    host: true,
+    allowedHosts: true,
+  },
   vite: {
     plugins: [
       tailwindcss(),
@@ -70,13 +88,16 @@ export default defineConfig({
     ],
     build: {
       assetsInlineLimit: 4096, // 4KB
+      rollupOptions: {
+        onwarn: IGNORE_REMOTE_IMPORTS_WARNING,
+      },
     },
   },
 
   build: {
     assets: '_assets',
     format: 'directory',
-    // concurrency: 1, // 默认值，通常不需要修改
+    // concurrency: 1, // Default value; usually does not need to be changed
   },
 
   trailingSlash: 'always',
@@ -90,10 +111,10 @@ export default defineConfig({
     smartypants: true,
     remarkPlugins: [
       remarkFootnotes,
-      remarkGfm, // GFM: 表格、任务列表、自动链接、删除线
-      remarkBreaks, // 单换行视为 <br>（宽容处理松散换行）
-      remarkUnwrapImages, // 取消图片被 <p> 包裹，便于样式控制
-      remarkMath, // 支持 $ 行内 / $$ 块级 公式
+      remarkGfm, // GFM: tables, task lists, autolinks, strikethrough
+      remarkBreaks, // Treat single line breaks as <br> (lenient handling of loose newlines)
+      remarkUnwrapImages, // Remove <p> wrapper around images to simplify styling
+      remarkMath, // Support $ inline / $$ block math
       [
         remarkWikiLink,
         {
@@ -102,10 +123,10 @@ export default defineConfig({
           hrefTemplate: (permalink) => `/posts/${permalink}/`,
         },
       ],
-      remarkCallouts, // 解析 Obsidian 风格 > [!note] 等 callout
+      remarkCallouts, // Parse Obsidian-style callouts like > [!note]
     ],
     rehypePlugins: [
-      // 按顺序：先处理原始 HTML，再做安全过滤
+      // Order: first process raw HTML, then apply sanitization
       rehypeRaw,
       [
         rehypeSanitize,
@@ -122,10 +143,10 @@ export default defineConfig({
           },
         },
       ],
-      rehypeSlug, // 为标题生成 id
-      rehypeKatex, // 将 remark-math 渲染为 KaTeX
+      rehypeSlug, // Generate id attributes for headings
+      rehypeKatex, // Render remark-math using KaTeX
     ],
   },
 
-  cacheDir: './.astro/', // 添加缓存目录
+  cacheDir: './.astro/', // Add cache directory
 });

@@ -78,7 +78,7 @@ function sanitizeRedirect(target: string, env: Env): string {
   try {
     const url = new URL(target);
     const allowed = parseAllowedOrigins(env);
-    // 允许通配符 * 或匹配的 origin
+    // Allow wildcard '*' or any origin present in the allowlist
     if (allowed.includes('*') || allowed.includes(url.origin)) {
       return url.toString();
     }
@@ -332,7 +332,7 @@ export default {
           const errorText = await tokenRes.text();
           console.error('OAuth token exchange failed', tokenRes.status, errorText);
           
-          // GitHub 速率限制
+          // GitHub rate limiting
           if (tokenRes.status === 429) {
             return new Response('GitHub 速率限制：请求过于频繁，请等待几分钟后再试', { status: 429 });
           }

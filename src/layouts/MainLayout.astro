@@ -1,5 +1,5 @@
 ---
-// 全站主布局，包含头部导航、内容插槽
+// Main site layout - includes header navigation and content slot
 import '@/styles/global.css';
 import NavigationBar from '@/components/NavigationBar.astro';
 import CategoryList from '@/components/CategoryList.astro';
@@ -68,7 +68,7 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Astro, 博客, 技术, 文章" />
+  <meta name="keywords" content="Astro, 博, 技术, 文章" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <title>{title}</title>
