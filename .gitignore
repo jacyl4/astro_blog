@@ -2,6 +2,9 @@
 dist/
 # generated types
 .astro/
+.codegraph/
+graphify-out/
+docs/
 
 # dependencies
 node_modules/

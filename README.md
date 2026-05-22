@@ -65,4 +65,7 @@ If you prefer another package manager like `bun` or `yarn`, replace the command 
 - 若需自定义页面 `<head>` 信息，可在页面组件中向 `MainLayout` 传入 `title` 与 `description`。
 - 运行 `npm run build` 会先执行 `astro check`，确保内容与类型安全。
 
+## 📚 项目文档
+- [迭代建议](docs/astro-blog-iteration-suggestions.md)：基于当前结构梳理后的优先级、验收点与首轮清单。
+
 更多资料参考 [Astro 官方文档](https://docs.astro.build)。
