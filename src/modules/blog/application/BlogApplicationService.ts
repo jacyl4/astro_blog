@@ -5,6 +5,7 @@ import {
   selectCategories,
   selectPostBySlug,
   selectPostsByCategory,
+  selectPostsByArchiveMonth,
   selectPostsByTag,
   selectTags,
 } from '../domain/selectors';
@@ -37,6 +38,10 @@ export class BlogApplicationService<T extends BlogSourcePost> {
 
   async getPostsByTag(tag: string): Promise<ProcessedPost<T>[]> {
     return selectPostsByTag(await this.getAllPosts(), tag);
+  }
+
+  async getPostsByArchiveMonth(yearMonth: string): Promise<ProcessedPost<T>[]> {
+    return selectPostsByArchiveMonth(await this.getAllPosts(), yearMonth);
   }
 
   async getAllCategories(): Promise<BlogCategory[]> {

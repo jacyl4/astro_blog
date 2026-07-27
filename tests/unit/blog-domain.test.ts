@@ -4,6 +4,7 @@ import {
   selectArchiveMonths,
   selectCategories,
   selectPostsByCategory,
+  selectPostsByArchiveMonth,
   selectPostsByTag,
   selectTags,
 } from '../../src/modules/blog/domain/selectors';
@@ -87,12 +88,13 @@ describe('blog domain', () => {
     expect(selectPostsByTag(posts, 'network')).toHaveLength(2);
   });
 
-  it('derives archive months from UTC instead of the runner timezone', () => {
+  it('derives archive months from the blog timezone instead of the runner timezone', () => {
     const posts = normalizePosts([
-      entry('网络/year-boundary.md', 'Year boundary', '2025-01-01T00:00:00.000Z'),
-      entry('网络/month-boundary.md', 'Month boundary', '2026-02-01T00:00:00.000Z'),
+      entry('网络/year-boundary.md', 'Year boundary', '2025-12-31T16:00:00.000Z'),
+      entry('网络/month-boundary.md', 'Month boundary', '2025-06-30T16:00:00.000Z'),
     ]);
 
-    expect(selectArchiveMonths(posts)).toEqual(['2026-02', '2025-01']);
+    expect(selectArchiveMonths(posts)).toEqual(['2026-01', '2025-07']);
+    expect(selectPostsByArchiveMonth(posts, '2025-07')).toHaveLength(1);
   });
 });

@@ -1,4 +1,5 @@
 import { slugify } from '@/utils/stringUtils';
+import { formatArchiveMonth } from '@/utils/dateUtils';
 import type {
   BlogCategory,
   BlogSourcePost,
@@ -42,6 +43,13 @@ export function selectPostsByTag<T extends BlogSourcePost>(
   }));
 }
 
+export function selectPostsByArchiveMonth<T extends BlogSourcePost>(
+  posts: ProcessedPost<T>[],
+  yearMonth: string,
+): ProcessedPost<T>[] {
+  return posts.filter((post) => formatArchiveMonth(post.data.created) === yearMonth);
+}
+
 export function selectCategories<T extends BlogSourcePost>(
   posts: ProcessedPost<T>[],
 ): BlogCategory[] {
@@ -75,9 +83,8 @@ export function selectArchiveMonths<T extends BlogSourcePost>(
 ): string[] {
   const months = new Set<string>();
   for (const post of posts) {
-    const date = post.data.created;
-    if (!date) continue;
-    months.add(`${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`);
+    const yearMonth = formatArchiveMonth(post.data.created);
+    if (yearMonth) months.add(yearMonth);
   }
   return [...months].sort().reverse();
 }

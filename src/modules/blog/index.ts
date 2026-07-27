@@ -15,6 +15,8 @@ export const getAllPosts = () => service.getAllPosts();
 export const getPostBySlug = (slug: string) => service.getPostBySlug(slug);
 export const getPostsByCategory = (category: string) => service.getPostsByCategory(category);
 export const getPostsByTag = (tag: string) => service.getPostsByTag(tag);
+export const getPostsByArchiveMonth = (yearMonth: string) =>
+  service.getPostsByArchiveMonth(yearMonth);
 export const getAllCategories = () => service.getAllCategories();
 export const getAllTags = () => service.getAllTags();
 export const getArchiveMonths = () => service.getArchiveMonths();

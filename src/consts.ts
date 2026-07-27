@@ -50,11 +50,14 @@ export const PAGE_TITLES = {
     tags: '标签',
 };
 
+export const BLOG_TIME_ZONE = 'Asia/Shanghai';
+
 export const DATE_FORMAT = {
     locale: 'zh-CN',
     options: {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        timeZone: BLOG_TIME_ZONE,
     },
 };

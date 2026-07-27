@@ -1,33 +1,21 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
-import { getAllPosts, type ProcessedBlogPost } from '@/modules/blog';
-
-type Archive = {
-  [key: string]: ProcessedBlogPost[];
-};
+import {
+  getArchiveMonths,
+  getPostsByArchiveMonth,
+  type ProcessedBlogPost,
+} from '@/modules/blog';
 
 export async function getStaticPaths() {
-  const allPosts = await getAllPosts();
-
-  const archives = allPosts.reduce((acc: Archive, post) => {
-      if (post.data.created) { // Ensure created exists
-      const date = new Date(post.data.created);
-      const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-      if (!acc[yearMonth]) {
-        acc[yearMonth] = [];
-      }
-      acc[yearMonth].push(post);
-    }
-    return acc;
-  }, {});
-
-  return Object.keys(archives).map((yearMonth) => {
-    return {
+  const months = await getArchiveMonths();
+  return Promise.all(months.map(async (yearMonth) => ({
       params: { year_month: yearMonth },
-      props: { posts: archives[yearMonth], yearMonth: yearMonth },
-    };
-  });
+      props: {
+        posts: await getPostsByArchiveMonth(yearMonth),
+        yearMonth,
+      },
+    })));
 }
 
 interface Props {
