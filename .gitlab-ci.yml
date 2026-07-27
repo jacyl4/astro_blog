@@ -159,6 +159,9 @@ production:
   extends: .deploy-base
   stage: deploy-production
   resource_group: astro-blog-production
+  needs:
+    - job: staging
+      artifacts: false
   script:
     - npm run cf:dry-run -- --env production
     - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
