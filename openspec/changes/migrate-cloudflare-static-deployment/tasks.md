@@ -1,8 +1,8 @@
 ## 1. 当前发布盘点
 
-- [ ] 1.1 记录 Pages 项目、生产域名、DNS、构建设置和最后稳定 deployment
+- [x] 1.1 记录 Pages 项目、生产域名、DNS、构建设置和最后稳定 deployment
 - [x] 1.2 记录当前 headers、redirects、404 和 Service Worker 行为
-- [ ] 1.3 确认 Cloudflare API Token 最小权限和 GitLab protected variables
+- [x] 1.3 确认 Cloudflare API Token 最小权限和 GitLab protected variables
 - [x] 1.4 确认当前 Wrangler 4.x 版本和 config schema
 
 ## 2. Wrangler 配置
@@ -25,20 +25,20 @@
 
 ## 4. CI Deployment
 
-- [ ] 4.1 将 deployment job 改为下载不可变 build artifact，不重新构建（当前用 pipeline-scoped cache 临时传递，等待 GitLab artifact 服务修复）
-- [ ] 4.2 staging job 先执行 dry-run 再 deploy
-- [ ] 4.3 staging smoke 通过后才允许 production manual job
-- [ ] 4.4 production job 记录 Cloudflare deployment/version ID
-- [ ] 4.5 将 build manifest 和部署身份保存为 release evidence
+- [x] 4.1 deployment job 从 Generic Package Registry 下载带 SHA-256 校验的不可变 release 包，不重新构建
+- [x] 4.2 staging job 先执行 dry-run 再 deploy
+- [x] 4.3 staging smoke 通过后才允许 production manual job
+- [x] 4.4 production job 记录 Cloudflare deployment/version ID
+- [x] 4.5 将 build manifest 和部署身份保存为 release evidence
 
 ## 5. Production Cutover
 
-- [ ] 5.1 在 production Worker 发布与 staging 相同 artifact
-- [ ] 5.2 记录域名切换前 DNS/route 状态
-- [ ] 5.3 在低流量窗口切换自定义域名或 route
-- [ ] 5.4 立即执行关键路径和全路由 smoke
+- [x] 5.1 在 production Worker 发布与 staging 相同 artifact
+- [x] 5.2 记录域名切换前 DNS/route 状态
+- [x] 5.3 在低流量窗口切换自定义域名或 route
+- [x] 5.4 立即执行关键路径和全路由 smoke
 - [ ] 5.5 观察错误、404 和缓存指标
-- [ ] 5.6 保留 Pages 旧入口七天
+- [x] 5.6 保留 Pages 旧入口七天
 
 ## 6. 回滚演练与清理
 

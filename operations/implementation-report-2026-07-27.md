@@ -6,7 +6,7 @@
 
 ## 1. 当前结论
 
-本轮已完成可在 staging 验收的架构重构：
+本轮已完成架构重构和生产切换：
 
 - Astro 保持纯静态输出，共 86 个公开路由。
 - `jacyl4/obsidian-digital:Blog/` 成为唯一发布边界。
@@ -17,9 +17,12 @@
 - Cloudflare 目标为无入口脚本、无 binding 的 Static Assets Worker。
 - staging Worker `astro-blog-staging` 已部署到
   `https://blog-staging.seso.icu`。
+- production Worker `astro-blog` 已接管
+  `https://blog.seso.icu`。
 - GitLab 双仓链路使用精确 content SHA，不再向应用仓库 rsync 后提交镜像内容。
 
-生产域名尚未切换。本报告把生产切换保留为单独、人工批准的发布动作。
+生产发布由 GitLab Pipeline `#407` 的受保护 manual job 完成。Pages 项目
+`blog` 仍保留 `blog-4la.pages.dev` 回退入口，但不再占用生产自定义域名。
 
 ## 2. 内容边界与编译器
 
@@ -160,24 +163,48 @@ prepare → verify → build → browser → staging → production
 - staging：dry-run、部署、HTTP sweep
 - production：manual、protected、resource group 串行化
 
+prepare、verify、build、browser、staging 和 production 不依赖 Runner 本地
+工作目录延续。内容包与 release 包均上传到项目 Generic Package Registry，
+版本由 `CI_PIPELINE_ID-CI_COMMIT_SHA` 唯一标识；后续 job 使用
+`CI_JOB_TOKEN` 下载并校验 SHA-256 后再解包。production 因此发布的是已经
+通过 browser 与 staging 的同一份不可变 release 包，而不是重新构建。
+
 内容项目已将 `jacyl4/astro_blog` 加入 Job Token allowlist。
 两项目默认分支均为 `main`；`main` 与本轮发布分支均为 protected branch，
 禁止 force push。真实 prepare job 已使用 `CI_JOB_TOKEN` 从内容项目精确检出
 锁定 SHA。
 
-远端分支验证：
+远端验证：
 
 - 内容仓 Pipeline `#398` 成功，commit
   `c925ad442b8389376728e792c4a8dc31bf365227`
-- Astro 仓 Pipeline `#403` 成功，commit
-  `783201ef528e34bdfa1804ae1e9275599ff1d8b2`
-- `#403` 的 prepare、verify、build、browser 四个 job 全部成功
+- Astro 仓 Pipeline `#407` 使用 commit
+  `2fe43ad7ad0f2d40757ff725227632a36c27c3db`
+- `#407` 的 prepare、verify、build、browser、staging 和 production
+  按门禁顺序执行
+- staging job `#641` 成功后，production job 才允许人工启动
+- 首次 production job `#640` 已完成 Worker 部署，但在 Pages 域名解除后的
+  DNS 收敛窗口内，Runner 对生产域名的请求全部 `fetch failed`；该 job 在
+  10 分钟后中止，没有回滚已经成功的 Worker deployment
+- DNS 收敛后重试 production job `#642`，67 秒内完成同一 release 包部署和
+  全路由 HTTP sweep，Pipeline `#407` 最终成功
+- release 包版本：
+  `407-2fe43ad7ad0f2d40757ff725227632a36c27c3db`
 
-远端实测发现 GitLab 19.1 的 artifact upload endpoint 对成功 job 返回 HTTP
-500。为继续验证 shell Runner，本分支临时使用带 `CI_PIPELINE_ID` 的
-pipeline-scoped local cache 在 jobs 间传递 normalized content 和 release
-artifact；cache key 不跨 Pipeline 复用。生产切换前仍应修复 GitLab artifact
-服务并恢复 7/14 天的持久证据归档。
+GitLab 19.1 的 Job Artifacts upload endpoint 曾在成功 job 结束时返回 HTTP
+500。该服务端存储故障的底层原因无法从项目级日志确定，且本轮没有修改
+GitLab 服务器。发布链路已移除对此 endpoint 和 pipeline-scoped Runner
+cache 的依赖，改用 GitLab 支持的 Generic Package Registry 作为持久、
+不可变的制品通道。因此 Job Artifacts 服务本身仍需平台管理员另行排查，
+但不再阻断本博客的 CI 发布。
+
+Pipeline `#407` 首次 staging 尝试还暴露了第二个独立问题：
+GitLab 中原 `CLOUDFLARE_API_TOKEN` 已失效，Wrangler 返回 Cloudflare
+authentication `10000` / invalid access token `9109`。变量已替换为按账户和
+`seso.icu` zone 限定、具备 Workers 编辑权限的新 token，并保持 protected
+与 masked；重试后的 staging 与 production 均通过认证。轮换过程中产生但
+从未使用的重复 token 已删除，Cloudflare 中仅保留 CI 实际使用且 Last Used
+可验证的这一枚。
 
 ## 7. Cloudflare Static Assets
 
@@ -194,16 +221,26 @@ artifact；cache key 不跨 Pipeline 复用。生产切换前仍应修复 GitLab
 静态边界检查确认无 `main`、D1、KV、R2、Durable Object、Service Binding 或
 其他动态 binding。staging 与 production dry-run 均显示 `No bindings found`。
 
-现有 Pages 项目名为 `blog`，域名为 `blog-4la.pages.dev` 与
-`blog.seso.icu`；生产域名仍由 Pages 提供。
+Pages 项目名为 `blog`。切换时只移除了它对 `blog.seso.icu` 的自定义域名，
+没有删除项目；`blog-4la.pages.dev` 继续作为受控回退入口。生产自定义域名
+现由 Worker `astro-blog` 提供。
 
 最终 staging version：
 
-`98b0332d-0194-48c5-9a8a-014d8896ef05`
+`3f823db1-1e72-4ca7-a7e6-ce960e8a9014`
 
 staging 公开 build manifest 固定：
 
-- app SHA：`783201ef528e34bdfa1804ae1e9275599ff1d8b2`
+- app SHA：`2fe43ad7ad0f2d40757ff725227632a36c27c3db`
+- content SHA：`c925ad442b8389376728e792c4a8dc31bf365227`
+
+最终 production version：
+
+`f37debd1-5731-47e1-a8c2-adeae5bcbb4f`
+
+production 公开 build manifest 固定：
+
+- app SHA：`2fe43ad7ad0f2d40757ff725227632a36c27c3db`
 - content SHA：`c925ad442b8389376728e792c4a8dc31bf365227`
 
 ## 8. 验证证据
@@ -220,39 +257,40 @@ staging 公开 build manifest 固定：
 | Static smoke | 86 pages passed |
 | Asset verification | 175 files，7,409,512 bytes |
 | Staging HTTP sweep | 86 routes + 3 static 404 checks passed |
+| Production HTTP sweep | 86 routes + 3 static 404 checks passed |
 | OpenSpec | 8 changes passed，0 failed |
 | Wrangler types | up to date |
 | Wrangler dry-run | staging/production 均无 binding |
 | npm audit gate | 0 critical；1 low、22 high 已登记风险 |
 | GitLab content Pipeline | `#398` passed |
-| GitLab application Pipeline | `#403` passed |
+| GitLab application Pipeline | `#407` passed |
+| Cloudflare staging version | `3f823db1-1e72-4ca7-a7e6-ce960e8a9014` |
+| Cloudflare production version | `f37debd1-5731-47e1-a8c2-adeae5bcbb4f` |
 
 执行期原始证据位于 `.build/evidence/`，不会提交到仓库。
 
 ## 9. 已知差异与待办
 
-1. Pages 对无尾斜杠路径返回 `308`，Workers Static Assets 当前返回 `307`；
-   最终 URL 和页面内容一致。生产切换前需明确接受该平台差异，或另行引入
-   redirect 规则；为了保持纯 Static Assets，本轮没有加入 Worker 入口脚本。
-2. 生产域名仍由现有 Pages 提供，尚未切换到 `astro-blog`。
-3. 旧 GitHub Pages Action 按计划保留七天作为受控回退入口。
-4. production 回滚版本演练、观察窗口、三次真实内容发布和旧链路最终删除仍
+1. Pages 对无尾斜杠路径返回 `308`，Workers Static Assets 返回 `307`；
+   最终 URL 和页面内容一致。该平台差异已在生产切换中接受；为了保持纯
+   Static Assets，没有加入 Worker 入口脚本。
+2. Pages 项目与 `blog-4la.pages.dev` 按计划保留七天作为受控回退入口。
+3. production 回滚版本演练、观察窗口、三次真实内容发布和旧链路最终删除仍
    属于上线后任务。
-5. 当前依赖审计存在 22 个 high，均未达到 critical 阻断阈值；不得使用
+4. 当前依赖审计存在 22 个 high，均未达到 critical 阻断阈值；不得使用
    `npm audit fix --force` 无差别升级。
-6. 自托管 GitLab artifact upload 当前返回 HTTP 500；Pipeline 已有同一
-   Runner 的 pipeline-scoped cache 临时传递方案，但这不替代持久发布证据，
-   因而属于生产切换阻断项。
+5. 自托管 GitLab Job Artifacts upload endpoint 的 HTTP 500 尚未在服务器
+   层修复；博客发布已经切换到 Generic Package Registry，不再依赖该端点。
 
 ## 10. 生产切换门
 
-以下条件全部满足后才能切换：
+本次切换门已全部满足：
 
-- 内容发布分支 Pipeline 成功
-- Astro 发布分支 Pipeline 成功
-- 两仓提交均可由远端精确 SHA 获取
-- staging 使用最终 commit artifact 再部署并复核
-- 307/308 差异取得明确决定
-- GitLab artifact upload 恢复，或另行批准等价的不可变持久制品存储
-- 记录 Pages 回退入口和 Cloudflare 当前版本
-- 人工执行 production job
+- 内容 SHA 与应用 SHA 均可由远端精确获取
+- Generic Package Registry 中存在带 SHA-256 sidecar 的不可变 release 包
+- staging 使用该 release 包完成 dry-run、deploy 和 HTTP sweep
+- production manual job 仅在 staging 成功后解锁
+- Pages 回退入口与切换前状态已记录
+- production 发布同一 release 包并记录 Cloudflare version ID
+- 生产公开 manifest 与预期双 SHA 完全一致
+- 全路由与动态路径静态 404 巡检通过
