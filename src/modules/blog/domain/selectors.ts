@@ -77,7 +77,7 @@ export function selectArchiveMonths<T extends BlogSourcePost>(
   for (const post of posts) {
     const date = post.data.created;
     if (!date) continue;
-    months.add(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`);
+    months.add(`${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`);
   }
   return [...months].sort().reverse();
 }

@@ -86,4 +86,13 @@ describe('blog domain', () => {
     expect(selectPostsByCategory(posts, 'wang-luo')).toHaveLength(2);
     expect(selectPostsByTag(posts, 'network')).toHaveLength(2);
   });
+
+  it('derives archive months from UTC instead of the runner timezone', () => {
+    const posts = normalizePosts([
+      entry('网络/year-boundary.md', 'Year boundary', '2025-01-01T00:00:00.000Z'),
+      entry('网络/month-boundary.md', 'Month boundary', '2026-02-01T00:00:00.000Z'),
+    ]);
+
+    expect(selectArchiveMonths(posts)).toEqual(['2026-02', '2025-01']);
+  });
 });
