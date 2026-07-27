@@ -28,7 +28,7 @@
 - [x] 4.2 执行 npm ci、check、unit、content、route 和静态资产验证
 - [x] 4.3 构建 Astro dist
 - [x] 4.4 生成包含双 SHA 的 build manifest
-- [x] 4.5 保存 dist、route manifest 和 build manifest artifacts
+- [ ] 4.5 保存 dist、route manifest 和 build manifest artifacts（远端 upload HTTP 500，当前仅有 pipeline-scoped cache）
 
 ## 5. Deployment 控制
 

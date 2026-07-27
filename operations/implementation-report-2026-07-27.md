@@ -157,6 +157,12 @@ prepare → verify → build → browser → staging → production
 
 内容项目已将 `jacyl4/astro_blog` 加入 Job Token allowlist。
 
+远端实测发现 GitLab 19.1 的 artifact upload endpoint 对成功 job 返回 HTTP
+500。为继续验证 shell Runner，本分支临时使用带 `CI_PIPELINE_ID` 的
+pipeline-scoped local cache 在 jobs 间传递 normalized content 和 release
+artifact；cache key 不跨 Pipeline 复用。生产切换前仍应修复 GitLab artifact
+服务并恢复 7/14 天的持久证据归档。
+
 ## 7. Cloudflare Static Assets
 
 `wrangler.jsonc` 固定：
@@ -207,6 +213,9 @@ staging version：
    属于上线后任务。
 5. 当前依赖审计存在 22 个 high，均未达到 critical 阻断阈值；不得使用
    `npm audit fix --force` 无差别升级。
+6. 自托管 GitLab artifact upload 当前返回 HTTP 500；Pipeline 已有同一
+   Runner 的 pipeline-scoped cache 临时传递方案，但这不替代持久发布证据，
+   因而属于生产切换阻断项。
 
 ## 10. 生产切换门
 
@@ -217,5 +226,6 @@ staging version：
 - 两仓提交均可由远端精确 SHA 获取
 - staging 使用最终 commit artifact 再部署并复核
 - 307/308 差异取得明确决定
+- GitLab artifact upload 恢复，或另行批准等价的不可变持久制品存储
 - 记录 Pages 回退入口和 Cloudflare 当前版本
 - 人工执行 production job

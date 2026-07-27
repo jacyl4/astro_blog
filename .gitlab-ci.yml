@@ -38,32 +38,50 @@ variables:
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
 
 cache:
+  &dependency-cache
   key:
     files:
       - package-lock.json
   paths:
     - .npm/
     - .ci-tools/
+  policy: pull
 
 prepare-content:
   stage: prepare
+  cache:
+    - key:
+        files:
+          - package-lock.json
+      paths:
+        - .npm/
+        - .ci-tools/
+      policy: pull-push
+    - key: "content-$CI_PIPELINE_ID"
+      paths:
+        - .build/content/
+        - .build/content-manifest.json
+        - .build/diagnostics/
+        - .build/evidence/content-head.txt
+      policy: push
   script:
     - npm ci
     - bash tools/ci/prepare-content.sh
-  artifacts:
-    expire_in: 7 days
-    when: always
-    paths:
-      - .build/content/
-      - .build/content-manifest.json
-      - .build/diagnostics/
-      - .build/evidence/content-head.txt
 
 verify:
   stage: verify
+  cache:
+    - *dependency-cache
+    - key: "content-$CI_PIPELINE_ID"
+      paths:
+        - .build/content/
+        - .build/content-manifest.json
+        - .build/diagnostics/
+        - .build/evidence/content-head.txt
+      policy: pull
   needs:
     - job: prepare-content
-      artifacts: true
+      artifacts: false
   script:
     - npm ci
     - mkdir -p .build/evidence
@@ -75,19 +93,26 @@ verify:
     - npm run cloudflare:verify-static
     - npm run cf:types:check
     - npm run openspec:validate
-  artifacts:
-    expire_in: 14 days
-    when: always
-    reports:
-      junit: .build/evidence/vitest-junit.xml
-    paths:
-      - .build/evidence/
 
 build:
   stage: build
+  cache:
+    - *dependency-cache
+    - key: "content-$CI_PIPELINE_ID"
+      paths:
+        - .build/content/
+        - .build/content-manifest.json
+        - .build/diagnostics/
+        - .build/evidence/content-head.txt
+      policy: pull
+    - key: "release-$CI_PIPELINE_ID"
+      paths:
+        - dist/
+        - .build/
+      policy: push
   needs:
     - job: prepare-content
-      artifacts: true
+      artifacts: false
     - job: verify
       artifacts: false
   script:
@@ -101,40 +126,39 @@ build:
     - npm run routes:generate
     - npm run assets:generate
     - APP_SHA="$CI_COMMIT_SHA" npm run manifest:build
-  artifacts:
-    expire_in: 14 days
-    when: always
-    paths:
-      - dist/
-      - .build/manifests/
-      - .build/evidence/
-      - .build/content-manifest.json
 
 .browser-base:
   stage: browser
+  cache:
+    - *dependency-cache
+    - key: "release-$CI_PIPELINE_ID"
+      paths:
+        - dist/
+        - .build/
+      policy: pull
   needs:
     - job: build
-      artifacts: true
+      artifacts: false
   script:
     - npm ci
     - npx playwright install chromium
     - npm run test:browser
-  artifacts:
-    expire_in: 14 days
-    when: always
-    reports:
-      junit: .build/evidence/playwright-junit.xml
-    paths:
-      - .build/evidence/
 
 browser:
   extends: .browser-base
 
 .deploy-base:
   interruptible: false
+  cache:
+    - *dependency-cache
+    - key: "release-$CI_PIPELINE_ID"
+      paths:
+        - dist/
+        - .build/
+      policy: pull
   needs:
     - job: build
-      artifacts: true
+      artifacts: false
     - job: browser
       artifacts: false
   before_script:

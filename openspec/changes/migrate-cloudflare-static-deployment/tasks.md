@@ -25,7 +25,7 @@
 
 ## 4. CI Deployment
 
-- [x] 4.1 将 deployment job 改为下载 build artifact，不重新构建
+- [ ] 4.1 将 deployment job 改为下载不可变 build artifact，不重新构建（当前用 pipeline-scoped cache 临时传递，等待 GitLab artifact 服务修复）
 - [ ] 4.2 staging job 先执行 dry-run 再 deploy
 - [ ] 4.3 staging smoke 通过后才允许 production manual job
 - [ ] 4.4 production job 记录 Cloudflare deployment/version ID

@@ -2,7 +2,7 @@
 
 - [ ] 1.1 将所有活动 OpenSpec scenarios 映射到自动测试或人工证据
 - [x] 1.2 创建统一 `.build/evidence` 输出约定
-- [x] 1.3 配置 JUnit、Playwright trace、manifest 和报告 artifacts
+- [ ] 1.3 配置 JUnit、Playwright trace、manifest 和报告 artifacts（配置曾完成，但远端 artifact upload HTTP 500，待修复后恢复）
 - [x] 1.4 定义 PR、main/staging 和 production 三层 CI
 
 ## 2. PR Fast Lane
