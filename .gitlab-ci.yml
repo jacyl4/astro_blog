@@ -36,6 +36,8 @@ variables:
   NODE_VERSION: "24.15.0"
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
+  CONTENT_PACKAGE_NAME: "astro-blog-content"
+  RELEASE_PACKAGE_NAME: "astro-blog-release"
 
 cache:
   &dependency-cache
@@ -50,40 +52,30 @@ cache:
 prepare-content:
   stage: prepare
   cache:
-    - key:
-        files:
-          - package-lock.json
-      paths:
-        - .npm/
-        - .ci-tools/
-      policy: pull-push
-    - key: "content-$CI_PIPELINE_ID"
-      paths:
-        - .build/content/
-        - .build/content-manifest.json
-        - .build/diagnostics/
-        - .build/evidence/content-head.txt
-      policy: push
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+      - .ci-tools/
+    policy: pull-push
   script:
     - npm ci
     - bash tools/ci/prepare-content.sh
+    - tar -czf .build/content.tar.gz -C .build content content-manifest.json diagnostics evidence/content-head.txt
+    - bash tools/ci/package-artifact.sh upload "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
 
 verify:
   stage: verify
-  cache:
-    - *dependency-cache
-    - key: "content-$CI_PIPELINE_ID"
-      paths:
-        - .build/content/
-        - .build/content-manifest.json
-        - .build/diagnostics/
-        - .build/evidence/content-head.txt
-      policy: pull
+  cache: *dependency-cache
   needs:
     - job: prepare-content
       artifacts: false
   script:
     - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
+    - tar -xzf .build/content.tar.gz -C .build
     - mkdir -p .build/evidence
     - npm audit --audit-level=critical --json > .build/evidence/npm-audit.json
     - npx astro check
@@ -96,20 +88,7 @@ verify:
 
 build:
   stage: build
-  cache:
-    - *dependency-cache
-    - key: "content-$CI_PIPELINE_ID"
-      paths:
-        - .build/content/
-        - .build/content-manifest.json
-        - .build/diagnostics/
-        - .build/evidence/content-head.txt
-      policy: pull
-    - key: "release-$CI_PIPELINE_ID"
-      paths:
-        - dist/
-        - .build/
-      policy: push
+  cache: *dependency-cache
   needs:
     - job: prepare-content
       artifacts: false
@@ -117,6 +96,9 @@ build:
       artifacts: false
   script:
     - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
+    - tar -xzf .build/content.tar.gz -C .build
     - npm run build:prepared
     - npm run routes:verify
     - npm run html-baseline:verify
@@ -126,21 +108,20 @@ build:
     - npm run routes:generate
     - npm run assets:generate
     - APP_SHA="$CI_COMMIT_SHA" npm run manifest:build
+    - tar -czf .build/release.tar.gz dist .build/manifests .build/content-manifest.json .build/evidence
+    - bash tools/ci/package-artifact.sh upload "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
 
 .browser-base:
   stage: browser
-  cache:
-    - *dependency-cache
-    - key: "release-$CI_PIPELINE_ID"
-      paths:
-        - dist/
-        - .build/
-      policy: pull
+  cache: *dependency-cache
   needs:
     - job: build
       artifacts: false
   script:
     - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
+    - tar -xzf .build/release.tar.gz
     - npx playwright install chromium
     - npm run test:browser
 
@@ -149,13 +130,7 @@ browser:
 
 .deploy-base:
   interruptible: false
-  cache:
-    - *dependency-cache
-    - key: "release-$CI_PIPELINE_ID"
-      paths:
-        - dist/
-        - .build/
-      policy: pull
+  cache: *dependency-cache
   needs:
     - job: build
       artifacts: false
@@ -164,6 +139,9 @@ browser:
   before_script:
     - *node-bootstrap
     - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
+    - tar -xzf .build/release.tar.gz
 
 staging:
   extends: .deploy-base
