@@ -1,8 +1,8 @@
 ## 1. 权限与现状盘点
 
 - [x] 1.1 已记录内容仓库 `jacyl4/obsidian-digital`、Astro 仓库 `jacyl4/astro_blog`、shell Runner、`Blog/` 发布根和旧 rsync/commit/push job
-- [ ] 1.2 确认两个项目的默认分支和保护规则
-- [ ] 1.3 配置 CI_JOB_TOKEN allowlist，并用最小 job 验证指定 SHA clone
+- [x] 1.2 确认两个项目的默认分支和保护规则
+- [x] 1.3 配置 CI_JOB_TOKEN allowlist，并用真实 prepare job 验证指定 SHA clone
 - [ ] 1.4 准备只读 Deploy Token 兜底方案但不默认启用
 
 ## 2. 内容仓库 Pipeline

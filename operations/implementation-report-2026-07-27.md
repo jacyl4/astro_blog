@@ -85,6 +85,11 @@ public entry
 模块公共入口读取文章、分类、标签、归档与详情。边界检查阻止深层导入和循环
 依赖。
 
+日期展示和归档路由固定采用 `Asia/Shanghai` 语义，不再继承构建主机时区。
+归档月份的生成与文章筛选已统一进入 domain/application 边界。该契约在 UTC、
+America/Los_Angeles 与 Asia/Shanghai 三种 Runner 时区下均保持既有 86
+路由和页面主内容不变。
+
 ## 4. 客户端生命周期
 
 原先分散的导航、目录、脚注和筛选脚本已合并到统一 runtime：
@@ -156,6 +161,17 @@ prepare → verify → build → browser → staging → production
 - production：manual、protected、resource group 串行化
 
 内容项目已将 `jacyl4/astro_blog` 加入 Job Token allowlist。
+两项目默认分支均为 `main`；`main` 与本轮发布分支均为 protected branch，
+禁止 force push。真实 prepare job 已使用 `CI_JOB_TOKEN` 从内容项目精确检出
+锁定 SHA。
+
+远端分支验证：
+
+- 内容仓 Pipeline `#398` 成功，commit
+  `c925ad442b8389376728e792c4a8dc31bf365227`
+- Astro 仓 Pipeline `#403` 成功，commit
+  `783201ef528e34bdfa1804ae1e9275599ff1d8b2`
+- `#403` 的 prepare、verify、build、browser 四个 job 全部成功
 
 远端实测发现 GitLab 19.1 的 artifact upload endpoint 对成功 job 返回 HTTP
 500。为继续验证 shell Runner，本分支临时使用带 `CI_PIPELINE_ID` 的
@@ -178,18 +194,27 @@ artifact；cache key 不跨 Pipeline 复用。生产切换前仍应修复 GitLab
 静态边界检查确认无 `main`、D1、KV、R2、Durable Object、Service Binding 或
 其他动态 binding。staging 与 production dry-run 均显示 `No bindings found`。
 
-staging version：
+现有 Pages 项目名为 `blog`，域名为 `blog-4la.pages.dev` 与
+`blog.seso.icu`；生产域名仍由 Pages 提供。
 
-`c9dad1f0-ecb3-40d8-8e01-eb72cc03ffc9`
+最终 staging version：
+
+`98b0332d-0194-48c5-9a8a-014d8896ef05`
+
+staging 公开 build manifest 固定：
+
+- app SHA：`783201ef528e34bdfa1804ae1e9275599ff1d8b2`
+- content SHA：`c925ad442b8389376728e792c4a8dc31bf365227`
 
 ## 8. 验证证据
 
 | 验证 | 结果 |
 |---|---|
-| Astro check | 74 files，0 error / warning / hint |
+| Astro check | 75 files，0 error / warning / hint |
 | Astro build | 86 pages |
-| Unit tests | 5 files，15 tests passed |
+| Unit tests | 6 files，17 tests passed |
 | Browser tests | 7 passed |
+| Date determinism | UTC、America/Los_Angeles、Asia/Shanghai 通过 |
 | Route baseline | 86 → 86，无删除、无新增 |
 | `<main>` baseline | 86 pages passed |
 | Static smoke | 86 pages passed |
@@ -199,6 +224,8 @@ staging version：
 | Wrangler types | up to date |
 | Wrangler dry-run | staging/production 均无 binding |
 | npm audit gate | 0 critical；1 low、22 high 已登记风险 |
+| GitLab content Pipeline | `#398` passed |
+| GitLab application Pipeline | `#403` passed |
 
 执行期原始证据位于 `.build/evidence/`，不会提交到仓库。
 
