@@ -2,8 +2,7 @@
 // Blog home page - shows a list of all posts
 import MainLayout from '../layouts/MainLayout.astro';
 import BlogPostCard from '../components/BlogPostCard.astro';
-import { getAllPosts } from '../services/BlogService';
-import type { ProcessedBlogPost } from '../services/BlogService'; // Corrected import type
+import { getAllPosts, type ProcessedBlogPost } from '@/modules/blog';
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '../consts';
 
 const posts: ProcessedBlogPost[] = await getAllPosts();

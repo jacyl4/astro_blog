@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "check": "astro check && npm run test:unit && npm run content:validate",
+    "content:compile": "tsx tools/content-compiler/index.ts compile",
+    "content:validate": "tsx tools/content-compiler/index.ts validate",
+    "routes:generate": "tsx tools/release/generate-route-manifest.ts",
+    "routes:verify": "tsx tools/release/verify-route-manifest.ts",
+    "assets:verify": "tsx tools/release/verify-assets.ts",
+    "manifest:build": "tsx tools/release/generate-build-manifest.ts",
+    "test:unit": "vitest run",
+    "test:browser": "playwright test",
+    "cf:types": "wrangler types worker-configuration.d.ts",
+    "cf:dry-run": "wrangler deploy --dry-run",
+    "cf:deploy:staging": "wrangler deploy --env staging",
+    "cf:deploy:production": "wrangler deploy --env production"
+  }
+}

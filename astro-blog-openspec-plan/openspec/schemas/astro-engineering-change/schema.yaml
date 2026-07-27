@@ -1,0 +1,75 @@
+name: astro-engineering-change
+version: 1
+description: Engineering change workflow for modular Astro, Obsidian content, GitLab CI, and Cloudflare delivery
+
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Why the change is needed and what is in scope
+    template: proposal.md
+    instruction: |
+      Explain current behavior, target outcome, scope, non-goals, capabilities, dependencies, risks, and rollback triggers.
+      Mark pure refactors explicitly. For pure refactors, specify enforceable engineering boundaries without inventing product behavior changes.
+    requires: []
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Delta behavior contracts and testable scenarios
+    template: spec.md
+    instruction: |
+      Create one delta spec per capability from the proposal.
+      Use ADDED, MODIFIED, REMOVED, or RENAMED Requirements.
+      Each requirement must use SHALL or MUST and include at least one #### Scenario with WHEN/THEN.
+      New capabilities must include a Purpose section.
+    requires:
+      - proposal
+
+  - id: design
+    generates: design.md
+    description: Architecture, decisions, migration, risks, and rollback design
+    template: design.md
+    instruction: |
+      Define module boundaries, dependency direction, data and artifact flow, failure modes, tests, observability, migration, alternatives, and rollback.
+      Keep implementation details precise enough to guide coding while avoiding line-by-line code generation.
+    requires:
+      - proposal
+
+  - id: tasks
+    generates: tasks.md
+    description: Ordered, trackable implementation checklist
+    template: tasks.md
+    instruction: |
+      Use numbered headings and - [ ] X.Y checkboxes.
+      Order work by dependencies. Include baseline, implementation, tests, docs, staging, production, and cleanup.
+    requires:
+      - specs
+      - design
+
+  - id: verification
+    generates: verification.md
+    description: Verification plan and evidence ledger
+    template: verification.md
+    instruction: |
+      Map requirements to exact automated or manual evidence.
+      Include commands, expected result, evidence location, and blocking severity.
+      After implementation, update planned evidence with actual results.
+    requires:
+      - tasks
+
+  - id: rollout
+    generates: rollout.md
+    description: Staging, production, observation, rollback, and cleanup runbook
+    template: rollout.md
+    instruction: |
+      Define preconditions, deployment sequence, smoke checks, observation window, rollback triggers, rollback commands, and post-release cleanup.
+    requires:
+      - design
+      - tasks
+      - verification
+
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    Implement pending tasks in dependency order. Keep the repository buildable after each logical batch.
+    Run the relevant verification commands, update evidence, and stop before production rollout when any blocking gate fails.

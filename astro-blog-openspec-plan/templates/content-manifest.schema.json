@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "content-manifest.schema.json",
+  "title": "Astro Blog Content Manifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "contentCommit",
+    "compilerVersion",
+    "entries",
+    "assets"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "contentCommit": {
+      "type": "string",
+      "minLength": 7
+    },
+    "compilerVersion": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source",
+          "slug",
+          "route",
+          "contentHash"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "route": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "outgoingLinks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source",
+          "output",
+          "hash",
+          "size"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "output": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,6 +1,5 @@
 ---
-import { getAllTags } from '@/services/BlogService';
-import type { BlogTag } from '@/services/BlogService';
+import { getAllTags, type BlogTag } from '@/modules/blog';
 import { UI_TEXT, URLS } from '@/consts';
 
 const tags = await getAllTags();
@@ -43,67 +42,3 @@ const searchInputId = 'tag-search';
     <p class="text-gray-400">{UI_TEXT.noTags}</p>
   )}
 </div>
-
-{hasTags && (
-  <script is:inline>
-    (() => {
-      const init = () => {
-        document.querySelectorAll('[data-tag-list-root]').forEach((root) => {
-          if (!root || root.dataset.tagSearchInitialized === 'true') {
-            return;
-          }
-
-          const searchInput = root.querySelector('[data-tag-search]');
-          const emptyState = root.querySelector('[data-tag-empty]');
-          const tagItems = Array.from(root.querySelectorAll('[data-tag-item]'));
-
-          if (!searchInput || tagItems.length === 0) {
-            return;
-          }
-
-          root.dataset.tagSearchInitialized = 'true';
-
-          const entries = tagItems.map((element) => ({
-            element,
-            keywords: `${(element.dataset.tagName || '').toLowerCase()} ${(element.dataset.tagSlug || '').toLowerCase()}`.trim(),
-          }));
-
-          const applyFilter = (value) => {
-            const query = value.trim().toLowerCase();
-            let visibleCount = 0;
-
-            entries.forEach(({ element, keywords }) => {
-              const matches = query === '' || keywords.includes(query);
-              element.classList.toggle('hidden', !matches);
-              if (matches) {
-                visibleCount += 1;
-              }
-            });
-
-            if (emptyState) {
-              emptyState.classList.toggle('hidden', visibleCount !== 0);
-            }
-          };
-
-          searchInput.addEventListener('input', (event) => {
-            const target = event.target;
-            if (target instanceof HTMLInputElement) {
-              applyFilter(target.value);
-            }
-          });
-
-          applyFilter(searchInput.value || '');
-        });
-      };
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
-      } else {
-        init();
-      }
-
-      document.addEventListener('astro:page-load', init);
-      document.addEventListener('astro:after-swap', init);
-    })();
-  </script>
-)}

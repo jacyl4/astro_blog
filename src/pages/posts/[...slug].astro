@@ -1,7 +1,7 @@
 ---
 // Blog post detail page
 import MainLayout from '@/layouts/MainLayout.astro';
-import { getAllPosts, getPostBySlug } from '@/services/BlogService';
+import { getAllPosts, getPostBySlug } from '@/modules/blog';
 import { render } from 'astro:content';
 import { UI_TEXT, URLS } from '@/consts';
 import { slugify } from '@/utils/stringUtils';

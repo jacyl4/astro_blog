@@ -18,8 +18,6 @@ jobs:
   publish:
     # 运行环境：使用最新的 Ubuntu
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_COMMENTS_API_BASE: ${{ vars.PUBLIC_COMMENTS_API_BASE || secrets.PUBLIC_COMMENTS_API_BASE }}
     
     # 权限设置：需要读取代码仓库和写入部署状态的权限
     permissions:
@@ -44,17 +42,36 @@ jobs:
           cache: 'npm'
 
       # 第三步：安装项目依赖
-      # 运行 npm install 来安装 package.json 中定义的所有依赖
+      # 使用 lockfile 驱动的可重复安装
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # 第四步：构建 Astro 项目
-      # 运行你在 package.json 中定义的 build 脚本
-      # 通常对于 Astro 项目，这会是 'astro build'
+      - name: Unit tests
+        run: npm run test:unit
+
+      # 第四步：构建并验证 Astro 静态产物
       - name: Build
         run: npm run build
-      - name: Restore package-lock.json
-        run: git restore package-lock.json
+
+      - name: Verify routes, assets, static pages, and removed comments
+        run: |
+          npm run routes:verify
+          npm run smoke:static
+          npm run assets:verify
+          npm run comments:verify-removed
+          npm run routes:generate
+          npm run assets:generate
+          npm run manifest:build
+
+      - name: Save release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-evidence-${{ github.sha }}
+          path: |
+            .build/manifests/
+            .build/evidence/
+            dist/_meta/build-manifest.json
+          if-no-files-found: error
 
       # 第五步：发布到 Cloudflare Pages
       # 使用官方的 Cloudflare Pages Action 来进行部署

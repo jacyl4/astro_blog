@@ -1,0 +1,8 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "将 BlogService 拆分为纯领域、应用服务和 Astro adapter，同时保持全部外部行为一致"
+affected_areas:
+  - blog-domain
+  - astro-content
+  - pages
+  - module-boundaries

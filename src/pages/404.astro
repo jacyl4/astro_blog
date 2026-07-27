@@ -1,12 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { render } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
+import { getPageById } from '@/modules/pages';
 
-const pages = await getCollection('pages', ({ id }) => {
-  return id === 'not-found.md';
-});
-const notFoundPage = pages[0];
-const { Content } = await notFoundPage.render();
+const notFoundPage = await getPageById('not-found');
+const { Content } = await render(notFoundPage);
 ---
 <MainLayout title={notFoundPage.data.title}>
   <article class="prose prose-invert max-w-none text-center">

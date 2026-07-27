@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
-import { getAllPosts, type ProcessedBlogPost } from '../../services/BlogService';
+import { getAllPosts, type ProcessedBlogPost } from '@/modules/blog';
 
 type Archive = {
   [key: string]: ProcessedBlogPost[];

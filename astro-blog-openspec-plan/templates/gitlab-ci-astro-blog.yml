@@ -1,0 +1,96 @@
+stages:
+  - prepare
+  - verify
+  - build
+  - deploy-staging
+  - deploy-production
+
+variables:
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+  CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
+  CONTENT_PROJECT_PATH: "jacyl4/obsidian-digital"
+  CONTENT_SUBDIR: "Blog"
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+
+prepare-content:
+  stage: prepare
+  image: node:24-bookworm
+  script:
+    - test -n "$CONTENT_PROJECT_PATH"
+    - test -n "$CONTENT_SHA"
+    - mkdir -p .work .build
+    - git clone "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_FQDN}/${CONTENT_PROJECT_PATH}.git" "$CONTENT_WORKTREE"
+    - git -C "$CONTENT_WORKTREE" fetch origin "$CONTENT_SHA" --depth=1
+    - git -C "$CONTENT_WORKTREE" checkout --detach "$CONTENT_SHA"
+    - npm ci
+    - test "$CONTENT_PROJECT_PATH" = "jacyl4/obsidian-digital"
+    - test "$CONTENT_SUBDIR" = "Blog"
+    - npm run content:compile -- --source "$CONTENT_WORKTREE/$CONTENT_SUBDIR" --output .build/content
+  artifacts:
+    expire_in: 7 days
+    paths:
+      - .build/content/
+      - .build/content-manifest.json
+
+verify:
+  stage: verify
+  image: node:24-bookworm
+  needs: [prepare-content]
+  script:
+    - npm ci
+    - npm run check
+    - npm run routes:verify
+    - npm run assets:verify
+
+build:
+  stage: build
+  image: node:24-bookworm
+  needs: [prepare-content, verify]
+  script:
+    - npm ci
+    - npm run build
+    - npm run manifest:build
+  artifacts:
+    expire_in: 14 days
+    paths:
+      - dist/
+      - .build/build-manifest.json
+      - .build/route-manifest.json
+
+.deploy-base:
+  image: node:24-bookworm
+  needs: [build]
+  before_script:
+    - npm ci
+
+staging:
+  extends: .deploy-base
+  stage: deploy-staging
+  script:
+    - npm run cf:dry-run
+    - npm run cf:deploy:staging
+    - npm run smoke:staging
+  environment:
+    name: staging
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+production:
+  extends: .deploy-base
+  stage: deploy-production
+  resource_group: astro-blog-production
+  script:
+    - npm run cf:deploy:production
+    - npm run smoke:production
+  environment:
+    name: production
+  when: manual
+  allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

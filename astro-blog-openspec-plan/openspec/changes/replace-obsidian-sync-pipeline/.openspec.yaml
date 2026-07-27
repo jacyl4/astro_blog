@@ -1,0 +1,9 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "用精确内容 SHA 的双仓流水线替代固定主机路径同步，实现可复现和原子发布"
+affected_areas:
+  - gitlab-ci
+  - content-repository
+  - build-workspace
+  - release-manifest
+  - deployment

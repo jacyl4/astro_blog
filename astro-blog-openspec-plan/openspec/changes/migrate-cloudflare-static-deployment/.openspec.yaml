@@ -1,0 +1,10 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "将 Astro 静态发布迁移为 Wrangler 管理的 Cloudflare Workers Static Assets，并建立 staging 与版本回滚"
+affected_areas:
+  - cloudflare
+  - wrangler
+  - static-assets
+  - dns
+  - deployment
+  - caching

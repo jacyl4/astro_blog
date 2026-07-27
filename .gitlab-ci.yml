@@ -1,0 +1,150 @@
+stages:
+  - prepare
+  - verify
+  - build
+  - browser
+  - deploy-staging
+  - deploy-production
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "pipeline"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+default:
+  image: node:24-bookworm
+  interruptible: true
+
+variables:
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+  CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+
+prepare-content:
+  stage: prepare
+  script:
+    - npm ci
+    - bash tools/ci/prepare-content.sh
+  artifacts:
+    expire_in: 7 days
+    when: always
+    paths:
+      - .build/content/
+      - .build/content-manifest.json
+      - .build/diagnostics/
+      - .build/evidence/content-head.txt
+
+verify:
+  stage: verify
+  needs:
+    - job: prepare-content
+      artifacts: true
+  script:
+    - npm ci
+    - mkdir -p .build/evidence
+    - npm audit --audit-level=critical --json > .build/evidence/npm-audit.json
+    - npx astro check
+    - npm run test:unit
+    - npm run boundaries:verify
+    - npm run comments:verify-removed
+    - npm run cloudflare:verify-static
+    - npm run cf:types:check
+    - npm run openspec:validate
+  artifacts:
+    expire_in: 14 days
+    when: always
+    reports:
+      junit: .build/evidence/vitest-junit.xml
+    paths:
+      - .build/evidence/
+
+build:
+  stage: build
+  needs:
+    - job: prepare-content
+      artifacts: true
+    - job: verify
+      artifacts: false
+  script:
+    - npm ci
+    - npm run build:prepared
+    - npm run routes:verify
+    - npm run html-baseline:verify
+    - npm run smoke:static
+    - npm run assets:verify
+    - npm run comments:verify-removed
+    - npm run routes:generate
+    - npm run assets:generate
+    - APP_SHA="$CI_COMMIT_SHA" npm run manifest:build
+  artifacts:
+    expire_in: 14 days
+    when: always
+    paths:
+      - dist/
+      - .build/manifests/
+      - .build/evidence/
+      - .build/content-manifest.json
+
+.browser-base:
+  stage: browser
+  needs:
+    - job: build
+      artifacts: true
+  script:
+    - npm ci
+    - npx playwright install chromium
+    - npm run test:browser
+  artifacts:
+    expire_in: 14 days
+    when: always
+    reports:
+      junit: .build/evidence/playwright-junit.xml
+    paths:
+      - .build/evidence/
+
+browser:
+  extends: .browser-base
+
+.deploy-base:
+  interruptible: false
+  needs:
+    - job: build
+      artifacts: true
+    - job: browser
+      artifacts: false
+  before_script:
+    - npm ci
+
+staging:
+  extends: .deploy-base
+  stage: deploy-staging
+  script:
+    - npm run cf:dry-run -- --env staging
+    - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
+    - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json
+  environment:
+    name: staging
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+production:
+  extends: .deploy-base
+  stage: deploy-production
+  resource_group: astro-blog-production
+  script:
+    - npm run cf:dry-run -- --env production
+    - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
+    - npm run http:sweep -- --base https://blog.seso.icu --output .build/evidence/production-http-sweep.json
+  environment:
+    name: production
+  when: manual
+  allow_failure: false
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

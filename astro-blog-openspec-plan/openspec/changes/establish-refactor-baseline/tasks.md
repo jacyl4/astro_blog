@@ -1,0 +1,52 @@
+## 1. 捕获当前基线
+
+- [ ] 1.1 在当前 main 提交执行干净的 `npm ci`、`astro check` 和 `astro build`，保存完整日志
+- [ ] 1.2 导出当前 `dist/` 文件清单、页面总数和各页面类型数量
+- [ ] 1.3 从当前生产 sitemap、部署产物或爬取结果交叉生成公开 URL 清单
+- [ ] 1.4 建立源文章到现有 URL 的映射，标记任何无法解释的冲突或后缀
+- [ ] 1.5 记录当前评论 UI、脚本、网络请求、Worker 部署和 CI secret 的实际状态
+
+## 2. 构建清单工具
+
+- [ ] 2.1 创建 route manifest 类型和路径规范化函数
+- [ ] 2.2 实现构建后 `dist/` 路由扫描器并区分首页、文章、分类、标签、归档和 404
+- [ ] 2.3 实现 route manifest hash 与差异报告
+- [ ] 2.4 创建 asset manifest，记录路径、大小和内容 hash
+- [ ] 2.5 创建 build manifest，记录 app/content SHA、lockfile hash 和两个 manifest hash
+- [ ] 2.6 将 build manifest 复制到可公开读取的版本路径或 CI artifact
+
+## 3. URL 和内容失败策略
+
+- [ ] 3.1 为重复 slug 增加确定性检测和包含源文件的错误信息
+- [ ] 3.2 将 collection 整体读取失败从空数组降级改为构建失败
+- [ ] 3.3 区分单篇 frontmatter 错误与 collection 运行错误
+- [ ] 3.4 实现基线路由对比脚本和 redirect allowlist 文件格式
+- [ ] 3.5 为新增、删除、改变和已批准迁移编写单元测试
+
+## 4. 评论能力完整退役
+
+- [ ] 4.1 记录现有评论代码、公开端点、Worker、D1、OAuth App、secret、DNS 和 CI 变量清单
+- [ ] 4.2 按数据保留决定导出 D1 与必要审计元数据；快照不得包含 secret
+- [ ] 4.3 删除 `CommentsPanel`、评论客户端脚本、样式、文案、配置、环境变量和页面生命周期代码
+- [ ] 4.4 删除仓库内评论 Worker、D1 migration/schema、Wrangler 配置和部署说明
+- [ ] 4.5 删除 GitHub/GitLab 中的评论变量、secret、自动部署配置和 OAuth App 凭据
+- [ ] 4.6 删除 Cloudflare Comments Worker、route/custom domain、D1 数据库及相关 secret
+- [ ] 4.7 删除 `astro-blog-comments.seso.icu` DNS 记录，并确认公开端点不再解析或返回服务
+- [ ] 4.8 删除所有 CommentsAdapter、No-op、future gateway、roadmap 等预设计接缝
+- [ ] 4.9 执行文本、文件、构建产物、浏览器网络和 Cloudflare 资源零残留扫描
+
+## 5. CI 与测试
+
+- [ ] 5.1 将 CI 依赖安装改为 `npm ci` 并移除 lockfile restore
+- [ ] 5.2 添加 Vitest 最小配置和 release 工具单测
+- [ ] 5.3 添加静态页面 smoke 脚本
+- [ ] 5.4 添加浏览器检查：文章 DOM/资源/网络/Cookie 无评论痕迹
+- [ ] 5.5 在 CI 保存 route、asset、build manifest 和构建日志
+- [ ] 5.6 更新 README 中的本地验证命令
+
+## 6. 验收与归档
+
+- [ ] 6.1 在候选分支重新生成路由并与基线比较
+- [ ] 6.2 抽查至少 20 篇文章和所有页面类型
+- [ ] 6.3 执行 `/opsx:verify establish-refactor-baseline`
+- [ ] 6.4 完成 rollout 中的 production smoke 后归档 change

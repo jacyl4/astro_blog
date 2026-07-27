@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "applicationCommit": "<CI_COMMIT_SHA>",
+  "contentCommit": "<CONTENT_SHA>",
+  "packageLockHash": "sha256:<hash>",
+  "contentCompilerVersion": "1.0.0",
+  "routeManifestHash": "sha256:<hash>",
+  "assetManifestHash": "sha256:<hash>",
+  "builtAt": "2026-07-27T00:00:00Z",
+  "pipelineUrl": "<CI_PIPELINE_URL>"
+}

@@ -1,0 +1,16 @@
+{
+  "distTotalBytes": 8388608,
+  "singleFileBytes": 1048576,
+  "javascriptFileBytes": 131072,
+  "cssFileBytes": 262144,
+  "requiredAssets": [
+    "/favicon.svg",
+    "/manifest.webmanifest",
+    "/pwa-192x192.png",
+    "/pwa-512x512.png",
+    "/fonts/intel-one-mono/IntelOneMono-Regular.woff2"
+  ],
+  "forbiddenAssets": [
+    "/fonts/intel-one-mono/IntelOneMono-Regular.ttf"
+  ]
+}

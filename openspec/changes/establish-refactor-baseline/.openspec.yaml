@@ -1,0 +1,9 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "建立可比较、可回滚的架构重构基线，并明确评论功能当前关闭"
+affected_areas:
+  - build
+  - routing
+  - content
+  - client-runtime
+  - ci

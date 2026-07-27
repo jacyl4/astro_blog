@@ -1,0 +1,33 @@
+## Purpose
+
+为 Cloudflare 生产发布提供明确的 staging、版本识别、观察和回滚能力，使静态站点迁移可以在故障时快速恢复。
+
+## ADDED Requirements
+
+### Requirement: 生产发布前完成 staging 验证
+系统 MUST 在 production 部署之前发布相同 artifact 到 staging 并通过自动 smoke checks。
+
+#### Scenario: staging smoke 失败
+- **WHEN** 任一关键 URL、404、资产或 manifest 检查失败
+- **THEN** production job 不允许继续
+
+### Requirement: 每次生产发布可识别
+系统 SHALL 记录 Cloudflare deployment/version 标识、GitLab Pipeline、app SHA、content SHA 和 manifest hash。
+
+#### Scenario: 发布完成
+- **WHEN** production deploy 成功
+- **THEN** 运维人员可以从发布记录定位全部版本身份
+
+### Requirement: 上一稳定版本可恢复
+系统 MUST 在生产切换前验证回滚到上一稳定 Cloudflare 版本或 Pages 回退入口的过程。
+
+#### Scenario: 新版本路由异常
+- **WHEN** 发布后触发回滚条件
+- **THEN** 运维人员按手册恢复上一稳定版本并验证 manifest 与关键 URL
+
+### Requirement: Pages 在观察期保留
+系统 SHALL 在 Workers Static Assets 切换后保留原 Pages 项目一个有限观察期，作为平台级应急回退。
+
+#### Scenario: Worker 回滚不可用
+- **WHEN** Worker 版本恢复无法及时完成
+- **THEN** 自定义域名可恢复指向已知稳定的 Pages 部署

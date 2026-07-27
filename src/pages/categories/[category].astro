@@ -2,7 +2,7 @@
 // Category detail page - displays all posts under a category
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
-import { getAllCategories, getPostsByCategory, type ProcessedBlogPost } from '@/services/BlogService';
+import { getAllCategories, getPostsByCategory, type ProcessedBlogPost } from '@/modules/blog';
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {

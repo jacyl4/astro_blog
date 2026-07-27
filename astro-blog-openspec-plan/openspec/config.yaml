@@ -1,0 +1,34 @@
+schema: astro-engineering-change
+
+context: |
+  Project: Existing Astro static blog at jacyl4/astro_blog linked to the self-hosted GitLab repository jacyl4/obsidian-digital.
+  Runtime: Astro static generation, TypeScript, browser navigation runtime, Cloudflare delivery.
+  CI/CD: GitLab CI; Node 24.x; npm lockfile; Wrangler 4.x.
+  Content: Blog/**/*.md is the directory-based publication boundary. The current source contains Markdown only and must be normalized through a deterministic compiler before Astro consumes it.
+  Current comments state: comments are enabled in production at blog.seso.icu through astro-blog-comments.seso.icu. The approved decision is complete decommission: remove frontend, repository code, CI configuration, Worker, D1, OAuth, secrets, DNS, and future adapter scaffolding after explicit backup/export evidence.
+  Architecture priorities: modularity, atomic release units, deterministic builds, URL stability, explicit boundaries, reversible migration.
+  Compatibility: preserve all existing public URLs and rendered behavior unless a migration table explicitly approves a change.
+  Delivery rule: do not combine architecture refactor, Astro major upgrade, and visual redesign in one change.
+
+rules:
+  proposal:
+    - State current behavior, desired behavior, scope, non-goals, dependencies, rollback trigger, and affected repositories.
+    - Treat comments as a decommissioned capability. Future comment design requires a new OpenSpec change and may not preserve dormant interfaces in this program.
+    - Identify whether the change is behavior-changing or a pure refactor.
+  specs:
+    - Use SHALL or MUST for normative requirements and four-hash Scenario headings.
+    - Every scenario must map to an automated test, a deterministic artifact check, or an explicit manual check.
+    - Preserve permanent URLs and content identity unless an explicit redirect migration is included.
+  design:
+    - Define module boundaries, dependency direction, source of truth, failure behavior, observability, migration, and rollback.
+    - Prefer small adapters and pure domain functions over framework-dependent service classes.
+    - Record alternatives and explain why the selected design fits a small static blog.
+  tasks:
+    - Use tracked checkbox format and group tasks in dependency order.
+    - Keep each task small enough for one focused implementation session.
+    - Include tests, documentation, staging validation, and rollback rehearsal as implementation tasks.
+  verification:
+    - Provide exact commands, expected outputs, evidence paths, and pass/fail criteria.
+    - Include route-count, URL-stability, app/content SHA, and clean-build checks where relevant.
+  rollout:
+    - Define preconditions, staging, production steps, observation window, rollback triggers, and cleanup timing.

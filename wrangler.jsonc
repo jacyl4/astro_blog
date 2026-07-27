@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "astro-blog",
+  "compatibility_date": "2026-07-27",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "env": {
+    "staging": {
+      "name": "astro-blog-staging",
+      "routes": [
+        {
+          "pattern": "blog-staging.seso.icu",
+          "custom_domain": true
+        }
+      ]
+    },
+    "production": {
+      "name": "astro-blog",
+      "routes": [
+        {
+          "pattern": "blog.seso.icu",
+          "custom_domain": true
+        }
+      ]
+    }
+  }
+}

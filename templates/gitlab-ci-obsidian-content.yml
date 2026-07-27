@@ -1,0 +1,36 @@
+stages:
+  - validate
+  - publish
+
+variables:
+  CONTENT_SUBDIR: "Blog"
+
+validate-content:
+  stage: validate
+  script:
+    - test -d "$CONTENT_SUBDIR"
+    - test -n "$(find "$CONTENT_SUBDIR" -type f -name '*.md' -print -quit)"
+    - |
+      if [[ "$CI_COMMIT_BEFORE_SHA" == "0000000000000000000000000000000000000000" ]]; then
+        git diff-tree --check --root "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
+      else
+        git diff --check "$CI_COMMIT_BEFORE_SHA" "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
+      fi
+  rules:
+    - changes:
+        - Blog/**/*
+
+trigger-astro-blog:
+  stage: publish
+  variables:
+    CONTENT_PROJECT_PATH: "$CI_PROJECT_PATH"
+    CONTENT_SUBDIR: "Blog"
+    CONTENT_SHA: "$CI_COMMIT_SHA"
+  trigger:
+    project: jacyl4/astro_blog
+    branch: main
+    strategy: mirror
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        - Blog/**/*

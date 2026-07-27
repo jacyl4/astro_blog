@@ -1,0 +1,11 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "将测试、资产完整性、性能预算、依赖治理和 Cloudflare 可观测性固化为持续交付门禁"
+affected_areas:
+  - testing
+  - ci
+  - assets
+  - performance
+  - observability
+  - dependencies
+  - runbooks

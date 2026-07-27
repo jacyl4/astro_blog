@@ -1,0 +1,9 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "建设确定性的 Obsidian Markdown 内容编译器，将内容方言与 Astro 运行时解耦"
+affected_areas:
+  - content-compiler
+  - markdown
+  - obsidian
+  - assets
+  - content-schema

@@ -1,0 +1,24 @@
+# Operations Index
+
+本目录是博客构建与发布的操作契约。所有发布证据写入
+`.build/evidence/`，所有可复现清单写入 `.build/manifests/`。
+
+- [ADR-001：统一客户端生命周期](ADR-001-client-lifecycle.md)
+- [内容作者与编译规范](content-authoring.md)
+- [发布手册](release-runbook.md)
+- [回滚手册](rollback-runbook.md)
+- [内容故障手册](content-incident-runbook.md)
+- [资产故障手册](asset-incident-runbook.md)
+- [依赖风险登记](dependency-risk-register.md)
+- [发布证据模板](release-evidence-template.md)
+
+## 证据目录约定
+
+| 路径 | 内容 | 保留要求 |
+| --- | --- | --- |
+| `.build/evidence/` | check、测试、audit、HTTP smoke、部署身份 | CI artifact 14 天 |
+| `.build/manifests/` | route、asset、build manifest | 与候选 artifact 一起保留 |
+| `dist/_meta/build-manifest.json` | 可从已部署站点读取的构建身份 | 随部署产物 |
+| `baselines/` | 已批准 URL/HTML/资产基线 | 版本控制，变更需评审 |
+
+任何证据都不得包含 CI token、Cloudflare token、OAuth secret、Cookie 或文章正文。

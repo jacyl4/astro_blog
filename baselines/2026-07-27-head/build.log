@@ -1,0 +1,160 @@
+
+> astro_blog@0.0.1 build
+> astro check && astro build
+
+21:04:46 [content] Syncing content
+21:04:48 [content] Synced content
+21:04:48 [types] Generated 2.94s
+21:04:48 [check] Getting diagnostics for Astro files in /tmp/astro-blog-baseline.CU3dKl...
+Result (30 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
+21:04:54 [content] Syncing content
+21:04:54 [content] Synced content
+21:04:54 [types] Generated 487ms
+21:04:54 [build] output: "static"
+21:04:54 [build] mode: "static"
+21:04:54 [build] directory: /tmp/astro-blog-baseline.CU3dKl/dist/
+21:04:54 [build] Collecting build info...
+21:04:54 [build] ✓ Completed in 548ms.
+21:04:54 [build] Building static entrypoints...
+21:04:56 [vite] ✓ built in 1.43s
+21:04:56 [build] ✓ Completed in 1.48s.
+
+ building client (vite) 
+21:04:56 [vite] transforming...
+21:04:56 [vite] ✓ 29 modules transformed.
+21:04:56 [vite] rendering chunks...
+21:04:56 [vite] computing gzip size...
+21:04:56 [vite] dist/registerSW.js                             0.13 kB
+21:04:56 [vite] dist/manifest.webmanifest                      0.35 kB
+21:04:56 [vite] dist/_assets/SwupScriptsPlugin.DeeT9ppa.js     1.10 kB │ gzip: 0.62 kB
+21:04:56 [vite] dist/_assets/SwupBodyClassPlugin.DU0ijZyF.js   1.24 kB │ gzip: 0.66 kB
+21:04:56 [vite] dist/_assets/index.modern.D46RI4Wq.js          1.77 kB │ gzip: 0.91 kB
+21:04:56 [vite] dist/_assets/SwupFadeTheme.k61LzBHP.js         2.26 kB │ gzip: 0.88 kB
+21:04:56 [vite] dist/_assets/SwupHeadPlugin.DvOZNxAa.js        2.58 kB │ gzip: 1.28 kB
+21:04:56 [vite] dist/_assets/page.Brky37ar.js                  3.49 kB │ gzip: 1.56 kB
+21:04:56 [vite] dist/_assets/SwupA11yPlugin.BoEaImyy.js        5.25 kB │ gzip: 2.12 kB
+21:04:56 [vite] dist/_assets/SwupPreloadPlugin.CTUtrABV.js     6.06 kB │ gzip: 2.35 kB
+21:04:56 [vite] dist/_assets/SwupScrollPlugin.4RNVwOaE.js      8.00 kB │ gzip: 2.40 kB
+21:04:56 [vite] dist/_assets/Swup.CAlgnk7W.js                 21.62 kB │ gzip: 7.41 kB
+21:04:56 [vite] ✓ built in 312ms
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+PWA v1.1.0
+Building src/sw.ts service worker ("es" format)...
+vite v7.1.10 building for production...
+transforming...
+✓ 77 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/sw.mjs  24.45 kB │ gzip: 7.93 kB
+✓ built in 211ms
+
+PWA v1.1.0
+mode      injectManifest
+format:   es
+precache  17 entries (138.40 KiB)
+files generated
+  dist/sw.js
+
+ generating static routes 
+21:04:57 ▶ src/pages/404.astro
+21:04:57   └─ /404.html (+31ms) 
+21:04:57 ▶ src/pages/about.astro
+21:04:57   └─ /about/index.html (+5ms) 
+21:04:57 ▶ src/pages/archive/[year_month].astro
+21:04:57   ├─ /archive/2025-08/index.html (+14ms) 
+21:04:57   ├─ /archive/2025-07/index.html (+4ms) 
+21:04:57   ├─ /archive/2025-05/index.html (+3ms) 
+21:04:57   ├─ /archive/2025-04/index.html (+4ms) 
+21:04:57   └─ /archive/2025-02/index.html (+5ms) 
+21:04:57 ▶ src/pages/categories/[category].astro
+21:04:57   ├─ /categories/wang-luo/index.html (+4ms) 
+21:04:57   ├─ /categories/qian-duan/index.html (+6ms) 
+21:04:57   ├─ /categories/bi-ji-xi-tong/index.html (+4ms) 
+21:04:57   ├─ /categories/cun-chu/index.html (+3ms) 
+21:04:57   ├─ /categories/kai-fa-huan-jing/index.html (+2ms) 
+21:04:57   ├─ /categories/shu-ju-ku/index.html (+2ms) 
+21:04:57   └─ /categories/tu-chuang-xi-tong/index.html (+3ms) 
+21:04:57 ▶ src/pages/posts/[...slug].astro
+21:04:57   ├─ /posts/database-architecture-selection-and-comparative-analysis/index.html (+3ms) 
+21:04:57   ├─ /posts/exploring-the-p.a.r.a.-method-and-luhmann-s-zettelkasten/index.html (+4ms) 
+21:04:57   ├─ /posts/astro-islands-architecture-rendering-explanation/index.html (+3ms) 
+21:04:57   ├─ /posts/modern-architectural-design-of-image-library-website/index.html (+4ms) 
+21:04:57   ├─ /posts/the-value-of-neovim-in-the-ai-era/index.html (+4ms) 
+21:04:57   ├─ /posts/astro-systematic-blog-construction-guide/index.html (+5ms) 
+21:04:57   ├─ /posts/beyond-tradition-deep-analysis-of-extreme-optimization-for-transparent-proxy-performance/index.html (+4ms) 
+21:04:57   ├─ /posts/feasibility-analysis-report-on-a-traffic-forwarding-architecture-based-on-transparent-proxy-unencrypted-quic-and-grpc-encapsulation/index.html (+4ms) 
+21:04:57   ├─ /posts/grpc-tunnel-performance-optimizationfang-an/index.html (+3ms) 
+21:04:57   ├─ /posts/high-performance-pppoe-dhcp-solution-for-debian/index.html (+3ms) 
+21:04:57   └─ /posts/exploring-the-btrfs-distributed-storage-system/index.html (+4ms) 
+21:04:57 ▶ src/pages/tags/[tag].astro
+21:04:57   ├─ /tags/performance-tuning/index.html (+4ms) 
+21:04:57   ├─ /tags/web-development/index.html (+5ms) 
+21:04:57   ├─ /tags/networking/index.html (+3ms) 
+21:04:57   ├─ /tags/database/index.html (+3ms) 
+21:04:57   ├─ /tags/load-balancing/index.html (+6ms) 
+21:04:57   ├─ /tags/network-optimization/index.html (+4ms) 
+21:04:57   ├─ /tags/nginx/index.html (+5ms) 
+21:04:57   ├─ /tags/astrojs/index.html (+4ms) 
+21:04:57   ├─ /tags/cloudflare-workers/index.html (+4ms) 
+21:04:57   ├─ /tags/grpc/index.html (+4ms) 
+21:04:57   ├─ /tags/http3/index.html (+3ms) 
+21:04:57   ├─ /tags/quic/index.html (+3ms) 
+21:04:57   ├─ /tags/serverless/index.html (+3ms) 
+21:04:57   ├─ /tags/static-site-generation/index.html (+3ms) 
+21:04:57   ├─ /tags/static-site-generator/index.html (+4ms) 
+21:04:57   ├─ /tags/web-architecture/index.html (+3ms) 
+21:04:57   ├─ /tags/accel-ppp/index.html (+3ms) 
+21:04:57   ├─ /tags/ai-integration/index.html (+3ms) 
+21:04:57   ├─ /tags/astro/index.html (+3ms) 
+21:04:57   ├─ /tags/astro-architecture/index.html (+3ms) 
+21:04:57   ├─ /tags/astro-tutorial/index.html (+2ms) 
+21:04:57   ├─ /tags/blog-development/index.html (+3ms) 
+21:04:57   ├─ /tags/blogging-platform/index.html (+4ms) 
+21:04:57   ├─ /tags/btrfs/index.html (+4ms) 
+21:04:57   ├─ /tags/ceph/index.html (+4ms) 
+21:04:57   ├─ /tags/code-editor-comparison/index.html (+2ms) 
+21:04:57   ├─ /tags/content-management/index.html (+3ms) 
+21:04:57   ├─ /tags/cursor/index.html (+3ms) 
+21:04:57   ├─ /tags/database-architecture/index.html (+3ms) 
+21:04:57   ├─ /tags/debian/index.html (+2ms) 
+21:04:57   ├─ /tags/developer-tooling/index.html (+2ms) 
+21:04:57   ├─ /tags/dhcp/index.html (+3ms) 
+21:04:57   ├─ /tags/distributed-storage/index.html (+3ms) 
+21:04:57   ├─ /tags/drbd/index.html (+4ms) 
+21:04:57   ├─ /tags/es/index.html (+4ms) 
+21:04:57   ├─ /tags/glusterfs/index.html (+15ms) 
+21:04:57   ├─ /tags/ide/index.html (+4ms) 
+21:04:57   ├─ /tags/image-gallery/index.html (+3ms) 
+21:04:57   ├─ /tags/ipoe/index.html (+3ms) 
+21:04:57   ├─ /tags/kea-dhcp/index.html (+3ms) 
+21:04:57   ├─ /tags/knowledge-management/index.html (+4ms) 
+21:04:57   ├─ /tags/neovim/index.html (+4ms) 
+21:04:57   ├─ /tags/network-architecture/index.html (+3ms) 
+21:04:57   ├─ /tags/network-architecture-analysis/index.html (+3ms) 
+21:04:57   ├─ /tags/network-architecture-evaluation/index.html (+3ms) 
+21:04:57   ├─ /tags/obsidian-integration/index.html (+4ms) 
+21:04:57   ├─ /tags/plugin-ecosystem/index.html (+3ms) 
+21:04:57   ├─ /tags/pppoe/index.html (+6ms) 
+21:04:57   ├─ /tags/protocol-analysis/index.html (+4ms) 
+21:04:57   ├─ /tags/protocol-evaluation/index.html (+3ms) 
+21:04:57   ├─ /tags/radius/index.html (+3ms) 
+21:04:57   ├─ /tags/remote-development/index.html (+3ms) 
+21:04:57   ├─ /tags/rendering-paradigms/index.html (+3ms) 
+21:04:57   ├─ /tags/sqlite/index.html (+3ms) 
+21:04:57   ├─ /tags/system-tuning/index.html (+3ms) 
+21:04:57   ├─ /tags/tailwindcss/index.html (+3ms) 
+21:04:57   ├─ /tags/tcp-over-tcp/index.html (+3ms) 
+21:04:57   ├─ /tags/transparent-proxy/index.html (+3ms) 
+21:04:57   ├─ /tags/vscode/index.html (+3ms) 
+21:04:57   └─ /tags/zettelkasten/index.html (+3ms) 
+21:04:57 ▶ src/pages/index.astro
+21:04:57   └─ /index.html (+7ms) 
+21:04:57 ✓ Completed in 412ms.
+
+21:04:57 [build] 86 page(s) built in 3.62s
+21:04:57 [build] Complete!

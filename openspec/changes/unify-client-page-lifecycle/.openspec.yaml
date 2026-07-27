@@ -1,0 +1,9 @@
+schema: astro-engineering-change
+created: 2026-07-27
+goal: "统一 Astro/Swup 页面生命周期，确保控制器可重复装载、清理和取消异步工作"
+affected_areas:
+  - client-runtime
+  - navigation
+  - toc
+  - browser-tests
+  - swup

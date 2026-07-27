@@ -2,7 +2,7 @@
 // Tag detail page - displays all posts under a tag
 import MainLayout from '@/layouts/MainLayout.astro';
 import BlogPostCard from '@/components/BlogPostCard.astro';
-import { getAllTags, getPostsByTag, type ProcessedBlogPost } from '@/services/BlogService';
+import { getAllTags, getPostsByTag, type ProcessedBlogPost } from '@/modules/blog';
 import { SITE_TITLE, UI_TEXT, PAGE_TITLES } from '@/consts';
 
 export async function getStaticPaths() {
