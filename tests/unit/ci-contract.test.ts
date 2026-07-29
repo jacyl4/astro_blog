@@ -14,25 +14,27 @@ describe('GitLab CI release contract', () => {
 
   it('accepts the current deployment ref and rejects stale candidates', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'deploy-freshness-'));
-    const fakeCurl = path.join(root, 'curl');
-    await writeFile(fakeCurl, `#!/usr/bin/env bash
-url="\${!#}"
-if [[ "$url" == *"obsidian-digital"* ]]; then
-  printf '{"commit":{"id":"%s"}}' "$FAKE_CONTENT_SHA"
+    const fakeGit = path.join(root, 'git');
+    await writeFile(fakeGit, `#!/usr/bin/env bash
+repository_url="$3"
+branch="\${4#refs/heads/}"
+if [[ "$repository_url" == *"obsidian-digital"* ]]; then
+  printf '%s\\trefs/heads/%s\\n' "$FAKE_CONTENT_SHA" "$branch"
 else
-  printf '{"commit":{"id":"%s"}}' "$FAKE_APP_SHA"
+  printf '%s\\trefs/heads/%s\\n' "$FAKE_APP_SHA" "$branch"
 fi
 `);
-    await chmod(fakeCurl, 0o755);
+    await chmod(fakeGit, 0o755);
 
     const appSha = 'a'.repeat(40);
     const contentSha = 'b'.repeat(40);
     const baseEnv = {
       ...process.env,
       PATH: `${root}:${process.env.PATH}`,
-      CI_API_V4_URL: 'https://gitlab.invalid/api/v4',
       CI_JOB_TOKEN: 'test-token',
-      CI_PROJECT_PATH: 'jacyl4/astro_blog',
+      CI_REPOSITORY_URL: 'https://gitlab-ci-token:test-token@gitlab.invalid/jacyl4/astro_blog.git',
+      CI_SERVER_FQDN: 'gitlab.invalid',
+      CI_SERVER_PROTOCOL: 'https',
       CI_DEFAULT_BRANCH: 'main',
       CI_COMMIT_REF_NAME: 'refactor/candidate',
       CI_COMMIT_SHA: appSha,
