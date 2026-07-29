@@ -34,6 +34,7 @@
     "openspec:evidence": "tsx tools/quality/openspec-evidence-matrix.ts",
     "openspec:evidence:check": "tsx tools/quality/openspec-evidence-matrix.ts --check",
     "http:sweep": "tsx tools/release/http-sweep.ts",
+    "deployment:wait": "tsx tools/release/wait-for-deployment.ts",
     "content:inventory": "tsx tools/content-compiler/index.ts inventory",
     "content:validate": "tsx tools/content-compiler/index.ts validate",
     "content:compile": "tsx tools/content-compiler/index.ts compile",

@@ -127,6 +127,11 @@ export function verifyCiContract(source: string): string[] {
   requireMatch(stagingRules, /"when":"manual"/, 'feature-branch staging is not manual');
   const stagingScript = scriptText(staging.script);
   requireMatch(stagingScript, /verify-deploy-freshness\.sh/, 'staging does not reject stale releases');
+  requireMatch(
+    stagingScript,
+    /deployment:wait[\s\S]*http:sweep/,
+    'staging does not wait for HTML and manifest identity before smoke tests',
+  );
   requireMatch(stagingScript, /PLAYWRIGHT_BASE_URL=.*test:staging/, 'staging lacks live browser validation');
   const stagingAfterScript = scriptText(staging.after_script);
   requireMatch(
@@ -141,6 +146,11 @@ export function verifyCiContract(source: string): string[] {
   assert(production.when === 'manual', 'production deployment remains manual');
   const productionRules = JSON.stringify(production.rules ?? []);
   requireMatch(productionRules, /CI_DEFAULT_BRANCH/, 'production is not restricted to the default branch');
+  requireMatch(
+    scriptText(production.script),
+    /deployment:wait[\s\S]*http:sweep/,
+    'production does not wait for HTML and manifest identity before smoke tests',
+  );
   const productionAfterScript = scriptText(production.after_script);
   requireMatch(
     productionAfterScript,

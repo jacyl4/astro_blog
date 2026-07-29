@@ -14,6 +14,7 @@ interface Props {
 }
 
 const { title, description = SITE_DESCRIPTION } = Astro.props;
+const buildAppSha = process.env.APP_SHA || 'local';
 ---
 
 <!DOCTYPE html>
@@ -22,6 +23,7 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="build-app-sha" content={buildAppSha} />
   <meta name="keywords" content="Astro, 博, 技术, 文章" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

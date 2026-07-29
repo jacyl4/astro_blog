@@ -120,7 +120,7 @@ build:
     - mkdir -p .build
     - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
     - tar -xzf .build/content.tar.gz -C .build
-    - npm run build:prepared
+    - APP_SHA="$CI_COMMIT_SHA" npm run build:prepared
     - npm run routes:verify
     - npm run html-baseline:verify
     - npm run smoke:static
@@ -189,6 +189,7 @@ staging:
     - bash tools/ci/verify-deploy-freshness.sh
     - npm run cf:dry-run -- --env staging
     - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
+    - npm run deployment:wait -- --base https://blog-staging.seso.icu --app-sha "$CI_COMMIT_SHA"
     - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json
     - npx playwright install chromium
     - PLAYWRIGHT_BASE_URL=https://blog-staging.seso.icu npm run test:staging
@@ -218,6 +219,7 @@ production:
   script:
     - npm run cf:dry-run -- --env production
     - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
+    - npm run deployment:wait -- --base https://blog.seso.icu --app-sha "$CI_COMMIT_SHA"
     - npm run http:sweep -- --base https://blog.seso.icu --output .build/evidence/production-http-sweep.json
     - npm run performance:collect -- --url https://blog.seso.icu --label production
   after_script:

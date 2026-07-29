@@ -16,6 +16,7 @@ import {
   normalizeMainContent,
   type MainContentBaseline,
 } from '../../tools/release/html-baseline';
+import { readHtmlDeploymentIdentity } from '../../tools/release/deployment-identity';
 
 describe('route manifest', () => {
   it('normalizes Astro directory output routes', () => {
@@ -125,5 +126,21 @@ describe('route manifest', () => {
     expect(assessMainContentBaseline(baseline, candidate, {
       'posts/a/index.html': { sha256: 'other', reason: 'stale' },
     }).changed).toEqual(['posts/a/index.html']);
+  });
+
+  it('reads the app and runtime asset identity embedded in deployed HTML', () => {
+    const appSha = 'a'.repeat(40);
+    expect(readHtmlDeploymentIdentity(`
+      <html><head>
+        <meta name="build-app-sha" content="${appSha}">
+        <script type="module" src="/_assets/runtime.abc123.js"></script>
+      </head></html>
+    `)).toEqual({
+      appSha,
+      runtimeAsset: '/_assets/runtime.abc123.js',
+    });
+    expect(() => readHtmlDeploymentIdentity('<html></html>')).toThrow(
+      'root HTML has no build-app-sha identity',
+    );
   });
 });
