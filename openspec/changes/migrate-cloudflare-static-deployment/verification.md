@@ -12,7 +12,7 @@
 | 缓存/PWA | Browser/HTTP | `PLAYWRIGHT_BASE_URL=<staging> npm run test:staging` | Worker 接管、离线首页与更新策略符合契约 | trace/report | Passed on staging |
 | 桌面/移动 | Browser | responsive Playwright sampling | 导航可达、无横向溢出、文章切页成功 | screenshots/trace | Passed on staging |
 | 纯静态边界 | Config/HTTP | 扫描配置并请求任意 `/api/*` | 无 Worker entrypoint/binding，路径按静态 404 处理 | config/smoke report | Passed locally |
-| CI 发布契约 | Static/unit | `npm run ci:verify && npm run test:unit` | manual feature staging、默认分支 production、resource groups、freshness 成立 | log | Passed, 21 contract checks / 34 tests |
+| CI 发布契约 | Static/unit | `npm run ci:verify && npm run test:unit` | manual feature staging、默认分支 production、resource groups、freshness 成立 | log | Passed, 21 contract checks / 35 tests |
 | 回滚 | Staging rehearsal | 发布 N+1 后恢复 N | HTML/manifest/runtime identity 与 URL 恢复 | rollback evidence | Identity gate proved; final two identity-aware versions pending |
 
 ## Blocking Checks

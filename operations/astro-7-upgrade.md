@@ -77,6 +77,10 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
   任一后续内容变化都会使门禁失败，不能被这次审批掩盖。
 - `data-astro-cid-*` 仅是编译器生成的 scoped CSS 标识，比较器会归一化；
   回归测试同时证明正文语义变化仍会失败。
+- 根依赖曾额外声明 `@shikijs/themes@3.x`，同时 Astro 7 的 Shiki 为 `4.3.1`。
+  该未使用的跨主版本 theme 包会让 Markdown 渲染依赖图出现两个 Shiki 类型/
+  theme 世代；已删除直接依赖，只保留 `shiki@4.3.1` 自带的
+  `@shikijs/themes@4.3.1`，并以 dependency contract 单测防止再次混装。
 
 ## 6. 依赖审计结论
 
@@ -93,6 +97,8 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
   `vite-plugin-pwa` / Workbox 构建链。Playwright 已验证 Worker 接管和离线首页。
 - `swup-morph-plugin@2.0.0` 已实装试验，但其依赖在 Astro
   服务端配置加载阶段访问 `Element`，因此回退并锁定 `1.3.0`。
+- 删除未使用的 `@shikijs/themes@3.x` 直接依赖；语法高亮统一由
+  `shiki@4.3.1` 的同主版本 theme 提供，不再保留双版本解析路径。
 
 完整审计证据由 CI 写入 Generic Package Registry；本地原始结果位于
 `.build/evidence/astro7-npm-audit.json`。
@@ -102,8 +108,8 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
 | 检查 | 结果 |
 | --- | --- |
 | strict content compile | 11 articles，0 warning，0 error |
-| Astro check | 84 files，0 error/warning/hint |
-| unit | 8 files，34 tests passed |
+| Astro check | 90 files，0 error/warning/hint |
+| unit | 9 files，35 tests passed |
 | route | 86 → 86，无增删 |
 | `<main>` | 85 个公开页面 rendered text 相同；1 个精确 hash 的 Shiki token 差异 |
 | asset | 92 release assets；178 dist files；6.83 MiB，预算内 |

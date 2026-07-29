@@ -33,7 +33,7 @@
 
 - 候选 commit：`aa62a37`
 - route：86，评论动态路径 `/api/comments`、`/auth/session` 均为 404
-- unit/browser：34/11
+- unit/browser：35/11
 - production smoke 已由 Pipeline `#407` 完成；当前候选 Pipeline `#421` 的
   staging `86 + 3`、Playwright `11/11` 也已通过
 - 最终 verify/archive 仍是未完成 rollout 门

@@ -31,7 +31,7 @@
 ## Actual Results
 
 - fault injection：empty icon、broken link、deleted route、lifecycle listener 均被拒绝
-- 本地候选：34 unit、11 browser、21 CI contract checks
+- 本地候选：35 unit、11 browser、21 CI contract checks
 - asset：178 dist files，约 6.83 MiB，PWA 155 precache entries
 - Pipeline `#421` 自动阶段和功能分支 manual staging `#699` 成功；真实域名
   `86 + 3`、Playwright `11/11` 和性能硬预算通过

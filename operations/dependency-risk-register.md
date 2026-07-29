@@ -34,6 +34,9 @@
 - `swup-morph-plugin@2.0.0` 在 Astro 配置加载时因
   `Element is not defined` 失败，锁定 1.3.0。这是经过实装验证的兼容性决定，
   不是遗漏升级。
+- 删除未使用的 `@shikijs/themes@3.x` 根依赖。Astro 7 使用
+  `shiki@4.3.1`，其内置 `@shikijs/themes@4.3.1` 已满足配置中的
+  `gruvbox-dark-medium`；不允许同时安装两个 theme 主版本参与 Markdown 构建。
 - 站点仍为 assets-only 静态部署；这些 Node 构建依赖不会被部署到
   Cloudflare 请求运行时。CI 继续以 critical 为硬阻断，并保留 high 项清单。
 

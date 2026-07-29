@@ -20,7 +20,7 @@
 - GitLab Job Artifacts 的 UID/GID 漂移已在 2026-07-28 修复，并以 Job `#644`
   的上传 `201`、下载 `200` 验证。
 - 候选分支 `refactor/complete-astro-blog-openspec` 已升级到 Astro `7.1.5`；
-  当前候选通过 34 个 unit、11 个 browser、86 条 route、PWA 离线、21 项 CI
+  当前候选通过 35 个 unit、11 个 browser、86 条 route、PWA 离线、21 项 CI
   contract 和 OpenSpec strict validation。
 - 八个 change 在本轮补强前共 265 项任务，233 项已登记完成，32 项未完成；
   未完成项主要是 staging、真实回滚、观察窗口、旧链路清理和归档。
