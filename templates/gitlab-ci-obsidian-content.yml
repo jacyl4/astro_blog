@@ -2,34 +2,59 @@ stages:
   - validate
   - publish
 
+workflow:
+  name: 'content:$CI_COMMIT_SHORT_SHA -> astro_blog'
+  auto_cancel:
+    on_new_commit: interruptible
+
 variables:
   CONTENT_SUBDIR: "Blog"
+  CONTENT_CHECKOUT: "$CI_PROJECT_DIR/.ci-content-source"
+  GIT_STRATEGY: "none"
 
 validate-content:
   stage: validate
+  interruptible: true
   script:
-    - test -d "$CONTENT_SUBDIR"
-    - test -n "$(find "$CONTENT_SUBDIR" -type f -name '*.md' -print -quit)"
+    - mkdir -p "$CONTENT_CHECKOUT"
+    - find "$CONTENT_CHECKOUT" -mindepth 1 -delete
+    - git -C "$CONTENT_CHECKOUT" init --quiet
+    - git -C "$CONTENT_CHECKOUT" remote add origin "$CI_REPOSITORY_URL"
+    - git -C "$CONTENT_CHECKOUT" config core.sparseCheckout true
+    - printf '/%s/\n' "$CONTENT_SUBDIR" > "$CONTENT_CHECKOUT/.git/info/sparse-checkout"
+    - git -C "$CONTENT_CHECKOUT" fetch --quiet --depth=2 origin "$CI_COMMIT_SHA"
+    - git -C "$CONTENT_CHECKOUT" checkout --quiet --detach FETCH_HEAD
+    - test "$(git -C "$CONTENT_CHECKOUT" rev-parse HEAD)" = "$CI_COMMIT_SHA"
+    - test -d "$CONTENT_CHECKOUT/$CONTENT_SUBDIR"
+    - test -n "$(find "$CONTENT_CHECKOUT/$CONTENT_SUBDIR" -type f \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
+    - test -z "$(find "$CONTENT_CHECKOUT/$CONTENT_SUBDIR" -type f ! \( -name '*.md' -o -name '*.mdx' \) -print -quit)"
     - |
       if [[ "$CI_COMMIT_BEFORE_SHA" == "0000000000000000000000000000000000000000" ]]; then
-        git diff-tree --check --root "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
+        git -C "$CONTENT_CHECKOUT" diff-tree --check --root "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
       else
-        git diff --check "$CI_COMMIT_BEFORE_SHA" "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
+        git -C "$CONTENT_CHECKOUT" diff --check "$CI_COMMIT_BEFORE_SHA" "$CI_COMMIT_SHA" -- "$CONTENT_SUBDIR"
       fi
+    - printf 'content_project=%s\ncontent_sha=%s\ncontent_subdir=%s\n' "$CI_PROJECT_PATH" "$CI_COMMIT_SHA" "$CONTENT_SUBDIR"
   rules:
     - changes:
         - Blog/**/*
 
 trigger-astro-blog:
   stage: publish
+  interruptible: true
   variables:
     CONTENT_PROJECT_PATH: "$CI_PROJECT_PATH"
+    CONTENT_REF: "$CI_COMMIT_REF_NAME"
     CONTENT_SUBDIR: "Blog"
     CONTENT_SHA: "$CI_COMMIT_SHA"
+    CONTENT_COMPILER_MODE: "strict"
   trigger:
     project: jacyl4/astro_blog
     branch: main
     strategy: mirror
+    forward:
+      yaml_variables: true
+      pipeline_variables: false
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:

@@ -7,6 +7,9 @@ stages:
   - deploy-production
 
 workflow:
+  name: 'astro_blog app:$CI_COMMIT_SHORT_SHA content:$CONTENT_SHA'
+  auto_cancel:
+    on_new_commit: interruptible
   rules:
     - if: '$CI_PIPELINE_SOURCE == "pipeline"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -90,6 +93,7 @@ verify:
       bash tools/ci/package-artifact.sh upload "$UNIT_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/unit-evidence.tar.gz
       exit "$test_status"
     - npm run boundaries:verify
+    - npm run paths:verify
     - npm run comments:verify-removed
     - npm run cloudflare:verify-static
     - npm run cf:types:check
@@ -164,6 +168,7 @@ staging:
   extends: .deploy-base
   stage: deploy-staging
   script:
+    - bash tools/ci/verify-deploy-freshness.sh
     - npm run cf:dry-run -- --env staging
     - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
     - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json

@@ -3,7 +3,7 @@
 - [x] 1.1 已记录内容仓库 `jacyl4/obsidian-digital`、Astro 仓库 `jacyl4/astro_blog`、shell Runner、`Blog/` 发布根和旧 rsync/commit/push job
 - [x] 1.2 确认两个项目的默认分支和保护规则
 - [x] 1.3 配置 CI_JOB_TOKEN allowlist，并用真实 prepare job 验证指定 SHA clone
-- [ ] 1.4 准备只读 Deploy Token 兜底方案但不默认启用
+- [x] 1.4 记录只读 Deploy Token break-glass 方案；CI_JOB_TOKEN 正常时不预先创建长期 token
 
 ## 2. 内容仓库 Pipeline
 
@@ -43,12 +43,12 @@
 - [x] 6.1 添加 `CONTENT_SOURCE_PATH`/CLI 参数支持
 - [x] 6.2 添加 prepare、dev 和 preview 文档
 - [x] 6.3 在无外部内容源时使用 fixtures 或清晰失败
-- [ ] 6.4 添加机器专属绝对路径扫描
+- [x] 6.4 添加机器专属绝对路径扫描
 
 ## 7. 并行验证与切换
 
-- [ ] 7.1 新旧链路用同一 app/content SHA 生成产物并比较
-- [ ] 7.2 测试删除文章没有残留
+- [x] 7.1 新旧链路用同一 app/content SHA 生成产物并比较
+- [x] 7.2 测试删除文章没有残留
 - [ ] 7.3 快速连续提交两个内容版本并验证部署顺序
 - [ ] 7.4 短时冻结内容并切换到新 trigger
 - [ ] 7.5 禁用旧 rsync/commit/push job，撤销其长期 OAuth token，并保留七天受控回退说明

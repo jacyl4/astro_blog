@@ -1,4 +1,4 @@
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -150,5 +150,35 @@ tags: []
       'WIKILINK_NOT_FOUND',
     ]));
     expect(result.inventory.records.map((record) => record.sourcePath)).toEqual(['source.md']);
+  });
+
+  it('atomically removes output for an article deleted from the next content SHA', async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), 'content-compiler-'));
+    const source = path.join(temp, 'Blog');
+    const output = path.join(temp, 'output');
+    await mkdir(source, { recursive: true });
+    const article = (id: string) => `---
+id: ${id}
+slug: ${id}
+title: ${id}
+created: 2026-01-01
+tags: []
+---
+${id}
+`;
+    await writeFile(path.join(source, 'keep.md'), article('keep'));
+    await writeFile(path.join(source, 'delete.md'), article('delete'));
+
+    const first = await compileContent(config(source, output));
+    await writeCompilation(config(source, output), first);
+    expect(await readFile(path.join(output, 'delete.md'), 'utf8')).toContain('delete');
+
+    await rm(path.join(source, 'delete.md'));
+    const second = await compileContent(config(source, output));
+    await writeCompilation(config(source, output), second);
+
+    await expect(stat(path.join(output, 'delete.md'))).rejects.toMatchObject({ code: 'ENOENT' });
+    expect(await readFile(path.join(output, 'keep.md'), 'utf8')).toContain('keep');
+    expect(second.manifest.articleCount).toBe(1);
   });
 });

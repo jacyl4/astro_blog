@@ -2,80 +2,176 @@ stages:
   - prepare
   - verify
   - build
+  - browser
   - deploy-staging
   - deploy-production
 
+workflow:
+  name: 'astro_blog app:$CI_COMMIT_SHORT_SHA content:$CONTENT_SHA'
+  auto_cancel:
+    on_new_commit: interruptible
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "pipeline"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+default:
+  image: node:24-bookworm
+  interruptible: true
+  before_script:
+    - &node-bootstrap |
+      if ! command -v npm >/dev/null 2>&1; then
+        NODE_HOME="$CI_PROJECT_DIR/.ci-tools/node-v${NODE_VERSION}-linux-x64"
+        if [[ ! -x "$NODE_HOME/bin/node" ]]; then
+          mkdir -p "$CI_PROJECT_DIR/.ci-tools"
+          curl --fail --silent --show-error --location \
+            "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
+            --output "$CI_PROJECT_DIR/.ci-tools/node.tar.xz"
+          tar -xJf "$CI_PROJECT_DIR/.ci-tools/node.tar.xz" \
+            -C "$CI_PROJECT_DIR/.ci-tools"
+        fi
+        export PATH="$NODE_HOME/bin:$PATH"
+      fi
+      node --version
+      npm --version
+
 variables:
+  NODE_VERSION: "24.15.0"
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
-  CONTENT_PROJECT_PATH: "jacyl4/obsidian-digital"
-  CONTENT_SUBDIR: "Blog"
+  CONTENT_PACKAGE_NAME: "astro-blog-content"
+  RELEASE_PACKAGE_NAME: "astro-blog-release"
+  UNIT_EVIDENCE_PACKAGE_NAME: "astro-blog-unit-evidence"
+  BROWSER_EVIDENCE_PACKAGE_NAME: "astro-blog-browser-evidence"
 
 cache:
+  &dependency-cache
   key:
     files:
       - package-lock.json
   paths:
     - .npm/
+    - .ci-tools/
+  policy: pull
 
 prepare-content:
   stage: prepare
-  image: node:24-bookworm
-  script:
-    - test -n "$CONTENT_PROJECT_PATH"
-    - test -n "$CONTENT_SHA"
-    - mkdir -p .work .build
-    - git clone "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_FQDN}/${CONTENT_PROJECT_PATH}.git" "$CONTENT_WORKTREE"
-    - git -C "$CONTENT_WORKTREE" fetch origin "$CONTENT_SHA" --depth=1
-    - git -C "$CONTENT_WORKTREE" checkout --detach "$CONTENT_SHA"
-    - npm ci
-    - test "$CONTENT_PROJECT_PATH" = "jacyl4/obsidian-digital"
-    - test "$CONTENT_SUBDIR" = "Blog"
-    - npm run content:compile -- --source "$CONTENT_WORKTREE/$CONTENT_SUBDIR" --output .build/content
-  artifacts:
-    expire_in: 7 days
+  cache:
+    key:
+      files:
+        - package-lock.json
     paths:
-      - .build/content/
-      - .build/content-manifest.json
+      - .npm/
+      - .ci-tools/
+    policy: pull-push
+  script:
+    - npm ci
+    - bash tools/ci/prepare-content.sh
+    - tar -czf .build/content.tar.gz -C .build content content-manifest.json diagnostics evidence/content-head.txt
+    - bash tools/ci/package-artifact.sh upload "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
 
 verify:
   stage: verify
-  image: node:24-bookworm
-  needs: [prepare-content]
+  cache: *dependency-cache
+  needs:
+    - job: prepare-content
+      artifacts: false
   script:
     - npm ci
-    - npm run check
-    - npm run routes:verify
-    - npm run assets:verify
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
+    - tar -xzf .build/content.tar.gz -C .build
+    - mkdir -p .build/evidence
+    - npm audit --audit-level=critical --json > .build/evidence/npm-audit.json
+    - npx astro check
+    - |
+      set +e
+      npm run test:unit
+      test_status=$?
+      set -e
+      tar -czf .build/unit-evidence.tar.gz -C .build evidence
+      bash tools/ci/package-artifact.sh upload "$UNIT_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/unit-evidence.tar.gz
+      exit "$test_status"
+    - npm run boundaries:verify
+    - npm run paths:verify
+    - npm run comments:verify-removed
+    - npm run cloudflare:verify-static
+    - npm run cf:types:check
+    - npm run openspec:validate
+    - npm run openspec:evidence:check
 
 build:
   stage: build
-  image: node:24-bookworm
-  needs: [prepare-content, verify]
+  cache: *dependency-cache
+  needs:
+    - job: prepare-content
+      artifacts: false
+    - job: verify
+      artifacts: false
   script:
     - npm ci
-    - npm run build
-    - npm run manifest:build
-  artifacts:
-    expire_in: 14 days
-    paths:
-      - dist/
-      - .build/build-manifest.json
-      - .build/route-manifest.json
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
+    - tar -xzf .build/content.tar.gz -C .build
+    - npm run build:prepared
+    - npm run routes:verify
+    - npm run html-baseline:verify
+    - npm run smoke:static
+    - npm run assets:verify
+    - npm run comments:verify-removed
+    - npm run routes:generate
+    - npm run assets:generate
+    - APP_SHA="$CI_COMMIT_SHA" npm run manifest:build
+    - tar -czf .build/release.tar.gz dist .build/manifests .build/content-manifest.json .build/evidence
+    - bash tools/ci/package-artifact.sh upload "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
+
+.browser-base:
+  stage: browser
+  cache: *dependency-cache
+  needs:
+    - job: build
+      artifacts: false
+  script:
+    - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
+    - tar -xzf .build/release.tar.gz
+    - npx playwright install chromium
+    - |
+      set +e
+      npm run test:browser
+      test_status=$?
+      set -e
+      tar -czf .build/browser-evidence.tar.gz -C .build evidence
+      bash tools/ci/package-artifact.sh upload "$BROWSER_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/browser-evidence.tar.gz
+      exit "$test_status"
+
+browser:
+  extends: .browser-base
 
 .deploy-base:
-  image: node:24-bookworm
-  needs: [build]
+  interruptible: false
+  cache: *dependency-cache
+  needs:
+    - job: build
+      artifacts: false
+    - job: browser
+      artifacts: false
   before_script:
+    - *node-bootstrap
     - npm ci
+    - mkdir -p .build
+    - bash tools/ci/package-artifact.sh download "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
+    - tar -xzf .build/release.tar.gz
 
 staging:
   extends: .deploy-base
   stage: deploy-staging
   script:
-    - npm run cf:dry-run
-    - npm run cf:deploy:staging
-    - npm run smoke:staging
+    - bash tools/ci/verify-deploy-freshness.sh
+    - npm run cf:dry-run -- --env staging
+    - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
+    - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json
   environment:
     name: staging
   rules:
@@ -85,9 +181,13 @@ production:
   extends: .deploy-base
   stage: deploy-production
   resource_group: astro-blog-production
+  needs:
+    - job: staging
+      artifacts: false
   script:
-    - npm run cf:deploy:production
-    - npm run smoke:production
+    - npm run cf:dry-run -- --env production
+    - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
+    - npm run http:sweep -- --base https://blog.seso.icu --output .build/evidence/production-http-sweep.json
   environment:
     name: production
   when: manual
