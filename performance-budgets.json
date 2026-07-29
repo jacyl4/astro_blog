@@ -1,0 +1,13 @@
+{
+  "blocking": {
+    "failedRequests": 0,
+    "requestCount": 80,
+    "totalEncodedBytes": 4194304,
+    "largestResourceBytes": 1048576
+  },
+  "trend": {
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "interactionProxyMs": 1000
+  }
+}

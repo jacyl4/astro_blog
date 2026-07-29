@@ -39,6 +39,8 @@ lockfile、route 和 asset hash。
 4. 请求 `/api/comments`、`/auth/session` 和随机 `/api/*`，必须得到静态 404。
 5. 检查 404、trailing slash、字体、PWA 图标、manifest 和 Service Worker。
 6. 保存 deployment/version ID、HTTP 结果和浏览器 trace。
+7. staging 保留 100% invocation log/trace 采样；确认记录仅含静态请求元数据，
+   不含 token、Cookie、请求体或文章正文。
 
 ## Production
 
@@ -48,5 +50,7 @@ lockfile、route 和 asset hash。
 4. 域名切换后立即执行首页、文章、分类、标签、归档、about、404 和全路由 sweep。
 5. 保存 [发布证据模板](release-evidence-template.md)。
 6. 旧 Pages 入口保留七天；完成三次内容发布和观察期后再移除旧 Action。
+7. production invocation logs 采样率为 10%，traces 为 1%；需要临时提高时必须记录
+   开始/结束时间并在调查结束后恢复。
 
 任何 production 部署、域名切换或资源删除都必须在执行点取得明确确认。

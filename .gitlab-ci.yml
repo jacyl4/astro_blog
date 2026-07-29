@@ -38,6 +38,7 @@ default:
 variables:
   NODE_VERSION: "24.15.0"
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+  PLAYWRIGHT_BROWSERS_PATH: "$CI_PROJECT_DIR/.cache/ms-playwright"
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
   CONTENT_PACKAGE_NAME: "astro-blog-content"
   RELEASE_PACKAGE_NAME: "astro-blog-release"
@@ -52,6 +53,7 @@ cache:
   paths:
     - .npm/
     - .ci-tools/
+    - .cache/ms-playwright/
   policy: pull
 
 prepare-content:
@@ -63,6 +65,7 @@ prepare-content:
     paths:
       - .npm/
       - .ci-tools/
+      - .cache/ms-playwright/
     policy: pull-push
   script:
     - npm ci
@@ -94,6 +97,7 @@ verify:
       exit "$test_status"
     - npm run boundaries:verify
     - npm run paths:verify
+    - npm run evidence:privacy
     - npm run comments:verify-removed
     - npm run cloudflare:verify-static
     - npm run cf:types:check
@@ -127,7 +131,15 @@ build:
 
 .browser-base:
   stage: browser
-  cache: *dependency-cache
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+      - .ci-tools/
+      - .cache/ms-playwright/
+    policy: pull-push
   needs:
     - job: build
       artifacts: false
@@ -172,6 +184,7 @@ staging:
     - npm run cf:dry-run -- --env staging
     - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
     - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json
+    - npm run performance:collect -- --url https://blog-staging.seso.icu --label staging
   environment:
     name: staging
   rules:
@@ -188,6 +201,7 @@ production:
     - npm run cf:dry-run -- --env production
     - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
     - npm run http:sweep -- --base https://blog.seso.icu --output .build/evidence/production-http-sweep.json
+    - npm run performance:collect -- --url https://blog.seso.icu --label production
   environment:
     name: production
   when: manual

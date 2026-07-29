@@ -3,12 +3,17 @@
   "singleFileBytes": 1048576,
   "javascriptFileBytes": 131072,
   "cssFileBytes": 262144,
+  "webpFileBytes": 327680,
   "requiredAssets": [
     "/favicon.svg",
     "/manifest.webmanifest",
     "/pwa-192x192.png",
     "/pwa-512x512.png",
-    "/fonts/intel-one-mono/IntelOneMono-Regular.woff2"
+    "/fonts/intel-one-mono/IntelOneMono-Regular.woff2",
+    "/images/head-768.webp",
+    "/images/head-1536.webp",
+    "/images/wallpaper-1280.webp",
+    "/images/wallpaper-2560.webp"
   ],
   "forbiddenAssets": [
     "/fonts/intel-one-mono/IntelOneMono-Regular.ttf"

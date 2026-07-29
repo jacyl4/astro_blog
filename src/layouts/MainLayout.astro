@@ -27,9 +27,21 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
     <meta property="og:description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="preload" as="image" href="/images/head.webp">
-    <link rel="preload" as="image" href="/images/wallpaper.webp">
-    <link rel="preload" as="image" href="/avatar.webp">
+    <link
+      rel="preload"
+      as="image"
+      href="/images/head-768.webp"
+      imagesrcset="/images/head-768.webp 768w, /images/head-1536.webp 1536w"
+      imagesizes="100vw"
+    >
+    <link
+      rel="preload"
+      as="image"
+      href="/images/wallpaper-1280.webp"
+      imagesrcset="/images/wallpaper-1280.webp 1280w, /images/wallpaper-2560.webp 2560w"
+      imagesizes="100vw"
+    >
+    <link rel="preload" as="image" href="/avatar.webp" media="(min-width: 768px)">
   </head>
   <body>
     <TableOfContents />

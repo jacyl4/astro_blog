@@ -40,6 +40,13 @@
   --meta-tag-color: #d3869b;
   --meta-label-color: #d4be98;
 
-  --head-car-bg: url('/images/head.webp');
-  --wallpaper-bg: url('/images/wallpaper.webp');
+  --head-car-bg: url('/images/head-768.webp');
+  --wallpaper-bg: url('/images/wallpaper-1280.webp');
+}
+
+@media (min-width: 768px) {
+  :root {
+    --head-car-bg: url('/images/head-1536.webp');
+    --wallpaper-bg: url('/images/wallpaper-2560.webp');
+  }
 }

@@ -13,6 +13,7 @@ interface AssetBudgets {
   singleFileBytes: number;
   javascriptFileBytes: number;
   cssFileBytes: number;
+  webpFileBytes: number;
   requiredAssets: string[];
   forbiddenAssets: string[];
 }
@@ -63,6 +64,9 @@ for (const file of allFiles) {
   }
   if (file.endsWith('.js') && fileStat.size > budgets.javascriptFileBytes) {
     errors.push(`${relative}: ${fileStat.size} exceeds JavaScript budget ${budgets.javascriptFileBytes}`);
+  }
+  if (file.endsWith('.webp') && fileStat.size > budgets.webpFileBytes) {
+    errors.push(`${relative}: ${fileStat.size} exceeds WebP budget ${budgets.webpFileBytes}`);
   }
   if (file.endsWith('.css')) {
     if (fileStat.size > budgets.cssFileBytes) {

@@ -3,6 +3,18 @@ import { readFile } from 'node:fs/promises';
 interface WranglerEnvironment {
   name?: string;
   routes?: Array<{ pattern?: string; custom_domain?: boolean }>;
+  observability?: {
+    enabled?: boolean;
+    logs?: {
+      enabled?: boolean;
+      head_sampling_rate?: number;
+      invocation_logs?: boolean;
+    };
+    traces?: {
+      enabled?: boolean;
+      head_sampling_rate?: number;
+    };
+  };
   [key: string]: unknown;
 }
 
@@ -61,10 +73,14 @@ const expected = {
   staging: {
     name: 'astro-blog-staging',
     hostname: 'blog-staging.seso.icu',
+    logsRate: 1,
+    tracesRate: 1,
   },
   production: {
     name: 'astro-blog',
     hostname: 'blog.seso.icu',
+    logsRate: 0.1,
+    tracesRate: 0.01,
   },
 };
 for (const [environment, contract] of Object.entries(expected)) {
@@ -77,6 +93,19 @@ for (const [environment, contract] of Object.entries(expected)) {
   );
   if (!route) {
     errors.push(`env.${environment} must own custom domain ${contract.hostname}`);
+  }
+  const observability = actual?.observability;
+  if (
+    observability?.enabled !== true
+    || observability.logs?.enabled !== true
+    || observability.logs.invocation_logs !== true
+    || observability.logs.head_sampling_rate !== contract.logsRate
+    || observability.traces?.enabled !== true
+    || observability.traces.head_sampling_rate !== contract.tracesRate
+  ) {
+    errors.push(
+      `env.${environment}.observability must use logs=${contract.logsRate} and traces=${contract.tracesRate}`,
+    );
   }
 }
 

@@ -26,3 +26,20 @@
 
 记录触发时间、操作者、旧/新 deployment ID、app/content SHA、回滚命令输出、
 DNS 状态和 smoke 结果。首次正式发布前必须在 staging 完成一次实际回滚演练。
+
+## 命令
+
+```bash
+npx wrangler deployments list --env staging
+npx wrangler rollback <STABLE_VERSION_ID> --env staging
+```
+
+回滚演练执行 N → N+1 → N：每一步记录 version ID、route manifest hash 和完整
+HTTP sweep。若 Wrangler rollback 失败，保留失败输出并按发布手册恢复 Pages
+自定义域名，不得用重新构建代替版本回滚。
+
+## 维护周期
+
+- 每季度至少演练一次 staging 回滚；
+- Astro、Wrangler、PWA/Workbox 或域名交付模型发生关键升级时追加一次；
+- 演练证据使用 Generic Package Registry 保存，不使用 Job Artifacts 传递。

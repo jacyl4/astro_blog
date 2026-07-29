@@ -108,4 +108,26 @@ describe('PageLifecycle', () => {
     expect(capturedSignal?.aborted).toBe(true);
     expect(abortEvents).toBe(1);
   });
+
+  it('uses the signal to remove an injected page listener during destroy', () => {
+    const target = new EventTarget();
+    let calls = 0;
+    const lifecycle = new PageLifecycle([
+      {
+        name: 'fault-injected-listener',
+        mount(context) {
+          target.addEventListener('fault', () => {
+            calls += 1;
+          }, { signal: context.signal });
+        },
+      },
+    ]);
+
+    lifecycle.mount({} as Document, {} as Window);
+    target.dispatchEvent(new Event('fault'));
+    lifecycle.destroy();
+    target.dispatchEvent(new Event('fault'));
+
+    expect(calls).toBe(1);
+  });
 });
