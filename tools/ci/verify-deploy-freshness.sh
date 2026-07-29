@@ -5,6 +5,7 @@ set -euo pipefail
 : "${CI_JOB_TOKEN:?CI_JOB_TOKEN is required}"
 : "${CI_PROJECT_PATH:?CI_PROJECT_PATH is required}"
 : "${CI_DEFAULT_BRANCH:?CI_DEFAULT_BRANCH is required}"
+: "${CI_COMMIT_REF_NAME:?CI_COMMIT_REF_NAME is required}"
 : "${CI_COMMIT_SHA:?CI_COMMIT_SHA is required}"
 
 branch_sha() {
@@ -33,9 +34,10 @@ branch_sha() {
       '
 }
 
-latest_app_sha="$(branch_sha "$CI_PROJECT_PATH" "$CI_DEFAULT_BRANCH")"
+deploy_ref="${DEPLOY_REF:-$CI_DEFAULT_BRANCH}"
+latest_app_sha="$(branch_sha "$CI_PROJECT_PATH" "$deploy_ref")"
 if [[ "$latest_app_sha" != "$CI_COMMIT_SHA" ]]; then
-  echo "Refusing stale app deployment: candidate is not current default branch HEAD" >&2
+  echo "Refusing stale app deployment: candidate is not current ${deploy_ref} HEAD" >&2
   exit 1
 fi
 
@@ -49,5 +51,5 @@ if [[ -n "${CONTENT_SHA:-}" ]]; then
   fi
 fi
 
-printf 'deployment candidate is current: app=%s content=%s\n' \
-  "$CI_COMMIT_SHA" "${CONTENT_SHA:-content-source.lock.json}"
+printf 'deployment candidate is current: app=%s ref=%s content=%s\n' \
+  "$CI_COMMIT_SHA" "$deploy_ref" "${CONTENT_SHA:-content-source.lock.json}"

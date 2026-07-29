@@ -50,9 +50,12 @@ CONTENT_SUBDIR=Blog
 ## Data and Artifact Flow
 
 - `prepare-content` 生成 `.build/content`、`content-manifest.json` 和 diagnostics。
-- 后续 job 使用 GitLab artifacts，不重复 clone 默认分支。
+- 后续 job 从 Generic Package Registry 下载当前 Pipeline 的不可变内容包，不重复
+  clone 默认分支。
 - `build` 合成 `dist` 和 `build-manifest.json`。
-- deployment 只消费 build job artifact。
+- deployment 只消费 build job 上传且通过 SHA-256 sidecar 校验的 release 包。
+- content/release 包版本为 `CI_PIPELINE_ID-CI_COMMIT_SHA`；测试和部署证据包额外
+  加入 `CI_JOB_ID`，避免 retry 与旧证据发生不可变校验冲突。
 
 ## Decisions
 
@@ -68,13 +71,18 @@ CONTENT_SUBDIR=Blog
 
 每个 Pipeline 从空目录开始，删除和重命名语义准确，Runner 可横向迁移。
 
-### 4. Artifact 在阶段间传递
+### 4. Generic Package 在阶段间传递
 
-避免每个 job 重新解析内容仓库，保证 verify/build/deploy 使用同一准备结果。
+避免每个 job 重新解析内容仓库，规避 Job Artifacts 服务故障，并保证
+verify/build/deploy 使用同一准备结果。
 
 ### 5. 生产 deployment 串行化
 
-使用 `resource_group: astro-blog-production`。可配置旧 Pipeline 自动取消，但已经进入不可取消发布步骤的 job 必须通过 resource group 排队。
+内容触发 job 使用 `resource_group: astro-blog-content-publish` 且
+`strategy: mirror`；应用 staging 与 production 分别使用独立 resource group。
+验证阶段可中断，已经进入不可中断发布步骤的 job 必须排队。部署前 freshness
+check 同时校验当前 app ref 和 content ref，旧 Pipeline 即使排到队首也会拒绝
+发布。
 
 ## Alternatives Considered
 
@@ -88,7 +96,8 @@ CONTENT_SUBDIR=Blog
 - Job Token 无权限 → prepare 阶段快速失败并提供 allowlist 诊断。
 - commit 被浅克隆遗漏 → fetch 指定 SHA，校验 checkout HEAD。
 - 上游重复触发 → pipeline interruptible + production resource group。
-- artifact 被后续 job 混用 → needs 精确依赖当前 pipeline artifact。
+- package 被后续 job 混用 → 包版本包含 Pipeline ID 与 app SHA，下载后校验
+  SHA-256 sidecar。
 - 本地路径误入配置 → CI grep/path policy。
 
 ## Security and Integrity

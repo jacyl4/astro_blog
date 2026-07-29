@@ -16,7 +16,8 @@
 - `jacyl4/obsidian-digital` 只负责验证 `Blog/` 并触发 Astro Blog 的下游 Pipeline。
 - 上游传递不可变 `CONTENT_SHA` 和内容项目路径。
 - Astro Pipeline 在临时工作区精确拉取该 commit。
-- Content Compiler 输出作为 Pipeline artifact 传递，源码目录保持只读。
+- Content Compiler 输出通过带 SHA-256 sidecar 的不可变 Generic Package
+  传递，源码目录保持只读，且不依赖 GitLab Job Artifacts 服务。
 - Build manifest 同时记录 app SHA 和 content SHA。
 - 生产部署使用 `resource_group` 串行化，旧 Pipeline 不得覆盖新版本。
 - 本地开发通过显式 `CONTENT_SOURCE_PATH` 或固定测试 fixture 使用相同编译入口。
@@ -39,7 +40,7 @@
 
 - 两个 GitLab 项目的 Pipeline 合同。
 - CI_JOB_TOKEN allowlist 或只读 Deploy Token 兜底。
-- 临时工作区、artifact、manifest 和串行部署。
+- 临时工作区、Generic Package、manifest 和串行部署。
 - 旧同步任务的观察期和下线。
 
 ### Out of Scope

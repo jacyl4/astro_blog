@@ -11,6 +11,16 @@
 - **WHEN** 任一关键 URL、404、资产或 manifest 检查失败
 - **THEN** production job 不允许继续
 
+#### Scenario: 功能分支需要真实候选验证
+- **WHEN** 非默认分支通过 build 与 browser 门禁
+- **THEN** Pipeline 提供显式 manual staging job，按该分支 HEAD 校验 freshness，
+  且不创建 production job
+
+#### Scenario: staging 部署成功
+- **WHEN** 候选发布到 staging 自定义域名
+- **THEN** 系统对真实域名执行全路由、404、trailing slash、PWA、桌面/移动
+  生命周期和性能检查，并将证据写入 Generic Package Registry
+
 ### Requirement: 每次生产发布可识别
 系统 SHALL 记录 Cloudflare deployment/version 标识、GitLab Pipeline、app SHA、content SHA 和 manifest hash。
 

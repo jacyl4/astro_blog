@@ -26,11 +26,19 @@ bash tools/ci/prepare-content.sh
 npm run verify:full
 ```
 
-构建必须只发生一次。staging 与 production 必须下载同一个 `dist/` artifact，
-不得重新构建。核验 `.build/manifests/build.json` 中的 app SHA、content SHA、
-lockfile、route 和 asset hash。
+构建必须只发生一次。staging 与 production 必须下载同一个带 SHA-256 sidecar
+的 Generic release package，不得重新构建。核验 `.build/manifests/build.json`
+中的 app SHA、content SHA、lockfile、route 和 asset hash。
+
+内容和 release 包使用 `CI_PIPELINE_ID-CI_COMMIT_SHA`；unit/browser/staging/
+production evidence 使用 `CI_PIPELINE_ID-CI_COMMIT_SHA-CI_JOB_ID`，使 job retry
+保留独立不可变证据。
 
 ## Staging
+
+默认分支在完整门禁后自动部署 staging；其他分支只提供 manual staging，按
+`CI_COMMIT_REF_NAME` 检查候选仍是该分支 HEAD。staging 使用
+`resource_group: astro-blog-staging`，不得并发覆盖。
 
 1. 对配置执行 Wrangler dry-run，确认没有 Worker entrypoint、D1、KV、R2、
    Service Binding 或其他动态 binding。
@@ -41,10 +49,12 @@ lockfile、route 和 asset hash。
 6. 保存 deployment/version ID、HTTP 结果和浏览器 trace。
 7. staging 保留 100% invocation log/trace 采样；确认记录仅含静态请求元数据，
    不含 token、Cookie、请求体或文章正文。
+8. 设置 `PLAYWRIGHT_BASE_URL=https://blog-staging.seso.icu` 对真实域名执行完整
+   browser/PWA/responsive suite，并上传 staging evidence package。
 
 ## Production
 
-1. 人工核对 staging 的 build manifest 与待发布 artifact 完全一致。
+1. 人工核对 staging 的 build manifest 与待发布 release package 完全一致。
 2. 记录切换前 Pages deployment、DNS/route 和可回滚版本 ID。
 3. 在低流量窗口执行受保护的 production job。
 4. 域名切换后立即执行首页、文章、分类、标签、归档、about、404 和全路由 sweep。

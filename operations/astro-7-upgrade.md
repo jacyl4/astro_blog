@@ -103,15 +103,15 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
 | --- | --- |
 | strict content compile | 11 articles，0 warning，0 error |
 | Astro check | 84 files，0 error/warning/hint |
-| unit | 7 files，30 tests passed |
+| unit | 8 files，32 tests passed |
 | route | 86 → 86，无增删 |
 | `<main>` | 85 个公开页面 rendered text 相同；1 个精确 hash 的 Shiki token 差异 |
 | asset | 92 release assets；178 dist files；6.83 MiB，预算内 |
 | PWA | 155 precache entries；Worker 接管与离线首页 Playwright 通过 |
-| browser | 9 tests passed；Swup 20 次导航无 listener/observer 增长 |
+| browser | 11 tests passed；Swup 20 次导航无 listener/observer 增长；桌面/移动响应式抽样通过 |
 | comments | 源码与 dist 零运行时残留，动态 API 路径均为 404 |
 | Cloudflare | staging/production assets-only dry-run 均通过，0 bindings |
-| OpenSpec | 8 changes strict validation passed；75 scenarios evidence matrix current |
+| OpenSpec | 8 changes strict validation passed；79 scenarios evidence matrix current |
 | audit | 17 high，0 critical/moderate/low |
 | `build:prepared` | Astro reported 2.24s；wall 12.621s（单次 warm-cache） |
 

@@ -5,7 +5,8 @@
 ## ADDED Requirements
 
 ### Requirement: 发布记录双提交身份
-系统 SHALL 在 build manifest 和 GitLab artifact 中记录 `applicationCommit` 与 `contentCommit`。
+系统 SHALL 在 build manifest 和 GitLab Generic Package 中记录
+`applicationCommit` 与 `contentCommit`。
 
 #### Scenario: 生产发布成功
 - **WHEN** 候选版本部署到生产
@@ -17,6 +18,18 @@
 #### Scenario: 两个内容提交快速连续触发
 - **WHEN** 两个 Pipeline 都到达 production job
 - **THEN** production resource group 按确定顺序串行执行，旧版本不会在新版本之后意外覆盖
+
+#### Scenario: 旧 Pipeline 排队后内容分支继续前进
+- **WHEN** 旧候选获得 deployment resource group
+- **THEN** freshness check 比较 app/content ref HEAD，并拒绝不再最新的候选
+
+### Requirement: 阶段传递不依赖 Job Artifacts
+系统 MUST 通过不可变 Generic Package 和 SHA-256 sidecar 传递内容、release
+与 evidence，不得要求 GitLab Job Artifacts 服务可用。
+
+#### Scenario: 同一证据 job 被 retry
+- **WHEN** retry 产生新的 `CI_JOB_ID`
+- **THEN** 新证据写入独立不可变版本，且不会覆盖或冲突于上一次尝试
 
 ### Requirement: 失败 Pipeline 不改变生产
 系统 SHALL 在内容验证、测试、构建或 staging 检查失败时停止在生产部署之前。

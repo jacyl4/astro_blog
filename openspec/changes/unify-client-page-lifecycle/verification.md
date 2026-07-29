@@ -4,13 +4,14 @@
 
 | Requirement / risk | Method | Command or procedure | Expected result | Evidence path | Status |
 |---|---|---|---|---|---|
-| mount 一次 | Integration | 触发首次加载/切页事件 | 每 generation 每 controller 一次 | unit/integration report | Planned |
-| destroy 清理 | Unit | mock listener/observer/timer | 全部释放且可幂等调用 | test report | Planned |
-| 直接/切页一致 | Browser | direct URL 与站内点击 | 导航、TOC、脚注一致 | screenshots/trace | Planned |
-| history 一致 | Browser | 前进/后退 | 状态正确 | Playwright trace | Planned |
-| 无增长泄漏 | Browser | 连续导航 20 次 | counters/requests 有界 | lifecycle report | Planned |
-| 取消旧请求 | Browser | 慢请求时快速切页 | 旧请求 aborted 且不改新 DOM | network trace | Planned |
-| resize 无请求 | Browser | 连续 resize | 数据请求数量不变 | network trace | Planned |
+| mount 一次 | Integration | 触发首次加载/切页事件 | 每 generation 每 controller 一次 | unit/integration report | Passed |
+| destroy 清理 | Unit | mock listener/observer/timer | 全部释放且可幂等调用 | test report | Passed |
+| 直接/切页一致 | Browser | direct URL 与站内点击 | 导航、TOC、脚注一致 | screenshots/trace | Passed locally |
+| history 一致 | Browser | 前进/后退 | 状态正确 | Playwright trace | Passed locally |
+| 无增长泄漏 | Browser | 连续导航 20 次 | counters/requests 有界 | lifecycle report | Passed locally |
+| 取消旧请求 | Unit/Browser | destroy 期间 Promise 完成 | 旧结果不改新 DOM | test/trace | Passed; controllers have no page fetch |
+| resize 无请求 | Browser | 连续 resize | 数据请求数量不变 | network trace | Passed locally |
+| 响应式抽样 | Browser | 1440×1000 与 390×844 | 导航可达、无横向溢出、文章切页成功 | screenshots/trace | Passed locally |
 
 ## Blocking Checks
 
@@ -26,7 +27,10 @@
 
 ## Actual Results
 
-填写浏览器版本、导航次数、请求数、debug counters、trace 链接和已知异常。
+- Chromium：20 次 Swup 导航后 signal listener 与 IntersectionObserver 计数不增长
+- history、keyboard、resize、评论零请求和 PWA 离线场景通过
+- 桌面与移动响应式证据由 `responsive.spec.ts` 生成
+- staging debug snapshot、真实域名桌面/移动抽样及 production 错误观察仍未完成
 
 ## Exceptions
 

@@ -13,14 +13,22 @@
 5. 只有满足 `program/09-definition-of-done.md` 的 change 才归档；
 6. 三次内容发布、七天 Pages 保留和两周 CI 观察等时间门不得提前伪造。
 
-## 2. 当前事实
+## 2. 当前事实（2026-07-29 19:30 CST）
 
 - production 已由 Cloudflare Static Assets Worker `astro-blog` 提供。
 - Pipeline `#407` 已完成 prepare、verify、build、browser、staging 和 production。
 - GitLab Job Artifacts 的 UID/GID 漂移已在 2026-07-28 修复，并以 Job `#644`
   的上传 `201`、下载 `200` 验证。
-- 当前依赖实际锁定在 Astro 5；Astro 7 change 的 16 项任务尚未开始。
-- 八个 change 共 265 项任务，193 项已登记完成，72 项仍未登记完成。
+- 候选分支 `refactor/complete-astro-blog-openspec` 已升级到 Astro `7.1.5`；
+  当前候选通过 32 个 unit、11 个 browser、86 条 route、PWA 离线、19 项 CI
+  contract 和 OpenSpec strict validation。
+- 八个 change 在本轮补强前共 265 项任务，233 项已登记完成，32 项未完成；
+  未完成项主要是 staging、真实回滚、观察窗口、旧链路清理和归档。
+- 本轮将 feature staging、retry evidence 和 responsive sampling 拆成 5 个新任务，
+  并关闭 6 个已有/新增实现任务；当前为 239/270，31 项保持未完成。
+- 候选 Pipeline `#411` 已创建但停在 `prepare-content: pending`；唯一 Runner
+  `endure` 自 `2026-07-29T10:03:52Z` 后离线。Runner 恢复前不得把本地验证
+  误记为远端 CI 或 staging 证据。
 - `openspec validate --all --strict` 通过只证明工件结构有效，不证明施工完成。
 - `openspec/changes/archive/` 为空。
 
@@ -60,6 +68,20 @@
 - 使用 `wrangler deployments list` 获取候选版本，使用
   `wrangler rollback <VERSION_ID>` 在 staging 演练 N → N+1 → N；
 - Pages 回退入口在观察期结束前保留，停止自动部署与删除项目是两个独立动作。
+
+### 3.4 CI 证据与候选 staging
+
+- 阶段间传递使用 Generic Package Registry，不依赖 GitLab Job Artifacts；
+- content/release 包以 `pipeline ID + app SHA` 为不可变版本并携带 SHA-256
+  sidecar；
+- unit/browser/staging/production 证据额外包含 `job ID`，使 retry 产生新证据，
+  不覆盖先前尝试；
+- 默认分支通过完整门禁后自动发布 staging；其他分支只提供显式 manual staging，
+  并按该分支 HEAD 执行 freshness check；
+- staging 使用独立 `resource_group` 串行化，部署后对真实域名运行完整
+  Playwright、PWA、响应式视口、HTTP sweep 和性能采集；
+- production 继续限定默认分支、受保护 manual job 和独立 production
+  `resource_group`。
 
 官方依据：
 
@@ -106,6 +128,7 @@ npm run cf:dry-run -- --env staging
 2. 补齐删除文章、双 SHA、连续提交、逆序发布和绝对路径测试。
 3. 在 staging 执行 Worker 版本回滚演练。
 4. 验证 Pages 回退步骤，但观察期结束前不删除回退入口。
+5. 在功能分支 manual staging 先验证候选，不以合并默认分支换取 staging 证据。
 
 放行门：
 
@@ -147,6 +170,16 @@ npm run cf:dry-run -- --env staging
 - production 发布后的约定观察窗口。
 
 这些任务应记录开始时间、累计样本和最早可关闭时间，不能用单次 smoke 替代。
+
+## 5.1 基础设施门
+
+远端 Runner 属于执行前置条件，不属于应用验收豁免。Runner 离线时：
+
+1. 允许继续完成本地实现、测试和 OpenSpec 工件；
+2. 允许推送功能分支并保留 pending Pipeline；
+3. 不得勾选任何要求 GitLab job、staging、Cloudflare rollback 或 production
+   observation 的任务；
+4. Runner 恢复后必须由新提交触发新 Pipeline，不复用本地日志冒充 CI evidence。
 
 ## 6. 失败与停止条件
 

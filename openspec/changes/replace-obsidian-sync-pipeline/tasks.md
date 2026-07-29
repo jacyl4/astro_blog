@@ -11,7 +11,7 @@
 - [x] 2.2 添加只在 `Blog/**` 变化时运行的 rules
 - [x] 2.3 添加 downstream trigger 并传递 CONTENT_PROJECT_PATH 与 CONTENT_SHA
 - [x] 2.4 使用 `strategy: mirror` 传播下游状态
-- [ ] 2.5 在 Pipeline 页面输出目标下游链接和内容 SHA
+- [x] 2.5 在 Pipeline 页面输出目标下游链接和完整内容 SHA
 
 ## 3. Astro Prepare 阶段
 
@@ -35,7 +35,7 @@
 - [x] 5.1 创建 staging deployment job
 - [x] 5.2 创建受保护的 manual production job
 - [x] 5.3 配置 `resource_group: astro-blog-production`
-- [ ] 5.4 配置可中断的旧 Pipeline 策略，验证不会逆序发布
+- [x] 5.4 配置 trigger/staging/production resource group、可中断旧 Pipeline 和部署前 freshness 拒绝，并用自动测试验证陈旧候选失败
 - [x] 5.5 将 Cloudflare token 限制在 deployment jobs
 
 ## 6. 本地开发

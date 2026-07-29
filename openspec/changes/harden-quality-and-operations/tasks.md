@@ -21,6 +21,7 @@
 - [x] 3.3 执行全路由 HTTP sweep
 - [x] 3.4 执行 Wrangler dry-run 和 staging deploy
 - [x] 3.5 执行稳定的性能/网络 smoke 并保存 trace
+- [x] 3.6 将 staging/production evidence 按 job attempt 写入 Generic Package Registry，retry 不覆盖旧证据
 
 ## 4. 静态资产完整性
 

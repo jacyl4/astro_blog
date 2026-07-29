@@ -35,8 +35,8 @@ const mappings: Record<string, EvidenceMapping> = {
     evidence: '`tests/unit/release-manifest.test.ts`；`npm run routes:verify`',
   },
   'harden-quality-and-operations/specs/asset-performance-integrity/spec.md': {
-    status: '待验证',
-    evidence: '`npm run assets:verify`；`operations/performance-budget.md`（Wave B 补齐响应式资产）',
+    status: '已验证',
+    evidence: '`npm run assets:verify`；`tools/quality/fault-injection.sh`；`operations/performance-budget.md`',
   },
   'harden-quality-and-operations/specs/continuous-quality-gates/spec.md': {
     status: '待验证',
@@ -67,8 +67,8 @@ const mappings: Record<string, EvidenceMapping> = {
     evidence: '`tools/ci/prepare-content.sh`；Generic Package Registry 双 SHA 证据；删除文章演练',
   },
   'replace-obsidian-sync-pipeline/specs/portable-content-development/spec.md': {
-    status: '待验证',
-    evidence: '`operations/content-authoring.md`；机器专属绝对路径扫描',
+    status: '已验证',
+    evidence: '`operations/content-authoring.md`；`npm run paths:verify`；Content Compiler source-path tests',
   },
   'unify-client-page-lifecycle/specs/client-async-cancellation/spec.md': {
     status: '已验证',
@@ -79,8 +79,43 @@ const mappings: Record<string, EvidenceMapping> = {
     evidence: '`tests/browser/lifecycle.spec.ts`；`.build/evidence/lifecycle-event-order.json`',
   },
   'upgrade-astro-major/specs/astro-major-upgrade-safety/spec.md': {
-    status: '待验证',
-    evidence: '`openspec/changes/upgrade-astro-major/verification.md`；Astro 7 staging 全回归',
+    status: '已验证',
+    evidence: '`operations/astro-7-upgrade.md`；route/HTML/static/PWA/browser gates',
+  },
+};
+
+const scenarioMappings: Record<string, EvidenceMapping> = {
+  'harden-quality-and-operations/specs/continuous-quality-gates/spec.md#单元测试失败': {
+    status: '已验证',
+    evidence: '`tools/quality/fault-injection.sh`；CI DAG contract',
+  },
+  'harden-quality-and-operations/specs/continuous-quality-gates/spec.md#Playwright 生命周期检查失败': {
+    status: '已验证',
+    evidence: '`tools/quality/fault-injection.sh`；`.gitlab-ci.yml` browser → staging needs',
+  },
+  'harden-quality-and-operations/specs/continuous-quality-gates/spec.md#Spec scenario 缺失': {
+    status: '已验证',
+    evidence: '`npm run openspec:validate`；`npm run openspec:evidence:check`',
+  },
+  'harden-quality-and-operations/specs/operational-observability/spec.md#audit 报告含高危开发依赖': {
+    status: '已验证',
+    evidence: '`operations/dependency-risk-register.md`；Astro 7 npm audit baseline',
+  },
+  'replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md#旧 Pipeline 排队后内容分支继续前进': {
+    status: '已验证',
+    evidence: '`tests/unit/ci-contract.test.ts` freshness rejection；deployment resource groups',
+  },
+  'replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md#同一证据 job 被 retry': {
+    status: '已验证',
+    evidence: '`npm run ci:verify`；evidence package version includes `CI_JOB_ID`',
+  },
+  'replace-obsidian-sync-pipeline/specs/immutable-content-build-input/spec.md#CI 构建完成': {
+    status: '已验证',
+    evidence: '`tools/ci/prepare-content.sh`；source path read-only checks',
+  },
+  'replace-obsidian-sync-pipeline/specs/immutable-content-build-input/spec.md#一篇文章在内容提交中被删除': {
+    status: '已验证',
+    evidence: 'Content Compiler clean-output integration test；route manifest diff',
   },
 };
 
@@ -122,8 +157,9 @@ for (const file of await collectSpecFiles(root)) {
   const scenarios = [...contents.matchAll(/^#### Scenario: (.+)$/gm)].map((match) => match[1]);
   if (scenarios.length === 0) throw new Error(`No scenarios found in ${relative}`);
   for (const scenario of scenarios) {
+    const scenarioMapping = scenarioMappings[`${relative}#${scenario}`] ?? mapping;
     rows.push(
-      `| \`${escapeCell(relative)}\` | ${escapeCell(scenario)} | ${mapping.status} | ${mapping.evidence} |`,
+      `| \`${escapeCell(relative)}\` | ${escapeCell(scenario)} | ${scenarioMapping.status} | ${scenarioMapping.evidence} |`,
     );
   }
 }

@@ -14,6 +14,12 @@
   `tools/ci/verify-deploy-freshness.sh` 在 staging 前拒绝旧 Pipeline。
 - production 使用不可中断的 `astro-blog-production` resource group，且只消费
   已通过 build/browser/staging 的不可变 release package。
+- 内容 trigger 使用 `astro-blog-content-publish` resource group 和
+  `strategy: mirror`；内容 Pipeline 名称展示完整 content SHA 与目标项目。
+- staging 使用独立 `astro-blog-staging` resource group；非默认分支只能由
+  manual job 部署，且 production job 不会出现在功能分支 Pipeline。
+- unit/browser/staging/production evidence package 版本包含 `CI_JOB_ID`，
+  job retry 保留独立证据，不覆盖旧尝试。
 
 ## 2. 同 SHA 新旧链路比较
 
@@ -55,7 +61,12 @@ manifest hash 不同是预期结果：它包含不同的输入身份元数据；
 ## 5. 尚未关闭的真实门
 
 - 内容分支尚未合并到默认分支；默认分支仍运行旧 rsync/OAuth push job。
+- 内容候选分支最新 commit 为 `9b2240c1`，已推送
+  `refactor/astro-blog-openspec`；完整 SHA/目标项目和串行 mirrored trigger
+  已通过本地 YAML contract。
 - 必须在应用分支 CI 通过后再合并内容分支，避免 trigger 指向不兼容的 main。
-- 两次快速内容提交、下游桥接链接、旧 Pipeline 自动取消和最终部署顺序仍需在
-  GitLab 上演练。
+- 下游桥接链接由 GitLab trigger graph 原生提供；两次快速内容提交、旧 Pipeline
+  自动取消和最终部署顺序仍需在 GitLab 上演练。
 - 三次成功内容发布和七天受控回退窗口不得用本地测试替代。
+- GitLab Pipeline `#411` 因唯一 Runner `endure` 离线停在 pending；Runner
+  恢复后必须触发新候选 Pipeline 和一次功能分支 manual staging。

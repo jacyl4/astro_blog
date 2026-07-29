@@ -44,6 +44,8 @@ variables:
   RELEASE_PACKAGE_NAME: "astro-blog-release"
   UNIT_EVIDENCE_PACKAGE_NAME: "astro-blog-unit-evidence"
   BROWSER_EVIDENCE_PACKAGE_NAME: "astro-blog-browser-evidence"
+  STAGING_EVIDENCE_PACKAGE_NAME: "astro-blog-staging-evidence"
+  PRODUCTION_EVIDENCE_PACKAGE_NAME: "astro-blog-production-evidence"
 
 cache:
   &dependency-cache
@@ -93,7 +95,7 @@ verify:
       test_status=$?
       set -e
       tar -czf .build/unit-evidence.tar.gz -C .build evidence
-      bash tools/ci/package-artifact.sh upload "$UNIT_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/unit-evidence.tar.gz
+      bash tools/ci/package-artifact.sh upload "$UNIT_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}-${CI_JOB_ID}" .build/unit-evidence.tar.gz
       exit "$test_status"
     - npm run boundaries:verify
     - npm run paths:verify
@@ -155,7 +157,7 @@ build:
       test_status=$?
       set -e
       tar -czf .build/browser-evidence.tar.gz -C .build evidence
-      bash tools/ci/package-artifact.sh upload "$BROWSER_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/browser-evidence.tar.gz
+      bash tools/ci/package-artifact.sh upload "$BROWSER_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}-${CI_JOB_ID}" .build/browser-evidence.tar.gz
       exit "$test_status"
 
 browser:
@@ -179,16 +181,31 @@ browser:
 staging:
   extends: .deploy-base
   stage: deploy-staging
+  resource_group: astro-blog-staging
+  variables:
+    DEPLOY_REF: "$CI_COMMIT_REF_NAME"
   script:
     - bash tools/ci/verify-deploy-freshness.sh
     - npm run cf:dry-run -- --env staging
     - npm run cf:deploy:staging 2>&1 | tee .build/evidence/wrangler-staging.log
     - npm run http:sweep -- --base https://blog-staging.seso.icu --output .build/evidence/staging-http-sweep.json
+    - npx playwright install chromium
+    - PLAYWRIGHT_BASE_URL=https://blog-staging.seso.icu npm run test:staging
     - npm run performance:collect -- --url https://blog-staging.seso.icu --label staging
+  after_script:
+    - |
+      if [[ -d .build/evidence ]]; then
+        tar -czf .build/staging-evidence.tar.gz -C .build evidence
+        bash tools/ci/package-artifact.sh upload "$STAGING_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}-${CI_JOB_ID}" .build/staging-evidence.tar.gz
+      fi
   environment:
     name: staging
+    url: https://blog-staging.seso.icu
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH'
+      when: manual
+      allow_failure: true
 
 production:
   extends: .deploy-base
@@ -202,8 +219,15 @@ production:
     - npm run cf:deploy:production 2>&1 | tee .build/evidence/wrangler-production.log
     - npm run http:sweep -- --base https://blog.seso.icu --output .build/evidence/production-http-sweep.json
     - npm run performance:collect -- --url https://blog.seso.icu --label production
+  after_script:
+    - |
+      if [[ -d .build/evidence ]]; then
+        tar -czf .build/production-evidence.tar.gz -C .build evidence
+        bash tools/ci/package-artifact.sh upload "$PRODUCTION_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}-${CI_JOB_ID}" .build/production-evidence.tar.gz
+      fi
   environment:
     name: production
+    url: https://blog.seso.icu
   when: manual
   allow_failure: false
   rules:
