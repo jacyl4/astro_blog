@@ -47,7 +47,7 @@
 - [x] 6.2 统一 deployment/build manifest 字段
 - [x] 6.3 确认日志不含 secret 和私有内容
 - [x] 6.4 创建 production release evidence 模板
-- [ ] 6.5 在 staging 执行并记录一次完整回滚演练
+- [x] 6.5 在 staging 执行并记录一次完整回滚演练
 - [x] 6.6 将回滚演练加入季度或关键升级维护计划
 
 ## 7. 依赖治理

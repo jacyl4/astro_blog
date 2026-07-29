@@ -41,5 +41,5 @@
 - [x] 6.1 执行全部单测、Astro check 和 build
 - [x] 6.2 比较 route manifest、文章顺序和页面抽样 HTML
 - [x] 6.3 检查 bundle/构建时间没有显著退化
-- [ ] 6.4 执行 `/opsx:verify modularize-blog-domain`
-- [ ] 6.5 staging 通过后归档 change
+- [x] 6.4 执行 `/opsx:verify modularize-blog-domain`
+- [x] 6.5 staging 通过后归档 change

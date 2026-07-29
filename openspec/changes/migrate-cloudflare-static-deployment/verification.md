@@ -13,7 +13,7 @@
 | 桌面/移动 | Browser | responsive Playwright sampling | 导航可达、无横向溢出、文章切页成功 | screenshots/trace | Passed on staging |
 | 纯静态边界 | Config/HTTP | 扫描配置并请求任意 `/api/*` | 无 Worker entrypoint/binding，路径按静态 404 处理 | config/smoke report | Passed locally |
 | CI 发布契约 | Static/unit | `npm run ci:verify && npm run test:unit` | manual feature staging、默认分支 production、resource groups、freshness 成立 | log | Passed, 21 contract checks / 35 tests |
-| 回滚 | Staging rehearsal | 发布 N+1 后恢复 N | HTML/manifest/runtime identity 与 URL 恢复 | rollback evidence | Identity gate proved; final two identity-aware versions pending |
+| 回滚 | Staging rehearsal | N→N−1→N | HTML/manifest/runtime identity 与 URL 恢复 | rollback evidence | Passed between versions `05193450-…` and `cc7a9a1e-…` |
 
 ## Blocking Checks
 
@@ -30,14 +30,15 @@
 
 ## Actual Results
 
-- Pipeline `#421` / Job `#699` 将不可变 release 发布为
-  `cc7a9a1e-db98-4def-87d8-f83da17925e2`。
-- 身份探测在第 20～22 次才连续确认 HTML、manifest 与 runtime asset 同时指向
-  `aa62a371…`，证明门禁能够阻止传播窗口内的过早 smoke。
+- Pipeline `#423` / Job `#709` 将不可变 release 发布为
+  `05193450-0648-4e68-8850-93e46eb93419`。
+- 候选发布的身份探测在第 14～16 次连续确认 HTML、manifest 与 runtime asset
+  同时指向 `cd94bda9…`，证明门禁能够阻止传播窗口内的过早 smoke。
 - 收敛后 `86 + 3` HTTP sweep、Playwright `11/11`、PWA、桌面/移动和性能硬预算
   全部通过；证据见 `operations/staging-rollback-evidence-2026-07-29.md`。
-- 身份标记引入前的历史版本不能满足新门禁；最终回滚验收保持未完成，直到两个
-  身份完整版本间的 N→N−1→N 演练通过。
+- 随后执行 `05193450-… → cc7a9a1e-… → 05193450-…`：回退端在第 5～7 次、
+  恢复端在第 6～8 次连续收敛；两端 `86 + 3` 通过，恢复后 Playwright
+  `11/11` 通过。最终回滚验收完成。
 
 ## Exceptions
 

@@ -28,7 +28,9 @@
 - domain tests：6 passed
 - module boundary：36 source files passed
 - route/static：86 routes，HTML baseline 无未批准变化
-- staging 通过与 archive 尚未完成
+- Pipeline `#423` / Job `#709` 的真实 staging `86 + 3`、Playwright `11/11`
+  通过；`/opsx:verify` 等价的 strict validation、证据矩阵和全量回归通过，
+  可归档
 
 ## Exceptions
 

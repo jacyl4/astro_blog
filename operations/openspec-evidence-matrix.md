@@ -23,20 +23,6 @@
 | `build-obsidian-content-compiler/specs/obsidian-content-normalization/spec.md` | 带别名和标题 | 已验证 | `tests/unit/content-compiler.test.ts`；`npm run content:measure` |
 | `build-obsidian-content-compiler/specs/obsidian-content-normalization/spec.md` | NOTE callout | 已验证 | `tests/unit/content-compiler.test.ts`；`npm run content:measure` |
 | `build-obsidian-content-compiler/specs/obsidian-content-normalization/spec.md` | 重复编译 | 已验证 | `tests/unit/content-compiler.test.ts`；`npm run content:measure` |
-| `establish-refactor-baseline/specs/comments-decommission/spec.md` | 打开任意文章页面 | 已验证 | `tests/unit/comments-zero-residue.test.ts`；`npm run comments:verify-removed`；`tests/browser/routes-http.spec.ts` |
-| `establish-refactor-baseline/specs/comments-decommission/spec.md` | 首次加载文章 | 已验证 | `tests/unit/comments-zero-residue.test.ts`；`npm run comments:verify-removed`；`tests/browser/routes-http.spec.ts` |
-| `establish-refactor-baseline/specs/comments-decommission/spec.md` | 客户端连续切换文章 | 已验证 | `tests/unit/comments-zero-residue.test.ts`；`npm run comments:verify-removed`；`tests/browser/routes-http.spec.ts` |
-| `establish-refactor-baseline/specs/comments-decommission/spec.md` | 执行生产资源零残留核验 | 已验证 | `tests/unit/comments-zero-residue.test.ts`；`npm run comments:verify-removed`；`tests/browser/routes-http.spec.ts` |
-| `establish-refactor-baseline/specs/comments-decommission/spec.md` | 扫描当前架构与公共 API | 已验证 | `tests/unit/comments-zero-residue.test.ts`；`npm run comments:verify-removed`；`tests/browser/routes-http.spec.ts` |
-| `establish-refactor-baseline/specs/release-baseline/spec.md` | CI 构建具有双提交信息 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run manifest:build`；`.gitlab-ci.yml` |
-| `establish-refactor-baseline/specs/release-baseline/spec.md` | 本地构建缺少 CI 变量 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run manifest:build`；`.gitlab-ci.yml` |
-| `establish-refactor-baseline/specs/release-baseline/spec.md` | lockfile 一致 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run manifest:build`；`.gitlab-ci.yml` |
-| `establish-refactor-baseline/specs/release-baseline/spec.md` | lockfile 漂移 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run manifest:build`；`.gitlab-ci.yml` |
-| `establish-refactor-baseline/specs/release-baseline/spec.md` | 构建成功 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run manifest:build`；`.gitlab-ci.yml` |
-| `establish-refactor-baseline/specs/url-stability/spec.md` | 新增文章路由 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run routes:verify` |
-| `establish-refactor-baseline/specs/url-stability/spec.md` | 既有文章 URL 消失 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run routes:verify` |
-| `establish-refactor-baseline/specs/url-stability/spec.md` | 已批准的 URL 迁移 | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run routes:verify` |
-| `establish-refactor-baseline/specs/url-stability/spec.md` | 两篇文章使用相同 slug | 已验证 | `tests/unit/release-manifest.test.ts`；`npm run routes:verify` |
 | `harden-quality-and-operations/specs/asset-performance-integrity/spec.md` | 图标为零字节 | 已验证 | `npm run assets:verify`；`tools/quality/fault-injection.sh`；`operations/performance-budget.md` |
 | `harden-quality-and-operations/specs/asset-performance-integrity/spec.md` | preload 目标不存在 | 已验证 | `npm run assets:verify`；`tools/quality/fault-injection.sh`；`operations/performance-budget.md` |
 | `harden-quality-and-operations/specs/asset-performance-integrity/spec.md` | 字体包超过预算 | 已验证 | `npm run assets:verify`；`tools/quality/fault-injection.sh`；`operations/performance-budget.md` |
@@ -47,23 +33,19 @@
 | `harden-quality-and-operations/specs/continuous-quality-gates/spec.md` | 生产回归调查 | 待验证 | `.gitlab-ci.yml`；JUnit/Playwright trace；本矩阵的 `npm run openspec:evidence:check` |
 | `harden-quality-and-operations/specs/operational-observability/spec.md` | 查询线上版本 | 已验证 | `operations/staging-rollback-evidence-2026-07-29.md`；公开 build manifest；Wrangler version |
 | `harden-quality-and-operations/specs/operational-observability/spec.md` | 生产部署完成 | 已验证 | Pipeline `#407` production release evidence；公开 production build manifest |
-| `harden-quality-and-operations/specs/operational-observability/spec.md` | 回滚演练 | 待验证 | `wrangler.jsonc` observability；release evidence；staging 回滚记录 |
+| `harden-quality-and-operations/specs/operational-observability/spec.md` | 回滚演练 | 已验证 | `wrangler.jsonc` observability；release evidence；`operations/staging-rollback-evidence-2026-07-29.md` |
 | `harden-quality-and-operations/specs/operational-observability/spec.md` | audit 报告含高危开发依赖 | 已验证 | `operations/dependency-risk-register.md`；Astro 7 npm audit baseline |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging smoke 失败 | 已验证 | Pipeline `#419` staging smoke 阻断；production job 不可达 |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 功能分支需要真实候选验证 | 已验证 | Pipeline `#421` / Job `#699`；`operations/staging-rollback-evidence-2026-07-29.md` |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging 部署成功 | 已验证 | Pipeline `#421` / Job `#699`；`86 + 3` HTTP sweep；Playwright `11/11` |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 功能分支需要真实候选验证 | 已验证 | Pipeline `#423` / Job `#709`；`operations/staging-rollback-evidence-2026-07-29.md` |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging 部署成功 | 已验证 | Pipeline `#423` / Job `#709`；`86 + 3` HTTP sweep；Playwright `11/11` |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 发布完成 | 已验证 | 三方 deployment identity 收敛；Generic Package staging evidence |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 新版本路由异常 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | Worker 回滚不可用 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 新版本路由异常 | 已验证 | `05193450-… → cc7a9a1e-… → 05193450-…`；两端 `86 + 3` HTTP sweep；恢复后 Playwright `11/11` |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | Worker 回滚不可用 | 待验证 | `operations/rollback-runbook.md`；Worker version rollback 已验证；Pages 平台级回退待演练 |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | CI 部署 | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | production job 开始 | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | 请求既有文章 URL | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | 请求不存在路径 | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | 访问任意 API 路径 | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |
-| `modularize-blog-domain/specs/blog-module-boundary/spec.md` | 页面只依赖公共入口 | 已验证 | `tests/unit/blog-domain.test.ts`；`npm run boundaries:verify`；`src/modules/blog/README.md` |
-| `modularize-blog-domain/specs/blog-module-boundary/spec.md` | 领域测试脱离 Astro 运行 | 已验证 | `tests/unit/blog-domain.test.ts`；`npm run boundaries:verify`；`src/modules/blog/README.md` |
-| `modularize-blog-domain/specs/blog-module-boundary/spec.md` | 框架访问边界唯一 | 已验证 | `tests/unit/blog-domain.test.ts`；`npm run boundaries:verify`；`src/modules/blog/README.md` |
-| `modularize-blog-domain/specs/blog-module-boundary/spec.md` | 新旧实现特征对比 | 已验证 | `tests/unit/blog-domain.test.ts`；`npm run boundaries:verify`；`src/modules/blog/README.md` |
 | `replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md` | 生产发布成功 | 待验证 | `tools/ci/prepare-content.sh`；双仓连续提交和失败传播演练 |
 | `replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md` | 两个内容提交快速连续触发 | 待验证 | `tools/ci/prepare-content.sh`；双仓连续提交和失败传播演练 |
 | `replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md` | 旧 Pipeline 排队后内容分支继续前进 | 已验证 | `tests/unit/ci-contract.test.ts` freshness rejection；deployment resource groups |

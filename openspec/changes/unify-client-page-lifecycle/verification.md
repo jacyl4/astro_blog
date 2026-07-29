@@ -30,7 +30,7 @@
 - Chromium：20 次 Swup 导航后 signal listener 与 IntersectionObserver 计数不增长
 - history、keyboard、resize、评论零请求和 PWA 离线场景通过
 - 桌面与移动响应式证据由 `responsive.spec.ts` 生成
-- Pipeline `#421` / Job `#699` 在真实 staging 域名通过 Playwright `11/11`；
+- Pipeline `#423` / Job `#709` 在真实 staging 域名通过 Playwright `11/11`；
   包括 debug snapshot、20 次导航、history、resize、PWA 和桌面/移动抽样
 - production 错误观察仍未完成
 

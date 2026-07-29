@@ -11,11 +11,11 @@
 
 ## Actual Results
 
-- Pipeline `#421` 的 Astro 7 候选在 staging 通过 `86 + 3` HTTP sweep、
+- Pipeline `#423` 的 Astro 7 候选在 staging 通过 `86 + 3` HTTP sweep、
   Playwright `11/11`、PWA 离线和桌面/移动抽样。
-- staging version：`cc7a9a1e-db98-4def-87d8-f83da17925e2`；应用/内容 SHA
-  分别为 `aa62a371…` / `c925ad44…`。
-- 版本传播需要 22 次探测才连续三次收敛，因此 smoke 现在由 HTML、manifest 和
-  runtime asset 三方身份门禁保护。
-- 升级前的最近历史版本缺少 HTML 身份标记，不作为新契约的最终回滚验收目标；
-  两个身份完整版本间的回滚仍待下一候选完成。
+- staging version：`05193450-0648-4e68-8850-93e46eb93419`；应用/内容 SHA
+  分别为 `cd94bda9…` / `c925ad44…`。
+- smoke 由 HTML、manifest 和 runtime asset 三方身份门禁保护；候选发布在第
+  14～16 次探测连续收敛。
+- 两个 Astro 7 身份完整版本间的 N→N−1→N 演练通过：回退端第 5～7 次、
+  恢复端第 6～8 次连续收敛，两端路由和恢复后的浏览器回归均通过。

@@ -72,17 +72,19 @@ manifest hash 不同是预期结果：它包含不同的输入身份元数据；
 
 ## 6. 功能分支候选实证
 
-- 应用 commit：`aa62a37100d1bd60bded83d710c0adabc050c6d5`
+- 应用 commit：`cd94bda91d33e3f0fe8973d9452cb6a9174f4d05`
 - 内容 commit：`c925ad442b8389376728e792c4a8dc31bf365227`
-- GitLab Pipeline：`#421`
-- prepare / verify / build / browser：Jobs `#695` / `#696` / `#697` / `#698`
-- manual staging：Job `#699`，成功
-- Cloudflare staging version：`cc7a9a1e-db98-4def-87d8-f83da17925e2`
+- GitLab Pipeline：`#423`
+- prepare / verify / build / browser：Jobs `#705` / `#706` / `#707` / `#708`
+- manual staging：Job `#709`，成功
+- Cloudflare staging version：`05193450-0648-4e68-8850-93e46eb93419`
 - staging evidence package：
-  `astro-blog-staging-evidence/421-aa62a37100d1bd60bded83d710c0adabc050c6d5-699/staging-evidence.tar.gz`
-- 发布后身份探测先观察到 19 次旧 HTML，第 20～22 次才连续三次确认 HTML、
-  manifest 和 runtime asset 一致；门禁在收敛前没有运行 smoke。
+  `astro-blog-staging-evidence/423-cd94bda91d33e3f0fe8973d9452cb6a9174f4d05-709/staging-evidence.tar.gz`
+- 发布后身份探测在第 14～16 次连续确认 HTML、manifest 和 runtime asset
+  一致；门禁在收敛前没有运行 smoke。
 - 收敛后全路由 `86 + 3`、Playwright `11/11` 和性能硬预算通过。
+- staging 随后在 `05193450-… → cc7a9a1e-… → 05193450-…` 间完成真实
+  N→N−1→N；两端 `86 + 3` 通过，恢复后 Playwright `11/11` 通过。
 
 该候选证明 Runner 和 Generic Package 链路已经恢复；剩余门是内容仓真实 mirrored
 trigger 的连续提交/失败传播演练，以及默认分支合并顺序，不再是 Runner 可用性。

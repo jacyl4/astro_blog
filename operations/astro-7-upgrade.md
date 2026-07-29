@@ -108,7 +108,7 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
 | 检查 | 结果 |
 | --- | --- |
 | strict content compile | 11 articles，0 warning，0 error |
-| Astro check | 90 files，0 error/warning/hint |
+| Astro check | 91 files，0 error/warning/hint |
 | unit | 9 files，35 tests passed |
 | route | 86 → 86，无增删 |
 | `<main>` | 85 个公开页面 rendered text 相同；1 个精确 hash 的 Shiki token 差异 |
@@ -117,9 +117,10 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
 | browser | 11 tests passed；Swup 20 次导航无 listener/observer 增长；桌面/移动响应式抽样通过 |
 | comments | 源码与 dist 零运行时残留，动态 API 路径均为 404 |
 | Cloudflare | staging/production assets-only dry-run 均通过，0 bindings |
-| OpenSpec | 8 changes strict validation passed；79 scenarios evidence matrix current |
+| OpenSpec | 6 active changes + 2 archived changes strict validation passed；61 active scenarios evidence matrix current |
 | audit | 17 high，0 critical/moderate/low |
 | `build:prepared` | Astro reported 2.24s；wall 12.621s（单次 warm-cache） |
 
-以上是本地候选证据；`staging` 发布、真实 version rollback、production
-观察窗口仍是远端放行门，未以本地结果替代。
+以上本地候选证据已由 Pipeline `#423` / Job `#709` 的真实 staging 与
+`05193450-… → cc7a9a1e-… → 05193450-…` version rollback 复核。production
+发布和观察窗口仍是远端放行门，未以 staging 结果替代。

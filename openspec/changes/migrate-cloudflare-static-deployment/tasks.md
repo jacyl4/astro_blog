@@ -45,7 +45,7 @@
 
 ## 6. 回滚演练与清理
 
-- [ ] 6.1 在 staging 演练 Wrangler 上一版本回滚
+- [x] 6.1 在 staging 演练 Wrangler 上一版本回滚
 - [x] 6.2 记录 production 回滚命令和版本 ID 获取方法
 - [ ] 6.3 验证将域名恢复到 Pages 的应急步骤
 - [ ] 6.4 观察期结束后停止 Pages 自动部署

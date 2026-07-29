@@ -4,7 +4,7 @@
 
 ## 1. 目标
 
-将当前八个活动 change 从“核心实现已上线、部分任务未登记或未完成”推进到：
+将最初八个活动 change 从“核心实现已上线、部分任务未登记或未完成”推进到：
 
 1. 每项 requirement 都能定位到自动测试或人工证据；
 2. 所有非观察期任务完成并通过严格验证；
@@ -13,7 +13,7 @@
 5. 只有满足 `program/09-definition-of-done.md` 的 change 才归档；
 6. 三次内容发布、七天 Pages 保留和两周 CI 观察等时间门不得提前伪造。
 
-## 2. 当前事实（2026-07-29 23:10 CST）
+## 2. 当前事实（2026-07-30 00:06 CST）
 
 - production 已由 Cloudflare Static Assets Worker `astro-blog` 提供。
 - Pipeline `#407` 已完成 prepare、verify、build、browser、staging 和 production。
@@ -25,18 +25,25 @@
 - 八个 change 在本轮补强前共 265 项任务，233 项已登记完成，32 项未完成；
   未完成项主要是 staging、真实回滚、观察窗口、旧链路清理和归档。
 - 本轮将 feature staging、retry evidence 和 responsive sampling 拆成 5 个新任务，
-  并已关闭 10 个已有/新增实现或 staging 任务；当前为 243/270，27 项保持未完成。
-- Runner `endure` 已恢复。候选 Pipeline `#421` 的 Jobs `#695`～`#698`
-  全部成功，功能分支 manual staging Job `#699` 成功。
-- staging version 为 `cc7a9a1e-db98-4def-87d8-f83da17925e2`；证据包为
-  `astro-blog-staging-evidence/421-aa62a37100d1bd60bded83d710c0adabc050c6d5-699/staging-evidence.tar.gz`。
-- 发布身份门禁在前 19 次探测拒绝旧 HTML，第 20～22 次才连续确认 HTML、
-  build manifest 与 runtime asset 一致；之后 `86 + 3`、Playwright `11/11`
-  和性能硬预算通过。
-- 直接回滚到身份门禁引入前的 `473f51b0-…` 被新门禁正确拒绝，且 staging 已
-  自动恢复到 `cc7a9a1e-…`。最终演练必须使用两个身份完整版本，不能降低门禁。
+  并已关闭 17 个已有/新增实现、staging、回滚和归档任务；累计为
+  **250/270**，20 项保持未完成。
+- `establish-refactor-baseline` 与 `modularize-blog-domain` 已完成全部任务并归档；
+  当前为 6 个活动 change（187/207）和 2 个归档 change（63/63）。
+- Runner `endure` 已恢复。当前候选 Pipeline `#423` 的 Jobs `#705`～`#708`
+  全部成功，功能分支 manual staging Job `#709` 成功。
+- staging version 为 `05193450-0648-4e68-8850-93e46eb93419`；证据包为
+  `astro-blog-staging-evidence/423-cd94bda91d33e3f0fe8973d9452cb6a9174f4d05-709/staging-evidence.tar.gz`。
+- Pipeline `#422` 被 HTML 确定性门禁阻断；根因是 Astro/Shiki `4.3.1` 与未使用
+  的直接 `@shikijs/themes@3.23.0` 形成双主版本。删除直接依赖并增加依赖契约后，
+  Pipeline `#423` build 通过，没有把漂移加入 allowlist。
+- 当前候选发布在第 14～16 次探测连续确认 HTML、build manifest 与 runtime
+  asset 一致；之后 `86 + 3`、Playwright `11/11` 和性能硬预算通过。
+- 已在两个身份完整版本间完成
+  `05193450-… → cc7a9a1e-… → 05193450-…`：两次身份收敛、两次 `86 + 3`
+  以及恢复后的 Playwright `11/11` 全部通过。
 - `openspec validate --all --strict` 通过只证明工件结构有效，不证明施工完成。
-- `openspec/changes/archive/` 为空。
+- canonical specs 已由归档写入 `openspec/specs/`；活动 scenario evidence matrix
+  当前为 61 项。
 
 ## 3. 决策
 
@@ -44,8 +51,8 @@
 
 采用“现有 change 就地对账和收口”，不新建重复的总括 change：
 
-- 实现细节仍由八个现有 change 的 `tasks.md`、`verification.md` 和 `rollout.md`
-  负责；
+- 实现细节仍由各活动 change 的 `tasks.md`、`verification.md` 和 `rollout.md`
+  负责；归档 change 只保留为不可变施工记录；
 - 本文件只规定跨 change 顺序、共同门禁和时间门；
 - 已完成但未登记的任务必须先找到当前证据，再勾选；
 - 缺少证据的任务即使功能看似存在，也保持未完成。
@@ -189,8 +196,8 @@ npm run cf:dry-run -- --env staging
    observation 的任务；
 4. Runner 恢复后必须由新提交触发新 Pipeline，不复用本地日志冒充 CI evidence。
 
-2026-07-29 已按上述规则由新提交触发 Pipeline `#421` 并完成真实 staging；
-该基础设施门现已关闭。
+2026-07-29 已按上述规则由新提交触发 Pipeline `#421`，并由 Pipeline `#423`
+完成当前候选的真实 staging 与后续双向回滚；该基础设施门现已关闭。
 
 ## 6. 失败与停止条件
 

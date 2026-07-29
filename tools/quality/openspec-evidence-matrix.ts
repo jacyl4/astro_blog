@@ -43,12 +43,12 @@ const mappings: Record<string, EvidenceMapping> = {
     evidence: '`.gitlab-ci.yml`；JUnit/Playwright trace；本矩阵的 `npm run openspec:evidence:check`',
   },
   'harden-quality-and-operations/specs/operational-observability/spec.md': {
-    status: '待验证',
-    evidence: '`wrangler.jsonc` observability；release evidence；staging 回滚记录',
+    status: '已验证',
+    evidence: '`wrangler.jsonc` observability；release evidence；`operations/staging-rollback-evidence-2026-07-29.md`',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md': {
     status: '待验证',
-    evidence: '`operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据',
+    evidence: '`operations/rollback-runbook.md`；Worker version rollback 已验证；Pages 平台级回退待演练',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md': {
     status: '已验证',
@@ -115,15 +115,19 @@ const scenarioMappings: Record<string, EvidenceMapping> = {
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#功能分支需要真实候选验证': {
     status: '已验证',
-    evidence: 'Pipeline `#421` / Job `#699`；`operations/staging-rollback-evidence-2026-07-29.md`',
+    evidence: 'Pipeline `#423` / Job `#709`；`operations/staging-rollback-evidence-2026-07-29.md`',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#staging 部署成功': {
     status: '已验证',
-    evidence: 'Pipeline `#421` / Job `#699`；`86 + 3` HTTP sweep；Playwright `11/11`',
+    evidence: 'Pipeline `#423` / Job `#709`；`86 + 3` HTTP sweep；Playwright `11/11`',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#发布完成': {
     status: '已验证',
     evidence: '三方 deployment identity 收敛；Generic Package staging evidence',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#新版本路由异常': {
+    status: '已验证',
+    evidence: '`05193450-… → cc7a9a1e-… → 05193450-…`；两端 `86 + 3` HTTP sweep；恢复后 Playwright `11/11`',
   },
   'replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md#旧 Pipeline 排队后内容分支继续前进': {
     status: '已验证',

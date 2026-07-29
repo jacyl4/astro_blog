@@ -48,5 +48,5 @@
 
 - [x] 6.1 在候选分支重新生成路由并与基线比较
 - [x] 6.2 当前语料仅 11 篇；已检查全部文章及所有页面类型
-- [ ] 6.3 执行 `/opsx:verify establish-refactor-baseline`
-- [ ] 6.4 完成 rollout 中的 production smoke 后归档 change
+- [x] 6.3 执行 `/opsx:verify establish-refactor-baseline`
+- [x] 6.4 完成 rollout 中的 production smoke 后归档 change
