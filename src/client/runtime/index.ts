@@ -29,14 +29,11 @@ export function startClientRuntime(): void {
   document.addEventListener('astro:before-swap', destroy);
   document.addEventListener('astro:page-load', mount);
   window.addEventListener('resize', resize, { passive: true });
+  window.__blogLifecycleSnapshot = () => lifecycle.snapshot();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', mount, { once: true });
   } else {
     mount();
-  }
-
-  if (import.meta.env.DEV) {
-    window.__blogLifecycleSnapshot = () => lifecycle.snapshot();
   }
 }

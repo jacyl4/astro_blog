@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import type { LifecycleSnapshot } from '../../src/client/runtime/types';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -14,11 +15,28 @@ declare global {
       path: string;
       timestamp: number;
     }>;
+    __blogLifecycleSnapshot?: () => LifecycleSnapshot;
   }
 }
 
 async function waitForSwup(page: Page): Promise<void> {
   await expect(page.locator('html')).toHaveClass(/swup-enabled/);
+}
+
+async function currentLifecycleGeneration(page: Page): Promise<number> {
+  await expect.poll(
+    () => page.evaluate(() => window.__blogLifecycleSnapshot?.().mounted ?? false),
+  ).toBe(true);
+  return page.evaluate(() => window.__blogLifecycleSnapshot!().generation);
+}
+
+async function waitForLifecycleAfter(page: Page, previousGeneration: number): Promise<void> {
+  await expect.poll(
+    () => page.evaluate(() => window.__blogLifecycleSnapshot?.().generation ?? 0),
+  ).toBeGreaterThan(previousGeneration);
+  await expect.poll(
+    () => page.evaluate(() => window.__blogLifecycleSnapshot?.().mounted ?? false),
+  ).toBe(true);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -159,18 +177,24 @@ test('twenty Swup navigations do not grow page-scoped listeners or observers', a
 
   await page.goto('/');
   await expect(page.locator('main')).toBeVisible();
+  await waitForSwup(page);
+  await currentLifecycleGeneration(page);
 
   const navigatePostAndHome = async () => {
+    const homeGeneration = await currentLifecycleGeneration(page);
     const postLink = page.locator('main a[href^="/posts/"]').first();
     const postPath = await postLink.getAttribute('href');
     await postLink.click();
     await page.waitForURL((url) => url.pathname === postPath);
     await expect(page.locator('main article.prose')).toBeVisible();
+    await waitForLifecycleAfter(page, homeGeneration);
 
+    const postGeneration = await currentLifecycleGeneration(page);
     const homeLink = page.locator('[data-nav-link="/"]').first();
     await homeLink.click();
     await page.waitForURL((url) => url.pathname === '/');
     await expect(page.locator('main .post-card').first()).toBeVisible();
+    await waitForLifecycleAfter(page, postGeneration);
   };
 
   // Warm lazy Swup plugins once; the assertion below measures page-scope growth,
