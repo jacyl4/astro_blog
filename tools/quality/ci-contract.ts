@@ -78,6 +78,14 @@ export function verifyCiContract(source: string): string[] {
   );
   checks.push('content package is immutable per pipeline and commit');
 
+  const verify = scriptText(job(config, 'verify').script);
+  requireMatch(
+    verify,
+    /npm-audit-with-retry\.sh/,
+    'dependency audit has no bounded retry for registry outages',
+  );
+  checks.push('dependency audit retries transient registry outages');
+
   const build = scriptText(job(config, 'build').script);
   requireMatch(
     build,

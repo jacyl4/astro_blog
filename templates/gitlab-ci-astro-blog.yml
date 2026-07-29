@@ -85,7 +85,7 @@ verify:
     - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
     - tar -xzf .build/content.tar.gz -C .build
     - mkdir -p .build/evidence
-    - npm audit --audit-level=critical --json > .build/evidence/npm-audit.json
+    - bash tools/ci/npm-audit-with-retry.sh .build/evidence/npm-audit.json
     - npx astro check
     - |
       set +e
