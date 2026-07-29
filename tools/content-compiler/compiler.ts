@@ -45,6 +45,7 @@ function detectContentSha(sourceDir: string): string {
   try {
     return execFileSync('git', ['-C', sourceDir, 'rev-parse', 'HEAD'], {
       encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();
   } catch {
     return 'local';

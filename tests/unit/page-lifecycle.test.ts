@@ -86,4 +86,26 @@ describe('PageLifecycle', () => {
 
     expect(applied).toBe(false);
   });
+
+  it('aborts the PageContext signal so page-scoped requests can be cancelled', () => {
+    let capturedSignal: AbortSignal | undefined;
+    let abortEvents = 0;
+    const lifecycle = new PageLifecycle([
+      {
+        name: 'request',
+        mount(context) {
+          capturedSignal = context.signal;
+          context.signal.addEventListener('abort', () => {
+            abortEvents += 1;
+          }, { once: true });
+        },
+      },
+    ]);
+
+    lifecycle.mount({} as Document, {} as Window);
+    expect(capturedSignal?.aborted).toBe(false);
+    lifecycle.destroy();
+    expect(capturedSignal?.aborted).toBe(true);
+    expect(abortEvents).toBe(1);
+  });
 });

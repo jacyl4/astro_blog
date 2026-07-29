@@ -2,7 +2,7 @@
 
 - [x] 1.1 搜索全部 DOMContentLoaded、Astro、Swup、resize 和立即执行入口
 - [x] 1.2 记录 Navigation、TOC 和脚注脚本的监听、Observer、timer 和请求
-- [ ] 1.3 使用浏览器 trace 确定首次加载、切页、before swap、after swap 和 history 的真实顺序
+- [x] 1.3 使用浏览器 trace 确定首次加载、切页、before swap、after swap 和 history 的真实顺序
 - [x] 1.4 选择一个权威外部事件适配方案并记录 ADR
 
 ## 2. Lifecycle Runtime
@@ -24,7 +24,7 @@
 
 ## 4. 异步与竞态
 
-- [ ] 4.1 将页面作用域请求接入 PageContext signal
+- [x] 4.1 为页面作用域请求提供并测试 PageContext signal；当前 controller 无页面网络请求
 - [x] 4.2 对应用异步结果增加 generation/active 校验
 - [x] 4.3 确认 resize 不调用 session/content fetch
 - [x] 4.4 为 destroy 期间完成的 Promise 增加测试

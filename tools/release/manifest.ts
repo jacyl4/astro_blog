@@ -47,6 +47,11 @@ export interface RouteDiff {
   kindChanged: Array<{ path: string; baseline: RouteKind; candidate: RouteKind }>;
 }
 
+export interface RouteDiffAssessment extends RouteDiff {
+  approvedRedirects: string[];
+  unapprovedRemovals: string[];
+}
+
 export function sha256(value: string | Buffer): string {
   return createHash('sha256').update(value).digest('hex');
 }
@@ -176,4 +181,18 @@ export function diffRouteManifests(
   });
 
   return { added, removed, kindChanged };
+}
+
+export function assessRouteDiff(
+  diff: RouteDiff,
+  redirects: Record<string, string>,
+): RouteDiffAssessment {
+  const approvedRedirects = diff.removed.filter((route) => Boolean(redirects[route]));
+  const unapprovedRemovals = diff.removed.filter((route) => !redirects[route]);
+
+  return {
+    ...diff,
+    approvedRedirects,
+    unapprovedRemovals,
+  };
 }

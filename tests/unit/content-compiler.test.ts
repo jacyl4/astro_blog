@@ -1,4 +1,4 @@
-import { readFile, stat } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -75,5 +75,80 @@ describe('content compiler', () => {
       .toBe(await readFile(path.join(temp, 'second', 'source.md'), 'utf8'));
     expect(await readFile(sourceFile, 'utf8')).toBe(before.contents);
     expect((await stat(sourceFile)).mtimeMs).toBe(before.mtime);
+  });
+
+  it('rejects duplicate public identities before writing output', async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), 'content-compiler-'));
+    const source = path.join(temp, 'Blog');
+    await mkdir(source, { recursive: true });
+    const frontmatter = (title: string, slug: string) => `---
+id: duplicate-id
+slug: ${slug}
+title: ${title}
+created: 2026-01-01
+tags: []
+---
+`;
+    await writeFile(path.join(source, 'a.md'), frontmatter('A', 'duplicate-slug'));
+    await writeFile(path.join(source, 'b.md'), frontmatter('B', 'duplicate-slug'));
+
+    const result = await compileContent(config(source, path.join(temp, 'output')));
+    expect(result.diagnostics.map((item) => item.code)).toEqual(expect.arrayContaining([
+      'DUPLICATE_ID',
+      'DUPLICATE_SLUG',
+    ]));
+    await expect(writeCompilation(config(source, path.join(temp, 'output')), result))
+      .rejects.toThrow(/blocking diagnostics/);
+  });
+
+  it('fails ambiguous basename links and lists every published candidate', async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), 'content-compiler-'));
+    const source = path.join(temp, 'Blog');
+    await mkdir(path.join(source, 'a'), { recursive: true });
+    await mkdir(path.join(source, 'b'), { recursive: true });
+    const article = (id: string, slug: string, title: string, body = '') => `---
+id: ${id}
+slug: ${slug}
+title: ${title}
+created: 2026-01-01
+tags: []
+---
+${body}
+`;
+    await writeFile(path.join(source, 'source.md'), article(
+      'source',
+      'source',
+      'Source',
+      '[[target]]',
+    ));
+    await writeFile(path.join(source, 'a', 'target.md'), article('target-a', 'target-a', 'A'));
+    await writeFile(path.join(source, 'b', 'target.md'), article('target-b', 'target-b', 'B'));
+
+    const result = await compileContent(config(source, path.join(temp, 'output')));
+    const ambiguity = result.diagnostics.find((item) => item.code === 'WIKILINK_AMBIGUOUS');
+    expect(ambiguity?.details?.candidates).toEqual(['a/target.md', 'b/target.md']);
+  });
+
+  it('rejects links that escape or are absent from the Blog publish boundary', async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), 'content-compiler-'));
+    const source = path.join(temp, 'Blog');
+    await mkdir(source, { recursive: true });
+    await writeFile(path.join(source, 'source.md'), `---
+id: source
+slug: source
+title: Source
+created: 2026-01-01
+tags: []
+---
+[[../Private/secret]]
+[[missing]]
+`);
+
+    const result = await compileContent(config(source, path.join(temp, 'output')));
+    expect(result.diagnostics.map((item) => item.code)).toEqual(expect.arrayContaining([
+      'WIKILINK_OUTSIDE_PUBLISH_ROOT',
+      'WIKILINK_NOT_FOUND',
+    ]));
+    expect(result.inventory.records.map((record) => record.sourcePath)).toEqual(['source.md']);
   });
 });

@@ -1,25 +1,28 @@
 import path from 'node:path';
 import type { CompilerConfig, CompilerMode } from './model';
 
-function readOption(name: string): string | undefined {
-  const index = process.argv.indexOf(`--${name}`);
-  return index >= 0 ? process.argv[index + 1] : undefined;
+function readOption(argv: string[], name: string): string | undefined {
+  const index = argv.indexOf(`--${name}`);
+  return index >= 0 ? argv[index + 1] : undefined;
 }
 
-export function loadConfig(): CompilerConfig {
-  const command = process.argv[2];
+export function loadConfig(
+  argv: string[] = process.argv,
+  env: NodeJS.ProcessEnv = process.env,
+): CompilerConfig {
+  const command = argv[2];
   if (!['inventory', 'validate', 'compile'].includes(command)) {
     throw new Error('Usage: content-compiler <inventory|validate|compile> [options]');
   }
 
-  const requestedMode = readOption('mode') ?? process.env.CONTENT_COMPILER_MODE ?? 'compat';
+  const requestedMode = readOption(argv, 'mode') ?? env.CONTENT_COMPILER_MODE ?? 'compat';
   if (requestedMode !== 'compat' && requestedMode !== 'strict') {
     throw new Error(`Unsupported compiler mode: ${requestedMode}`);
   }
 
-  const explicitSource = readOption('source');
-  const sourceBase = process.env.CONTENT_SOURCE_PATH;
-  const contentSubdir = process.env.CONTENT_SUBDIR || 'Blog';
+  const explicitSource = readOption(argv, 'source');
+  const sourceBase = env.CONTENT_SOURCE_PATH;
+  const contentSubdir = env.CONTENT_SUBDIR || 'Blog';
   const sourceDir = explicitSource
     ? path.resolve(explicitSource)
     : sourceBase
@@ -30,13 +33,13 @@ export function loadConfig(): CompilerConfig {
     command: command as CompilerConfig['command'],
     mode: requestedMode as CompilerMode,
     sourceDir,
-    outputDir: path.resolve(readOption('output') ?? '.build/content/blog'),
-    manifestPath: path.resolve(readOption('manifest') ?? '.build/content-manifest.json'),
+    outputDir: path.resolve(readOption(argv, 'output') ?? '.build/content/blog'),
+    manifestPath: path.resolve(readOption(argv, 'manifest') ?? '.build/content-manifest.json'),
     diagnosticsPath: path.resolve(
-      readOption('diagnostics') ?? '.build/diagnostics/content.json',
+      readOption(argv, 'diagnostics') ?? '.build/diagnostics/content.json',
     ),
     migrationPath: path.resolve(
-      readOption('migration') ?? '.build/diagnostics/content-migration.json',
+      readOption(argv, 'migration') ?? '.build/diagnostics/content-migration.json',
     ),
   };
 }

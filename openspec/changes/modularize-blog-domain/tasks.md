@@ -1,9 +1,9 @@
 ## 1. Characterization Baseline
 
-- [ ] 1.1 为现有 BlogService 的所有公开方法建立行为测试
+- [x] 1.1 为迁移后的 BlogApplicationService 全部公开查询建立行为测试
 - [x] 1.2 固定文章排序、标题优先级、category 推导、tag 清洗和 selector 输出
 - [x] 1.3 使用当前 route manifest 验证所有文章 URL
-- [ ] 1.4 记录当前缓存生命周期和错误处理
+- [x] 1.4 记录当前缓存生命周期和错误处理
 
 ## 2. Domain 提取
 
@@ -24,7 +24,7 @@
 ## 4. 公共入口与兼容层
 
 - [x] 4.1 创建 `src/modules/blog/index.ts` 并只导出页面需要的 API
-- [ ] 4.2 将旧 BlogService 改为调用新模块的薄 façade
+- [x] 4.2 所有调用方迁移后删除旧 BlogService，以公共 index 作为唯一 façade
 - [x] 4.3 逐页迁移首页、详情、分类、标签和归档 imports
 - [x] 4.4 迁移侧边栏和其他组件 imports
 - [x] 4.5 确认仓库无模块内部深层导入

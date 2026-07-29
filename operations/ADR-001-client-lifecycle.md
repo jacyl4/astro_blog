@@ -30,3 +30,7 @@
 - controller 必须显式拥有并清理自身资源。
 - Playwright 连续执行 20 次站内导航、后退/前进和多次 resize；监听器与
   IntersectionObserver 计数不得增长，且不得产生 `/api/*` 或 `/auth/*` 请求。
+- Chromium 实测顺序固化在 `.build/evidence/lifecycle-event-order.json`：
+  首次加载为 `DOMContentLoaded`；站内切页为
+  `astro:before-swap → astro:page-load`；history 返回为
+  `popstate → astro:before-swap → astro:page-load`。

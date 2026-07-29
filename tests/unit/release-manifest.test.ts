@@ -4,10 +4,12 @@ import path from 'node:path';
 import { mkdtemp } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import {
+  assessRouteDiff,
   classifyRoute,
   createRouteManifest,
   diffRouteManifests,
   routePathFromHtml,
+  type RouteManifest,
 } from '../../tools/release/manifest';
 
 describe('route manifest', () => {
@@ -41,5 +43,53 @@ describe('route manifest', () => {
 
     expect(baseline.routes.map((route) => route.path)).toEqual(['/', '/posts/b/']);
     expect(diffRouteManifests(baseline, candidate).removed).toEqual(['/posts/b/']);
+  });
+
+  it('reports additions, removals, kind changes, and approved migrations independently', () => {
+    const route = (
+      path: string,
+      kind: RouteManifest['routes'][number]['kind'],
+    ): RouteManifest['routes'][number] => ({
+      path,
+      kind,
+      file: path === '/' ? 'index.html' : `${path.slice(1)}index.html`,
+      bytes: 1,
+      sha256: path,
+    });
+    const baseline: RouteManifest = {
+      schemaVersion: 1,
+      routeCount: 3,
+      hash: 'baseline',
+      routes: [
+        route('/', 'home'),
+        route('/posts/old/', 'post'),
+        route('/legacy/', 'other'),
+      ],
+    };
+    const candidate: RouteManifest = {
+      schemaVersion: 1,
+      routeCount: 3,
+      hash: 'candidate',
+      routes: [
+        route('/', 'home'),
+        route('/posts/new/', 'post'),
+        route('/legacy/', 'page'),
+      ],
+    };
+
+    const diff = diffRouteManifests(baseline, candidate);
+    expect(diff).toEqual({
+      added: ['/posts/new/'],
+      removed: ['/posts/old/'],
+      kindChanged: [{ path: '/legacy/', baseline: 'other', candidate: 'page' }],
+    });
+    expect(assessRouteDiff(diff, {})).toMatchObject({
+      approvedRedirects: [],
+      unapprovedRemovals: ['/posts/old/'],
+    });
+    expect(assessRouteDiff(diff, { '/posts/old/': '/posts/new/' })).toMatchObject({
+      approvedRedirects: ['/posts/old/'],
+      unapprovedRemovals: [],
+    });
   });
 });

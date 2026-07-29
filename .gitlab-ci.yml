@@ -38,6 +38,8 @@ variables:
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
   CONTENT_PACKAGE_NAME: "astro-blog-content"
   RELEASE_PACKAGE_NAME: "astro-blog-release"
+  UNIT_EVIDENCE_PACKAGE_NAME: "astro-blog-unit-evidence"
+  BROWSER_EVIDENCE_PACKAGE_NAME: "astro-blog-browser-evidence"
 
 cache:
   &dependency-cache
@@ -79,12 +81,20 @@ verify:
     - mkdir -p .build/evidence
     - npm audit --audit-level=critical --json > .build/evidence/npm-audit.json
     - npx astro check
-    - npm run test:unit
+    - |
+      set +e
+      npm run test:unit
+      test_status=$?
+      set -e
+      tar -czf .build/unit-evidence.tar.gz -C .build evidence
+      bash tools/ci/package-artifact.sh upload "$UNIT_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/unit-evidence.tar.gz
+      exit "$test_status"
     - npm run boundaries:verify
     - npm run comments:verify-removed
     - npm run cloudflare:verify-static
     - npm run cf:types:check
     - npm run openspec:validate
+    - npm run openspec:evidence:check
 
 build:
   stage: build
@@ -123,7 +133,14 @@ build:
     - bash tools/ci/package-artifact.sh download "$RELEASE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/release.tar.gz
     - tar -xzf .build/release.tar.gz
     - npx playwright install chromium
-    - npm run test:browser
+    - |
+      set +e
+      npm run test:browser
+      test_status=$?
+      set -e
+      tar -czf .build/browser-evidence.tar.gz -C .build evidence
+      bash tools/ci/package-artifact.sh upload "$BROWSER_EVIDENCE_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/browser-evidence.tar.gz
+      exit "$test_status"
 
 browser:
   extends: .browser-base

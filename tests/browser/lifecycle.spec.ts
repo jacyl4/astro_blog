@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 
 declare global {
   interface Window {
@@ -6,6 +8,11 @@ declare global {
       activeSignalListeners: number;
       activeIntersectionObservers: number;
     };
+    __lifecycleEventTrace?: Array<{
+      event: string;
+      path: string;
+      timestamp: number;
+    }>;
   }
 }
 
@@ -54,6 +61,67 @@ test.beforeEach(async ({ page }) => {
         return super.disconnect();
       }
     };
+  });
+});
+
+test('records the authoritative initial, swap, page-load, and history event order', async ({
+  page,
+}, testInfo) => {
+  await page.addInitScript(() => {
+    const trace: NonNullable<Window['__lifecycleEventTrace']> = [];
+    window.__lifecycleEventTrace = trace;
+    const record = (event: string) => {
+      trace.push({
+        event,
+        path: window.location.pathname,
+        timestamp: performance.now(),
+      });
+    };
+    document.addEventListener('DOMContentLoaded', () => record('DOMContentLoaded'));
+    document.addEventListener('astro:before-swap', () => record('astro:before-swap'));
+    document.addEventListener('astro:page-load', () => record('astro:page-load'));
+    window.addEventListener('popstate', () => record('popstate'));
+  });
+
+  await page.goto('/');
+  await expect(page.locator('main')).toBeVisible();
+  const postPath = await page.locator('main a[href^="/posts/"]').first().getAttribute('href');
+  expect(postPath).toBeTruthy();
+
+  await page.locator('main a[href^="/posts/"]').first().click();
+  await page.waitForURL((url) => url.pathname === postPath);
+  await expect(page.locator('main article.prose')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator('main .post-card').first()).toBeVisible();
+
+  const trace = await page.evaluate(() => window.__lifecycleEventTrace ?? []);
+  const events = trace.map((item) => item.event);
+  expect(events[0]).toBe('DOMContentLoaded');
+  expect(events.filter((event) => event === 'astro:before-swap')).toHaveLength(2);
+  expect(events.filter((event) => event === 'astro:page-load').length).toBeGreaterThanOrEqual(2);
+  expect(events.filter((event) => event === 'popstate')).toHaveLength(1);
+
+  for (const [index, event] of events.entries()) {
+    if (event !== 'astro:before-swap') continue;
+    expect(events.slice(index + 1)).toContain('astro:page-load');
+  }
+  const popstateIndex = events.indexOf('popstate');
+  const lastBeforeSwapIndex = events.lastIndexOf('astro:before-swap');
+  expect(popstateIndex).toBeLessThan(lastBeforeSwapIndex);
+
+  const evidence = {
+    schemaVersion: 1,
+    test: testInfo.title,
+    browser: testInfo.project.name || 'chromium',
+    trace,
+  };
+  const evidencePath = path.resolve('.build/evidence/lifecycle-event-order.json');
+  await mkdir(path.dirname(evidencePath), { recursive: true });
+  await writeFile(evidencePath, `${JSON.stringify(evidence, null, 2)}\n`);
+  await testInfo.attach('lifecycle-event-order', {
+    body: Buffer.from(JSON.stringify(evidence, null, 2)),
+    contentType: 'application/json',
   });
 });
 

@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { BlogApplicationService } from '../../src/modules/blog/application/BlogApplicationService';
+import type { BlogRepository } from '../../src/modules/blog/application/BlogRepository';
 import { normalizePosts } from '../../src/modules/blog/domain/normalize';
 import {
   selectArchiveMonths,
@@ -96,5 +98,50 @@ describe('blog domain', () => {
 
     expect(selectArchiveMonths(posts)).toEqual(['2026-01', '2025-07']);
     expect(selectPostsByArchiveMonth(posts, '2025-07')).toHaveLength(1);
+  });
+
+  it('keeps every application query consistent and caches repository reads per build scope', async () => {
+    let reads = 0;
+    let resets = 0;
+    const repository: BlogRepository<ReturnType<typeof entry>> = {
+      async getAll() {
+        reads += 1;
+        return [
+          entry('网络/a.md', 'A', '2026-02-01', ['#network'], 'a'),
+          entry('前端/b.md', 'B', '2025-01-01', ['web'], 'b'),
+        ];
+      },
+      reset() {
+        resets += 1;
+      },
+    };
+    const service = new BlogApplicationService(repository);
+
+    expect((await service.getAllPosts()).map((post) => post.slug)).toEqual(['a', 'b']);
+    expect((await service.getPostBySlug('a'))?.slug).toBe('a');
+    expect(await service.getPostsByCategory('wang-luo')).toHaveLength(1);
+    expect(await service.getPostsByTag('web')).toHaveLength(1);
+    expect(await service.getPostsByArchiveMonth('2026-02')).toHaveLength(1);
+    expect(await service.getAllCategories()).toHaveLength(2);
+    expect(await service.getAllTags()).toHaveLength(2);
+    expect(await service.getArchiveMonths()).toEqual(['2026-02', '2025-01']);
+    expect(reads).toBe(1);
+
+    service.reset();
+    expect(resets).toBe(1);
+    await service.getAllPosts();
+    expect(reads).toBe(2);
+  });
+
+  it('propagates repository failures with their source context', async () => {
+    const repository: BlogRepository<ReturnType<typeof entry>> = {
+      async getAll() {
+        throw new Error('content collection unavailable');
+      },
+      reset() {},
+    };
+
+    await expect(new BlogApplicationService(repository).getAllPosts())
+      .rejects.toThrow('content collection unavailable');
   });
 });
