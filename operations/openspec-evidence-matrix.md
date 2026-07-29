@@ -45,14 +45,14 @@
 | `harden-quality-and-operations/specs/continuous-quality-gates/spec.md` | Playwright 生命周期检查失败 | 已验证 | `tools/quality/fault-injection.sh`；`.gitlab-ci.yml` browser → staging needs |
 | `harden-quality-and-operations/specs/continuous-quality-gates/spec.md` | Spec scenario 缺失 | 已验证 | `npm run openspec:validate`；`npm run openspec:evidence:check` |
 | `harden-quality-and-operations/specs/continuous-quality-gates/spec.md` | 生产回归调查 | 待验证 | `.gitlab-ci.yml`；JUnit/Playwright trace；本矩阵的 `npm run openspec:evidence:check` |
-| `harden-quality-and-operations/specs/operational-observability/spec.md` | 查询线上版本 | 待验证 | `wrangler.jsonc` observability；release evidence；staging 回滚记录 |
-| `harden-quality-and-operations/specs/operational-observability/spec.md` | 生产部署完成 | 待验证 | `wrangler.jsonc` observability；release evidence；staging 回滚记录 |
+| `harden-quality-and-operations/specs/operational-observability/spec.md` | 查询线上版本 | 已验证 | `operations/staging-rollback-evidence-2026-07-29.md`；公开 build manifest；Wrangler version |
+| `harden-quality-and-operations/specs/operational-observability/spec.md` | 生产部署完成 | 已验证 | Pipeline `#407` production release evidence；公开 production build manifest |
 | `harden-quality-and-operations/specs/operational-observability/spec.md` | 回滚演练 | 待验证 | `wrangler.jsonc` observability；release evidence；staging 回滚记录 |
 | `harden-quality-and-operations/specs/operational-observability/spec.md` | audit 报告含高危开发依赖 | 已验证 | `operations/dependency-risk-register.md`；Astro 7 npm audit baseline |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging smoke 失败 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 功能分支需要真实候选验证 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging 部署成功 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
-| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 发布完成 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging smoke 失败 | 已验证 | Pipeline `#419` staging smoke 阻断；production job 不可达 |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 功能分支需要真实候选验证 | 已验证 | Pipeline `#421` / Job `#699`；`operations/staging-rollback-evidence-2026-07-29.md` |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | staging 部署成功 | 已验证 | Pipeline `#421` / Job `#699`；`86 + 3` HTTP sweep；Playwright `11/11` |
+| `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 发布完成 | 已验证 | 三方 deployment identity 收敛；Generic Package staging evidence |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | 新版本路由异常 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md` | Worker 回滚不可用 | 待验证 | `operations/rollback-runbook.md`；staging N → N+1 → N 回滚证据 |
 | `migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md` | CI 部署 | 已验证 | `.gitlab-ci.yml`；`npm run cloudflare:verify-static`；`npm run http:sweep` |

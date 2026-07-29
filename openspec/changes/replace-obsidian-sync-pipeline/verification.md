@@ -12,7 +12,7 @@
 | 并发顺序 | Concurrency | 快速触发 A、B | resource group 串行，旧候选 freshness 失败，最终为 B | deployment log | Policy/test passed; live sequence pending |
 | 上游状态 | Cross-project | 令下游测试失败 | 内容 Pipeline 失败并链接下游 | upstream log | Planned |
 | 无绝对路径 | Static check | `npm run paths:verify` | 零匹配 | report | Passed, 355 tracked files |
-| 无 Job Artifacts 依赖 | Static check | `npm run ci:verify` | 无 job artifacts，package/version/retry 契约有效 | CI contract log | Passed, 19 checks |
+| 无 Job Artifacts 依赖 | Static check | `npm run ci:verify` | 无 job artifacts，package/version/retry 契约有效 | CI contract log | Passed, 21 checks |
 
 ## Blocking Checks
 

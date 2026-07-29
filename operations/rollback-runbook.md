@@ -12,9 +12,11 @@
 
 1. 暂停后续 production job，记录故障 deployment/version ID。
 2. 使用 Cloudflare 版本历史回滚到发布前记录的稳定版本。
-3. 重新执行关键路径和全路由 HTTP sweep。
-4. 若 Worker 回滚不可用，将自定义域名恢复到保留的 Pages 项目。
-5. 清理或更新 Service Worker 缓存只作为后续措施，不得用它掩盖错误 artifact。
+3. 等待根 HTML、build manifest 和根 HTML 引用的 runtime asset 连续三次指向
+   目标 app SHA；在收敛前不得开始 smoke。
+4. 重新执行关键路径和全路由 HTTP sweep。
+5. 若 Worker 回滚不可用，将自定义域名恢复到保留的 Pages 项目。
+6. 清理或更新 Service Worker 缓存只作为后续措施，不得用它掩盖错误 artifact。
 
 ## 数据与内容
 
@@ -31,12 +33,29 @@ DNS 状态和 smoke 结果。首次正式发布前必须在 staging 完成一次
 
 ```bash
 npx wrangler deployments list --env staging
-npx wrangler rollback <STABLE_VERSION_ID> --env staging
+npx wrangler rollback <STABLE_VERSION_ID> --env staging --yes \
+  --message "rollback reason"
+npm run deployment:wait -- \
+  --base https://blog-staging.seso.icu \
+  --app-sha <STABLE_APP_SHA>
+npm run http:sweep -- \
+  --base https://blog-staging.seso.icu \
+  --output .build/evidence/staging-rollback-http-sweep.json
 ```
 
 回滚演练执行 N → N+1 → N：每一步记录 version ID、route manifest hash 和完整
-HTTP sweep。若 Wrangler rollback 失败，保留失败输出并按发布手册恢复 Pages
-自定义域名，不得用重新构建代替版本回滚。
+HTTP sweep。不得用固定 sleep 代替 `deployment:wait`：Cloudflare 版本切换期间，
+不同请求可能短暂命中旧 HTML、旧 manifest 或不同 runtime asset。只有根 HTML 的
+`build-app-sha`、公开 build manifest 的 `appSha` 和 runtime asset `HEAD 200`
+连续三次一致，才视为已收敛。
+
+身份门禁引入前的历史版本没有 `build-app-sha`，不能作为新门禁的最终演练目标；
+迁移期若必须恢复该类版本，应先按 manifest 和人工资产清单完成应急恢复，再尽快
+部署一个由不可变 Generic Package 恢复的身份完整版本。不得为了回滚重新构建旧
+提交，也不得放宽当前发布门禁。
+
+若 Wrangler rollback 失败，保留失败输出并按发布手册恢复 Pages 自定义域名，
+不得用重新构建代替版本回滚。
 
 ## 维护周期
 

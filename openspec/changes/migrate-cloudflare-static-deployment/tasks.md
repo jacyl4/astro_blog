@@ -32,7 +32,7 @@
 - [x] 4.5 将 build manifest 和部署身份保存为 release evidence
 - [x] 4.6 为非默认分支提供串行化 manual staging，production 仍仅允许默认分支
 - [x] 4.7 staging 部署后对真实域名运行 Playwright/PWA/桌面移动视口并保存 retry-safe Generic Package evidence
-- [ ] 4.8 Runner 恢复后执行一次功能分支 manual staging 并登记 job/package/version
+- [x] 4.8 Runner 恢复后执行一次功能分支 manual staging 并登记 job/package/version
 
 ## 5. Production Cutover
 

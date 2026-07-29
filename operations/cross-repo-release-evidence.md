@@ -62,11 +62,27 @@ manifest hash 不同是预期结果：它包含不同的输入身份元数据；
 
 - 内容分支尚未合并到默认分支；默认分支仍运行旧 rsync/OAuth push job。
 - 内容候选分支最新 commit 为 `9b2240c1`，已推送
-  `refactor/astro-blog-openspec`；完整 SHA/目标项目和串行 mirrored trigger
-  已通过本地 YAML contract。
+  `refactor/astro-blog-openspec`；其 GitLab CI 已改为只触发应用仓，不再生成、
+  提交或推送同步副本；完整 SHA、目标项目和串行 mirrored trigger 已通过
+  本地 YAML contract。
 - 必须在应用分支 CI 通过后再合并内容分支，避免 trigger 指向不兼容的 main。
 - 下游桥接链接由 GitLab trigger graph 原生提供；两次快速内容提交、旧 Pipeline
   自动取消和最终部署顺序仍需在 GitLab 上演练。
 - 三次成功内容发布和七天受控回退窗口不得用本地测试替代。
-- GitLab Pipeline `#411` 因唯一 Runner `endure` 离线停在 pending；Runner
-  恢复后必须触发新候选 Pipeline 和一次功能分支 manual staging。
+
+## 6. 功能分支候选实证
+
+- 应用 commit：`aa62a37100d1bd60bded83d710c0adabc050c6d5`
+- 内容 commit：`c925ad442b8389376728e792c4a8dc31bf365227`
+- GitLab Pipeline：`#421`
+- prepare / verify / build / browser：Jobs `#695` / `#696` / `#697` / `#698`
+- manual staging：Job `#699`，成功
+- Cloudflare staging version：`cc7a9a1e-db98-4def-87d8-f83da17925e2`
+- staging evidence package：
+  `astro-blog-staging-evidence/421-aa62a37100d1bd60bded83d710c0adabc050c6d5-699/staging-evidence.tar.gz`
+- 发布后身份探测先观察到 19 次旧 HTML，第 20～22 次才连续三次确认 HTML、
+  manifest 和 runtime asset 一致；门禁在收敛前没有运行 smoke。
+- 收敛后全路由 `86 + 3`、Playwright `11/11` 和性能硬预算通过。
+
+该候选证明 Runner 和 Generic Package 链路已经恢复；剩余门是内容仓真实 mirrored
+trigger 的连续提交/失败传播演练，以及默认分支合并顺序，不再是 Runner 可用性。

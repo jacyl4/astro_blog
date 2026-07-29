@@ -103,7 +103,7 @@ Astro 7 将 Shiki 3 升级到 Shiki 4。仅
 | --- | --- |
 | strict content compile | 11 articles，0 warning，0 error |
 | Astro check | 84 files，0 error/warning/hint |
-| unit | 8 files，32 tests passed |
+| unit | 8 files，34 tests passed |
 | route | 86 → 86，无增删 |
 | `<main>` | 85 个公开页面 rendered text 相同；1 个精确 hash 的 Shiki token 差异 |
 | asset | 92 release assets；178 dist files；6.83 MiB，预算内 |

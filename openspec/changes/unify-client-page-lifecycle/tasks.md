@@ -42,8 +42,8 @@
 
 ## 6. 发布
 
-- [ ] 6.1 staging 开启 debug snapshot 并记录基线/候选对比
-- [ ] 6.2 抽样桌面和移动视口
+- [x] 6.1 staging 开启 debug snapshot 并记录基线/候选对比
+- [x] 6.2 抽样桌面和移动视口
 - [ ] 6.3 生产发布后观察控制台和错误日志
 - [x] 6.4 删除旧脚本、重复事件和临时兼容调用
 - [ ] 6.5 执行 `/opsx:verify unify-client-page-lifecycle` 并归档

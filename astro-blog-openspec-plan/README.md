@@ -2,6 +2,12 @@
 
 本包用于将现有 Astro 静态博客改造为一个边界清晰、可重复构建、可原子发布、可逐阶段回滚的模块化系统。
 
+> **状态说明（2026-07-29）**
+>
+> 本目录是最初导入的规划基线，不再是施工状态的权威来源。当前实现、任务勾选和
+> 验证事实以仓库根目录的 `openspec/`、`operations/`、`.gitlab-ci.yml`、
+> `wrangler.jsonc` 和测试代码为准。不要把本目录中的旧模板重新覆盖到现行配置。
+
 它已经按 OpenSpec 的 brownfield / delta-first 思路拆成多个独立 change。每个 change 都包含：
 
 - `proposal.md`：为什么做、改什么、影响范围；

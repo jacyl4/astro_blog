@@ -17,7 +17,7 @@
 - [x] 3.1 执行 strict content compile、Astro check、unit 和 build
 - [x] 3.2 比较全部 route 与 `<main>` HTML 基线
 - [x] 3.3 执行静态资产、PWA、全路由 HTTP 和浏览器生命周期测试
-- [ ] 3.4 在 staging 验证 404、trailing slash、缓存和 Service Worker 更新
+- [x] 3.4 在 staging 验证 404、trailing slash、缓存和 Service Worker 更新
 - [ ] 3.5 演练回滚到升级前 artifact/version
 
 ## 4. 上线

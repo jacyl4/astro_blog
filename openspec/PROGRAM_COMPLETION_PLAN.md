@@ -13,22 +13,28 @@
 5. 只有满足 `program/09-definition-of-done.md` 的 change 才归档；
 6. 三次内容发布、七天 Pages 保留和两周 CI 观察等时间门不得提前伪造。
 
-## 2. 当前事实（2026-07-29 19:30 CST）
+## 2. 当前事实（2026-07-29 23:10 CST）
 
 - production 已由 Cloudflare Static Assets Worker `astro-blog` 提供。
 - Pipeline `#407` 已完成 prepare、verify、build、browser、staging 和 production。
 - GitLab Job Artifacts 的 UID/GID 漂移已在 2026-07-28 修复，并以 Job `#644`
   的上传 `201`、下载 `200` 验证。
 - 候选分支 `refactor/complete-astro-blog-openspec` 已升级到 Astro `7.1.5`；
-  当前候选通过 32 个 unit、11 个 browser、86 条 route、PWA 离线、19 项 CI
+  当前候选通过 34 个 unit、11 个 browser、86 条 route、PWA 离线、21 项 CI
   contract 和 OpenSpec strict validation。
 - 八个 change 在本轮补强前共 265 项任务，233 项已登记完成，32 项未完成；
   未完成项主要是 staging、真实回滚、观察窗口、旧链路清理和归档。
 - 本轮将 feature staging、retry evidence 和 responsive sampling 拆成 5 个新任务，
-  并关闭 6 个已有/新增实现任务；当前为 239/270，31 项保持未完成。
-- 候选 Pipeline `#411` 已创建但停在 `prepare-content: pending`；唯一 Runner
-  `endure` 自 `2026-07-29T10:03:52Z` 后离线。Runner 恢复前不得把本地验证
-  误记为远端 CI 或 staging 证据。
+  并已关闭 10 个已有/新增实现或 staging 任务；当前为 243/270，27 项保持未完成。
+- Runner `endure` 已恢复。候选 Pipeline `#421` 的 Jobs `#695`～`#698`
+  全部成功，功能分支 manual staging Job `#699` 成功。
+- staging version 为 `cc7a9a1e-db98-4def-87d8-f83da17925e2`；证据包为
+  `astro-blog-staging-evidence/421-aa62a37100d1bd60bded83d710c0adabc050c6d5-699/staging-evidence.tar.gz`。
+- 发布身份门禁在前 19 次探测拒绝旧 HTML，第 20～22 次才连续确认 HTML、
+  build manifest 与 runtime asset 一致；之后 `86 + 3`、Playwright `11/11`
+  和性能硬预算通过。
+- 直接回滚到身份门禁引入前的 `473f51b0-…` 被新门禁正确拒绝，且 staging 已
+  自动恢复到 `cc7a9a1e-…`。最终演练必须使用两个身份完整版本，不能降低门禁。
 - `openspec validate --all --strict` 通过只证明工件结构有效，不证明施工完成。
 - `openspec/changes/archive/` 为空。
 
@@ -126,7 +132,8 @@ npm run cf:dry-run -- --env staging
 
 1. 核验内容仓旧 rsync/commit/push 链路和凭据是否仍存在。
 2. 补齐删除文章、双 SHA、连续提交、逆序发布和绝对路径测试。
-3. 在 staging 执行 Worker 版本回滚演练。
+3. 在 staging 执行 Worker 版本回滚演练；每次切换先等待 HTML、manifest 与
+   runtime asset 连续三次身份一致，不使用固定 sleep。
 4. 验证 Pages 回退步骤，但观察期结束前不删除回退入口。
 5. 在功能分支 manual staging 先验证候选，不以合并默认分支换取 staging 证据。
 
@@ -134,7 +141,7 @@ npm run cf:dry-run -- --env staging
 
 - 内容仓和应用仓 pipeline 均成功；
 - staging 全路由 `86 + 3` 通过；
-- 回滚前后 manifest 与 route hash 可定位。
+- 回滚前后 HTML app SHA、manifest、runtime asset、route hash 可定位。
 
 ### Wave D：Astro 7
 
@@ -150,13 +157,14 @@ npm run cf:dry-run -- --env staging
 - `<main>` 基线无未批准变化；
 - 评论零残留；
 - Static Assets Worker 无入口脚本和 binding；
-- staging 回滚成功。
+- 两个身份完整版本间的 staging 回滚成功。
 
 ### Wave E：生产和归档
 
 1. production manual job 发布已经通过 staging 的同一 release 包。
 2. 记录 app SHA、content SHA、Cloudflare version 和 HTTP sweep。
-3. 更新所有 `verification.md` 的 Planned 项为真实结果。
+3. 更新所有 `verification.md` 的 Planned 项为真实结果，不把迁移期旧版本缺少
+   HTML 身份标记伪记为回滚通过。
 4. 执行 OpenSpec verify/strict validation。
 5. 仅归档所有任务完成或明确移出范围的 change。
 
@@ -180,6 +188,9 @@ npm run cf:dry-run -- --env staging
 3. 不得勾选任何要求 GitLab job、staging、Cloudflare rollback 或 production
    observation 的任务；
 4. Runner 恢复后必须由新提交触发新 Pipeline，不复用本地日志冒充 CI evidence。
+
+2026-07-29 已按上述规则由新提交触发 Pipeline `#421` 并完成真实 staging；
+该基础设施门现已关闭。
 
 ## 6. 失败与停止条件
 

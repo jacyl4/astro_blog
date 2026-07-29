@@ -101,6 +101,30 @@ const scenarioMappings: Record<string, EvidenceMapping> = {
     status: '已验证',
     evidence: '`operations/dependency-risk-register.md`；Astro 7 npm audit baseline',
   },
+  'harden-quality-and-operations/specs/operational-observability/spec.md#查询线上版本': {
+    status: '已验证',
+    evidence: '`operations/staging-rollback-evidence-2026-07-29.md`；公开 build manifest；Wrangler version',
+  },
+  'harden-quality-and-operations/specs/operational-observability/spec.md#生产部署完成': {
+    status: '已验证',
+    evidence: 'Pipeline `#407` production release evidence；公开 production build manifest',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#staging smoke 失败': {
+    status: '已验证',
+    evidence: 'Pipeline `#419` staging smoke 阻断；production job 不可达',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#功能分支需要真实候选验证': {
+    status: '已验证',
+    evidence: 'Pipeline `#421` / Job `#699`；`operations/staging-rollback-evidence-2026-07-29.md`',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#staging 部署成功': {
+    status: '已验证',
+    evidence: 'Pipeline `#421` / Job `#699`；`86 + 3` HTTP sweep；Playwright `11/11`',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#发布完成': {
+    status: '已验证',
+    evidence: '三方 deployment identity 收敛；Generic Package staging evidence',
+  },
   'replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md#旧 Pipeline 排队后内容分支继续前进': {
     status: '已验证',
     evidence: '`tests/unit/ci-contract.test.ts` freshness rejection；deployment resource groups',
