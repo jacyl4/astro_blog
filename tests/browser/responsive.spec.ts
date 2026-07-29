@@ -1,9 +1,14 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'mobile', width: 390, height: 844 },
 ] as const;
+
+async function waitForSwup(page: Page): Promise<void> {
+  await expect(page.locator('html')).toHaveClass(/swup-enabled/);
+}
 
 for (const viewport of viewports) {
   test(`${viewport.name} viewport preserves the public navigation surface`, async ({
@@ -14,6 +19,7 @@ for (const viewport of viewports) {
 
     await expect(page.locator('main')).toBeVisible();
     await expect(page.locator('#header-container')).toBeVisible();
+    await waitForSwup(page);
     if (viewport.name === 'mobile') {
       const menuButton = page.getByRole('button', { name: '主导航菜单' });
       await expect(menuButton).toBeVisible();

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -14,6 +15,10 @@ declare global {
       timestamp: number;
     }>;
   }
+}
+
+async function waitForSwup(page: Page): Promise<void> {
+  await expect(page.locator('html')).toHaveClass(/swup-enabled/);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -85,6 +90,7 @@ test('records the authoritative initial, swap, page-load, and history event orde
 
   await page.goto('/');
   await expect(page.locator('main')).toBeVisible();
+  await waitForSwup(page);
   const postPath = await page.locator('main a[href^="/posts/"]').first().getAttribute('href');
   expect(postPath).toBeTruthy();
 
@@ -135,6 +141,7 @@ test('site has no comments runtime boundary', async ({ page, context }) => {
 
   await page.goto('/');
   await expect(page.locator('main')).toBeVisible();
+  await waitForSwup(page);
   await expect(page.locator('#comments-panel')).toHaveCount(0);
   await expect(page.locator('script[src*="comments"]')).toHaveCount(0);
   await expect(page.locator('link[href*="comments"]')).toHaveCount(0);
@@ -197,6 +204,7 @@ test('viewport changes do not produce data requests', async ({ page }) => {
 
 test('browser back and forward preserve lifecycle behavior', async ({ page }) => {
   await page.goto('/');
+  await waitForSwup(page);
   const postPath = await page.locator('main a[href^="/posts/"]').first().getAttribute('href');
   expect(postPath).toBeTruthy();
 
