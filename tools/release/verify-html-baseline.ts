@@ -18,7 +18,18 @@ const candidate = await createMainContentBaseline(distDir);
 const assessment = assessMainContentBaseline(baseline, candidate, approvals);
 
 if (assessment.missing.length > 0 || assessment.changed.length > 0) {
-  console.error(JSON.stringify(assessment, null, 2));
+  const baselineByFile = new Map(baseline.pages.map((page) => [page.file, page.sha256]));
+  const candidateByFile = new Map(candidate.pages.map((page) => [page.file, page.sha256]));
+  console.error(JSON.stringify({
+    missing: assessment.missing,
+    changed: assessment.changed.map((file) => ({
+      file,
+      baselineSha256: baselineByFile.get(file),
+      candidateSha256: candidateByFile.get(file),
+      approvedSha256: approvals[file]?.sha256,
+    })),
+    approved: assessment.approved,
+  }, null, 2));
   process.exitCode = 1;
 } else {
   console.log(JSON.stringify({
