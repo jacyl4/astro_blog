@@ -1,0 +1,6 @@
+{
+  "posts/astro-systematic-blog-construction-guide/index.html": {
+    "sha256": "20b43a0981a3e0f06f3e03327bfa54355d01bace65df2c3d16e649ae78273bc5",
+    "reason": "Astro 7 upgrades Shiki 3 to 4; only token span styling in one mdx code example changed, while rendered main.innerText is identical across all public pages."
+  }
+}

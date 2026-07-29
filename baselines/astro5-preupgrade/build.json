@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "appSha": "2ccf7ce19bbaaf6f8b2853974966267e51f72076",
+  "contentSha": "c925ad442b8389376728e792c4a8dc31bf365227",
+  "lockfileSha256": "73f54845d2f46793791dd6eb3ef6f7371671ee81584e1964b1f8765b4cc14630",
+  "routeManifestSha256": "f969586f1867599ee5bca4afd52ac8513623b211c20b98cd791ad52b43562fca",
+  "assetManifestSha256": "98f3a53e70016db19532cc33ca33618687fe9235800adc1c951ac02fac215222",
+  "routeCount": 86,
+  "assetCount": 91,
+  "builtAt": "2026-07-29T09:33:23.131Z"
+}

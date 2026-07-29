@@ -223,3 +223,39 @@ test('primary navigation is keyboard reachable and exposes a current page', asyn
   const focusedTag = await page.evaluate(() => document.activeElement?.tagName);
   expect(['A', 'BUTTON']).toContain(focusedTag);
 });
+
+test.describe('PWA runtime', () => {
+  test.use({ serviceWorkers: 'allow' });
+
+  test('generated service worker controls the site and serves the home page offline', async ({
+    page,
+    context,
+  }) => {
+    await page.goto('/');
+    await page.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      if (!registration.active) throw new Error('service worker did not activate');
+      if (!navigator.serviceWorker.controller) {
+        await new Promise<void>((resolve) => {
+          navigator.serviceWorker.addEventListener('controllerchange', () => resolve(), { once: true });
+        });
+      }
+    });
+
+    await expect.poll(async () => {
+      try {
+        return await page.evaluate(() => navigator.serviceWorker.controller?.scriptURL.endsWith('/sw.js'));
+      } catch {
+        return false;
+      }
+    }).toBe(true);
+
+    await context.setOffline(true);
+    try {
+      await page.reload();
+      await expect(page.locator('main')).toBeVisible();
+    } finally {
+      await context.setOffline(false);
+    }
+  });
+});

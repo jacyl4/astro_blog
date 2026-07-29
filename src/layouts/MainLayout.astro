@@ -27,6 +27,9 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
     <meta property="og:description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <script is:inline src="/registerSW.js" defer data-swup-ignore-script></script>
     <link
       rel="preload"
       as="image"

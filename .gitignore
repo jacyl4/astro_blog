@@ -10,6 +10,9 @@ docs/
 
 # dependencies
 node_modules/
+.npm/
+.ci-tools/
+.cache/
 
 # logs
 npm-debug.log*

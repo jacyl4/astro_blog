@@ -98,6 +98,12 @@ for (const forbidden of budgets.forbiddenAssets) {
 
 for (const htmlFile of allFiles.filter((file) => file.endsWith('.html'))) {
   const html = await readFile(htmlFile, 'utf8');
+  if (!html.includes('rel="manifest" href="/manifest.webmanifest"')) {
+    errors.push(`${path.relative(distDir, htmlFile)}: missing web app manifest link`);
+  }
+  if (!/<script\b[^>]*src="\/registerSW\.js"[^>]*data-swup-ignore-script[^>]*><\/script>/.test(html)) {
+    errors.push(`${path.relative(distDir, htmlFile)}: missing Swup-safe service worker registration`);
+  }
   const references = html.matchAll(/(?:src|href)="(\/[^"#?]+)"/g);
   for (const match of references) {
     const reference = match[1];
@@ -126,6 +132,53 @@ for (const cssReference of combinedCss.matchAll(/url\((?:['"])?(\/[^'")?#]+)(?:[
   } catch {
     errors.push(`CSS references missing asset: ${reference}`);
   }
+}
+
+try {
+  const manifest = JSON.parse(await readFile(path.join(distDir, 'manifest.webmanifest'), 'utf8')) as {
+    icons?: Array<{ src?: string; sizes?: string; type?: string }>;
+  };
+  for (const expected of [
+    { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
+  ]) {
+    if (!manifest.icons?.some((icon) => (
+      icon.src === expected.src
+      && icon.sizes === expected.sizes
+      && icon.type === expected.type
+    ))) {
+      errors.push(`manifest.webmanifest: missing ${expected.src} metadata`);
+    }
+  }
+} catch (error) {
+  errors.push(`manifest.webmanifest: ${error instanceof Error ? error.message : String(error)}`);
+}
+
+try {
+  const registration = await readFile(path.join(distDir, 'registerSW.js'), 'utf8');
+  if (!registration.includes("register('/sw.js'")) {
+    errors.push('registerSW.js: does not register /sw.js');
+  }
+  if (!registration.includes("registration.update()")) {
+    errors.push('registerSW.js: missing update check');
+  }
+} catch (error) {
+  errors.push(`registerSW.js: ${error instanceof Error ? error.message : String(error)}`);
+}
+
+try {
+  const serviceWorker = await readFile(path.join(distDir, 'sw.js'), 'utf8');
+  if (serviceWorker.includes('__PRECACHE_')) {
+    errors.push('sw.js: unresolved precache marker');
+  }
+  if (!serviceWorker.includes('/index.html') || !serviceWorker.includes('/404.html')) {
+    errors.push('sw.js: incomplete navigation precache');
+  }
+  if (!serviceWorker.includes('skipWaiting') || !serviceWorker.includes('clients.claim')) {
+    errors.push('sw.js: incomplete update activation strategy');
+  }
+} catch (error) {
+  errors.push(`sw.js: ${error instanceof Error ? error.message : String(error)}`);
 }
 
 if (errors.length > 0) {

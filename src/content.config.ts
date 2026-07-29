@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const blogBase = process.env.BLOG_CONTENT_SOURCE === 'legacy'
   ? './src/content/blog'

@@ -2,6 +2,12 @@
 // Syntax: > [!note] Optional title\n> content...
 import { visit } from 'unist-util-visit';
 import type { Root, Blockquote, Paragraph, Text } from 'mdast';
+import type { Properties } from 'hast';
+
+interface HastData {
+  hName?: string;
+  hProperties?: Properties;
+}
 
 const TYPE_MAP: Record<string, string> = {
   note: 'note',
@@ -69,9 +75,9 @@ export default function remarkCallouts() {
       node.children.unshift(titleNode);
 
       // Turn blockquote into a div with classes
-      node.data = node.data || {};
-      node.data.hName = 'div';
-      node.data.hProperties = {
+      const data = (node.data ??= {}) as Blockquote['data'] & HastData;
+      data.hName = 'div';
+      data.hProperties = {
         className: ['callout', `callout-${type}`],
       };
     });

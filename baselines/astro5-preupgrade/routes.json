@@ -1,0 +1,609 @@
+{
+  "schemaVersion": 1,
+  "routeCount": 86,
+  "hash": "f969586f1867599ee5bca4afd52ac8513623b211c20b98cd791ad52b43562fca",
+  "routes": [
+    {
+      "path": "/",
+      "kind": "home",
+      "file": "index.html",
+      "bytes": 40259,
+      "sha256": "653c6bfabdf47c981ab747626bedba99f98343ebb944128983d91efaa2ab7bd2"
+    },
+    {
+      "path": "/404.html",
+      "kind": "not-found",
+      "file": "404.html",
+      "bytes": 25127,
+      "sha256": "0d0921e88f627031f654bca03b5f476d105f3160d5121b68df22552f67db0624"
+    },
+    {
+      "path": "/about/",
+      "kind": "page",
+      "file": "about/index.html",
+      "bytes": 25079,
+      "sha256": "6dfdc1c1a87ef2af112bf1b7d91772ca3fb53241be3557f20b38ad180ea01e6c"
+    },
+    {
+      "path": "/archive/2025-02/",
+      "kind": "archive",
+      "file": "archive/2025-02/index.html",
+      "bytes": 28524,
+      "sha256": "b8cd3b420b495b53adf177419ffb6e3297bff919ab5ff68ce74797e27f8dd758"
+    },
+    {
+      "path": "/archive/2025-04/",
+      "kind": "archive",
+      "file": "archive/2025-04/index.html",
+      "bytes": 27230,
+      "sha256": "03fb72d313d1909ccc0bd6f81b8087dbdec77b006f09f411375874b2fb5dde6b"
+    },
+    {
+      "path": "/archive/2025-05/",
+      "kind": "archive",
+      "file": "archive/2025-05/index.html",
+      "bytes": 30096,
+      "sha256": "71a8b627ba68d5ae062f60941612cf4645f776cda32f99ef82959a0d6eeb75fa"
+    },
+    {
+      "path": "/archive/2025-07/",
+      "kind": "archive",
+      "file": "archive/2025-07/index.html",
+      "bytes": 29800,
+      "sha256": "ad1280b65b2376107297d4184e29832eb136ec46472ba4104a56a5ef30246d67"
+    },
+    {
+      "path": "/archive/2025-08/",
+      "kind": "archive",
+      "file": "archive/2025-08/index.html",
+      "bytes": 28571,
+      "sha256": "19e8716d3044f6f01f37ac284ff5e43614ac32769497482cfdb8c61f0a6e1f64"
+    },
+    {
+      "path": "/categories/bi-ji-xi-tong/",
+      "kind": "category",
+      "file": "categories/bi-ji-xi-tong/index.html",
+      "bytes": 27272,
+      "sha256": "b93954c5e6c46c4f9846bc7390e47be36d3d5b409f525cae4831030e9b29b3ed"
+    },
+    {
+      "path": "/categories/cun-chu/",
+      "kind": "category",
+      "file": "categories/cun-chu/index.html",
+      "bytes": 27223,
+      "sha256": "6682f795f6ee527b74903442b96384a9281d17d22fa78e1b0f8a45562afb94c3"
+    },
+    {
+      "path": "/categories/kai-fa-huan-jing/",
+      "kind": "category",
+      "file": "categories/kai-fa-huan-jing/index.html",
+      "bytes": 27228,
+      "sha256": "eb03bdf4e796ceea5da107d5c8fac8b8d158d8a7a4dc4f0052d92aff347a120e"
+    },
+    {
+      "path": "/categories/qian-duan/",
+      "kind": "category",
+      "file": "categories/qian-duan/index.html",
+      "bytes": 28497,
+      "sha256": "b38d99b65d12eac5690ebbd4f739105376b2eb043d46d814250a1624f1b979f7"
+    },
+    {
+      "path": "/categories/shu-ju-ku/",
+      "kind": "category",
+      "file": "categories/shu-ju-ku/index.html",
+      "bytes": 27252,
+      "sha256": "54ff6416ca88bc85b81f4d4c7ae93fb40ff78a949b85ac4c917211db727ba91d"
+    },
+    {
+      "path": "/categories/tu-chuang-xi-tong/",
+      "kind": "category",
+      "file": "categories/tu-chuang-xi-tong/index.html",
+      "bytes": 27256,
+      "sha256": "692b1bc7dcb4af07bbf64db5ad14f8663da272c8c6ae5da85656ffcb85d7bf45"
+    },
+    {
+      "path": "/categories/wang-luo/",
+      "kind": "category",
+      "file": "categories/wang-luo/index.html",
+      "bytes": 31357,
+      "sha256": "8a24ee67695674fd872061efa18a9138219a12a7462de18f52671d7262c9b833"
+    },
+    {
+      "path": "/posts/astro-islands-architecture-rendering-explanation/",
+      "kind": "post",
+      "file": "posts/astro-islands-architecture-rendering-explanation/index.html",
+      "bytes": 67277,
+      "sha256": "cfce79a2aba43979c19c9e60b81c2cf205b2a2407b90869a5dd9763a034bbd13"
+    },
+    {
+      "path": "/posts/astro-systematic-blog-construction-guide/",
+      "kind": "post",
+      "file": "posts/astro-systematic-blog-construction-guide/index.html",
+      "bytes": 165484,
+      "sha256": "3b3c22383634c0eeb8b96e47efeb634ed984b6b3a2974809e1759d124a9e8679"
+    },
+    {
+      "path": "/posts/beyond-tradition-deep-analysis-of-extreme-optimization-for-transparent-proxy-performance/",
+      "kind": "post",
+      "file": "posts/beyond-tradition-deep-analysis-of-extreme-optimization-for-transparent-proxy-performance/index.html",
+      "bytes": 105000,
+      "sha256": "40a97f04051f087ffa9f90225b853b3ab57af97de58c4f727271ce75d1aa1d39"
+    },
+    {
+      "path": "/posts/database-architecture-selection-and-comparative-analysis/",
+      "kind": "post",
+      "file": "posts/database-architecture-selection-and-comparative-analysis/index.html",
+      "bytes": 132981,
+      "sha256": "da120e1936e5a6f3af050f4e2fcdef36d62208477a31a46910067f9e3c37ff05"
+    },
+    {
+      "path": "/posts/exploring-the-btrfs-distributed-storage-system/",
+      "kind": "post",
+      "file": "posts/exploring-the-btrfs-distributed-storage-system/index.html",
+      "bytes": 76000,
+      "sha256": "740d38fb6031f6674afc3cb50166c817cb5ccde4889c23104fbb49df4ecf9e89"
+    },
+    {
+      "path": "/posts/exploring-the-p.a.r.a.-method-and-luhmann-s-zettelkasten/",
+      "kind": "post",
+      "file": "posts/exploring-the-p.a.r.a.-method-and-luhmann-s-zettelkasten/index.html",
+      "bytes": 87022,
+      "sha256": "dfdee1e99769b53119e6841a0dc96adad99f7bc564556addbbd56f076cf9aa1f"
+    },
+    {
+      "path": "/posts/feasibility-analysis-report-on-a-traffic-forwarding-architecture-based-on-transparent-proxy-unencrypted-quic-and-grpc-encapsulation/",
+      "kind": "post",
+      "file": "posts/feasibility-analysis-report-on-a-traffic-forwarding-architecture-based-on-transparent-proxy-unencrypted-quic-and-grpc-encapsulation/index.html",
+      "bytes": 92060,
+      "sha256": "fb134917f6bcaa554dc539768864cc816068282a617eb0eb510f5cf97f463e34"
+    },
+    {
+      "path": "/posts/grpc-tunnel-performance-optimizationfang-an/",
+      "kind": "post",
+      "file": "posts/grpc-tunnel-performance-optimizationfang-an/index.html",
+      "bytes": 63587,
+      "sha256": "de18b72f500a8bb9622e0f46bccbc5489c43df59610c4babb1acbb1ec5340562"
+    },
+    {
+      "path": "/posts/high-performance-pppoe-dhcp-solution-for-debian/",
+      "kind": "post",
+      "file": "posts/high-performance-pppoe-dhcp-solution-for-debian/index.html",
+      "bytes": 104494,
+      "sha256": "727ecfdd2ed1352a064c9c2148d6fb3f1ffd1823f72a500bbf11cfaddfdb9522"
+    },
+    {
+      "path": "/posts/modern-architectural-design-of-image-library-website/",
+      "kind": "post",
+      "file": "posts/modern-architectural-design-of-image-library-website/index.html",
+      "bytes": 118731,
+      "sha256": "29ec3650b83bc0541a226d47af4126201a4472690ed8cc09aaa3a9abac13e5d2"
+    },
+    {
+      "path": "/posts/the-value-of-neovim-in-the-ai-era/",
+      "kind": "post",
+      "file": "posts/the-value-of-neovim-in-the-ai-era/index.html",
+      "bytes": 60131,
+      "sha256": "e0fea67e0dce2da3c679abdd6523eeb89dd9686d0635d25fd5d403512a6ff421"
+    },
+    {
+      "path": "/tags/accel-ppp/",
+      "kind": "tag",
+      "file": "tags/accel-ppp/index.html",
+      "bytes": 27231,
+      "sha256": "5492d9c12e2cc06fd523ee10967ebe8cfb5577628d7b00c74ee72ea60e6afaf4"
+    },
+    {
+      "path": "/tags/ai-integration/",
+      "kind": "tag",
+      "file": "tags/ai-integration/index.html",
+      "bytes": 27229,
+      "sha256": "f49ca0699fb5c71a21af69b914fdd38bd520a63844aabc4f2247407b57e30a31"
+    },
+    {
+      "path": "/tags/astro-architecture/",
+      "kind": "tag",
+      "file": "tags/astro-architecture/index.html",
+      "bytes": 27252,
+      "sha256": "8427cd0662ef65c2abe9c8f65d6685b2368636dbb2d0a42d069811711a7635e4"
+    },
+    {
+      "path": "/tags/astro-tutorial/",
+      "kind": "tag",
+      "file": "tags/astro-tutorial/index.html",
+      "bytes": 27238,
+      "sha256": "285af97660e9ee744a9c845e05f6cd3ca88584b09616b3b337fb765532a1e4ea"
+    },
+    {
+      "path": "/tags/astro/",
+      "kind": "tag",
+      "file": "tags/astro/index.html",
+      "bytes": 27211,
+      "sha256": "7224d93aab4acacb784e976e3efea88caa57114bb37f0d6e22a23d9d927eb199"
+    },
+    {
+      "path": "/tags/astrojs/",
+      "kind": "tag",
+      "file": "tags/astrojs/index.html",
+      "bytes": 28514,
+      "sha256": "bd2c1c0b918c1133f8f0dce62a7f34acaee7927d2a82b76cffadf52f3dcfe775"
+    },
+    {
+      "path": "/tags/blog-development/",
+      "kind": "tag",
+      "file": "tags/blog-development/index.html",
+      "bytes": 27244,
+      "sha256": "d899dc06bcbf3d989d5a4b387cebc71857bfc7cee52bcc709abe451bbacf1b8a"
+    },
+    {
+      "path": "/tags/blogging-platform/",
+      "kind": "tag",
+      "file": "tags/blogging-platform/index.html",
+      "bytes": 27247,
+      "sha256": "e252767c03c2d977ff20a4ef6be3d78bda3d360f25d1944d99b03c63e17e7516"
+    },
+    {
+      "path": "/tags/btrfs/",
+      "kind": "tag",
+      "file": "tags/btrfs/index.html",
+      "bytes": 27215,
+      "sha256": "a77dd960ef0550b5003c2d1b1775ebb584d7e6f513159d353dff2d1a29085d5b"
+    },
+    {
+      "path": "/tags/ceph/",
+      "kind": "tag",
+      "file": "tags/ceph/index.html",
+      "bytes": 27212,
+      "sha256": "1747ca24e0352356bee4703e0a1a3a7207b3453e45beae90ff0d64be175b3285"
+    },
+    {
+      "path": "/tags/cloudflare-workers/",
+      "kind": "tag",
+      "file": "tags/cloudflare-workers/index.html",
+      "bytes": 28547,
+      "sha256": "9ca9e5dda7bf3c53f90e5edd9be274013dadbd29bbd4a9af2eb012d3d45e1d51"
+    },
+    {
+      "path": "/tags/code-editor-comparison/",
+      "kind": "tag",
+      "file": "tags/code-editor-comparison/index.html",
+      "bytes": 27253,
+      "sha256": "1879d49a3f981a509fb313bc6622fdd851e6acf3a42ba85b70539f6a1715295a"
+    },
+    {
+      "path": "/tags/content-management/",
+      "kind": "tag",
+      "file": "tags/content-management/index.html",
+      "bytes": 27250,
+      "sha256": "db2cd2f1da1376a7cadd64c2da60c7e07b9c298a4503590f0ea946182b1b7a2b"
+    },
+    {
+      "path": "/tags/cursor/",
+      "kind": "tag",
+      "file": "tags/cursor/index.html",
+      "bytes": 27205,
+      "sha256": "8f0e620d1d8e5859b102ef9fe357bd1f2ff1f51541f4a986c60cad666a5f7913"
+    },
+    {
+      "path": "/tags/database-architecture/",
+      "kind": "tag",
+      "file": "tags/database-architecture/index.html",
+      "bytes": 27283,
+      "sha256": "a54326c22a824d40f7d51ba4537eb0005c31758376a049151fa1e6742f80e967"
+    },
+    {
+      "path": "/tags/database/",
+      "kind": "tag",
+      "file": "tags/database/index.html",
+      "bytes": 29910,
+      "sha256": "ecfc8ee84b9bb673fa20723f601b418a257aaa06ba6dc1a0d30432f96434c20c"
+    },
+    {
+      "path": "/tags/debian/",
+      "kind": "tag",
+      "file": "tags/debian/index.html",
+      "bytes": 27222,
+      "sha256": "603f18a9d8821f33d4aa4cac3bd84287071341e3c20fe4fff8675ac67a657f7f"
+    },
+    {
+      "path": "/tags/developer-tooling/",
+      "kind": "tag",
+      "file": "tags/developer-tooling/index.html",
+      "bytes": 27238,
+      "sha256": "1ca19a53b9c2e001bcfcacb91def7694e3830558bc898f16fe2d393e9a15ece6"
+    },
+    {
+      "path": "/tags/dhcp/",
+      "kind": "tag",
+      "file": "tags/dhcp/index.html",
+      "bytes": 27216,
+      "sha256": "bb168cc19af99e4df95248a646ab46f4820399b61eef4ef35133c309d391147c"
+    },
+    {
+      "path": "/tags/distributed-storage/",
+      "kind": "tag",
+      "file": "tags/distributed-storage/index.html",
+      "bytes": 27257,
+      "sha256": "55c358e64b78d3a6d17b4d6a74943e0b19dd782a055a967105f59a1ff1f607db"
+    },
+    {
+      "path": "/tags/drbd/",
+      "kind": "tag",
+      "file": "tags/drbd/index.html",
+      "bytes": 27212,
+      "sha256": "6ef3b4fa6fd912c87c0ad42a11e7925ca271b7532d7c5cf223ed2dfe7fc92654"
+    },
+    {
+      "path": "/tags/es/",
+      "kind": "tag",
+      "file": "tags/es/index.html",
+      "bytes": 27297,
+      "sha256": "1c0b72d183e52956c59380f25a04486dd89b8116f268b3e13ed43dfd4f841137"
+    },
+    {
+      "path": "/tags/glusterfs/",
+      "kind": "tag",
+      "file": "tags/glusterfs/index.html",
+      "bytes": 27227,
+      "sha256": "c721d83e08b0eb9d39682f29e2a4e47e854b168afac3192b1f2e0f249d35c384"
+    },
+    {
+      "path": "/tags/grpc/",
+      "kind": "tag",
+      "file": "tags/grpc/index.html",
+      "bytes": 28691,
+      "sha256": "66d1384a53961e2a1003efb8c05a12d4b7cff296b444b0c32fa165882faa5d1e"
+    },
+    {
+      "path": "/tags/http3/",
+      "kind": "tag",
+      "file": "tags/http3/index.html",
+      "bytes": 28694,
+      "sha256": "9a4c19406e9ce46299bdefb916ace321870015f49998c84e23da64602ab0cb2b"
+    },
+    {
+      "path": "/tags/ide/",
+      "kind": "tag",
+      "file": "tags/ide/index.html",
+      "bytes": 27196,
+      "sha256": "0281b2b7831b4caa42309097fa4be86b27791e95c63c919a6fc41e3b9563b981"
+    },
+    {
+      "path": "/tags/image-gallery/",
+      "kind": "tag",
+      "file": "tags/image-gallery/index.html",
+      "bytes": 27254,
+      "sha256": "87d01591d85f06f0e541a9b4b969af8e58b1c0c4b55b21831730935d9a8a9601"
+    },
+    {
+      "path": "/tags/ipoe/",
+      "kind": "tag",
+      "file": "tags/ipoe/index.html",
+      "bytes": 27216,
+      "sha256": "ca8c655fdf0f8bf35778b61f9e1839ba1925309fed584e8e253eba21f65af7e4"
+    },
+    {
+      "path": "/tags/kea-dhcp/",
+      "kind": "tag",
+      "file": "tags/kea-dhcp/index.html",
+      "bytes": 27228,
+      "sha256": "94f8789fb9f6688403203cb155e4babd8e34028ff56bb30a5c0c4dca8174c09f"
+    },
+    {
+      "path": "/tags/knowledge-management/",
+      "kind": "tag",
+      "file": "tags/knowledge-management/index.html",
+      "bytes": 27291,
+      "sha256": "03e3f945f2270eca00e0ce014dc0e25b73e53f1050543972891135b6ac3bba91"
+    },
+    {
+      "path": "/tags/load-balancing/",
+      "kind": "tag",
+      "file": "tags/load-balancing/index.html",
+      "bytes": 30117,
+      "sha256": "74d1892b17c9c379c4d87d5f9fbdce1950d2702f2b9167c7a785a80195554482"
+    },
+    {
+      "path": "/tags/neovim/",
+      "kind": "tag",
+      "file": "tags/neovim/index.html",
+      "bytes": 27205,
+      "sha256": "e6fd3d14e91af117a118e605b320e019b754643b2fc2bdf1d3e70412a4b55463"
+    },
+    {
+      "path": "/tags/network-architecture-analysis/",
+      "kind": "tag",
+      "file": "tags/network-architecture-analysis/index.html",
+      "bytes": 27496,
+      "sha256": "0c30b70d7d7645202fcf59fa3cfd9625851e9ae40fe3a524df67d31e72e295f1"
+    },
+    {
+      "path": "/tags/network-architecture-evaluation/",
+      "kind": "tag",
+      "file": "tags/network-architecture-evaluation/index.html",
+      "bytes": 27502,
+      "sha256": "06bf61f70a88c40cdd33485fe9b0f4b06647c4a61cb001252540e5d8e5314e66"
+    },
+    {
+      "path": "/tags/network-architecture/",
+      "kind": "tag",
+      "file": "tags/network-architecture/index.html",
+      "bytes": 27264,
+      "sha256": "760ebba4086a427a5adee951210efd0f28c675539e1801d98ac2a4fdf5caef7a"
+    },
+    {
+      "path": "/tags/network-optimization/",
+      "kind": "tag",
+      "file": "tags/network-optimization/index.html",
+      "bytes": 29905,
+      "sha256": "95f06a0d46329c2b406b138b3b1293b25ebcb2ccc73c1d5acb6da5de35a4e99f"
+    },
+    {
+      "path": "/tags/networking/",
+      "kind": "tag",
+      "file": "tags/networking/index.html",
+      "bytes": 31273,
+      "sha256": "43b5d3574119d1a168279b850bdf29ace58534d21aa1cbb1818565eddd5ddae7"
+    },
+    {
+      "path": "/tags/nginx/",
+      "kind": "tag",
+      "file": "tags/nginx/index.html",
+      "bytes": 30090,
+      "sha256": "918ec928aa4841d732b17b8e6aab10deb4330bec83f7ae944517ba28e13f04f3"
+    },
+    {
+      "path": "/tags/obsidian-integration/",
+      "kind": "tag",
+      "file": "tags/obsidian-integration/index.html",
+      "bytes": 27291,
+      "sha256": "65ef71ef121380301c30793b19d18e058bd3632bb8536b4d16f1cc50db745d35"
+    },
+    {
+      "path": "/tags/performance-tuning/",
+      "kind": "tag",
+      "file": "tags/performance-tuning/index.html",
+      "bytes": 32666,
+      "sha256": "138d9c96a72335169ebb9d185165ed1c9b1ced59750bb1c0a06b4641a14b71c0"
+    },
+    {
+      "path": "/tags/plugin-ecosystem/",
+      "kind": "tag",
+      "file": "tags/plugin-ecosystem/index.html",
+      "bytes": 27235,
+      "sha256": "9f2f33634f9f479cb9bbfe828107b5563de48cffbe180cc430e751db60be04fe"
+    },
+    {
+      "path": "/tags/pppoe/",
+      "kind": "tag",
+      "file": "tags/pppoe/index.html",
+      "bytes": 27219,
+      "sha256": "e7a1fe120f72bf23b88052b9b114d4e0de67eed9433813616552d54c82ac9822"
+    },
+    {
+      "path": "/tags/protocol-analysis/",
+      "kind": "tag",
+      "file": "tags/protocol-analysis/index.html",
+      "bytes": 27460,
+      "sha256": "436e96880280780096745522933df816dfdd656d395b9d8a280c54747b02fcc3"
+    },
+    {
+      "path": "/tags/protocol-evaluation/",
+      "kind": "tag",
+      "file": "tags/protocol-evaluation/index.html",
+      "bytes": 27466,
+      "sha256": "7c0f93fd86e85119527c15e06f4f2a83b4483157daa0fd1ef1630046dd4df3f8"
+    },
+    {
+      "path": "/tags/quic/",
+      "kind": "tag",
+      "file": "tags/quic/index.html",
+      "bytes": 28691,
+      "sha256": "87cd48e13f16fc041498ce44b8a883f4389533f676813ebebbfae6c9813082fc"
+    },
+    {
+      "path": "/tags/radius/",
+      "kind": "tag",
+      "file": "tags/radius/index.html",
+      "bytes": 27222,
+      "sha256": "f05ccc811f24d0b31437396fae07980249dde13bfb8d2727d1d5b3005b2f7278"
+    },
+    {
+      "path": "/tags/remote-development/",
+      "kind": "tag",
+      "file": "tags/remote-development/index.html",
+      "bytes": 27241,
+      "sha256": "2a35f6ba923155b2149ecf27aa4af6791d642638a97373639a69bf48b2830b82"
+    },
+    {
+      "path": "/tags/rendering-paradigms/",
+      "kind": "tag",
+      "file": "tags/rendering-paradigms/index.html",
+      "bytes": 27255,
+      "sha256": "99fc1f11a2e9baf75e57ae548e51e0b349d2b4163a6842ee0c4cf78e54ff4e1f"
+    },
+    {
+      "path": "/tags/serverless/",
+      "kind": "tag",
+      "file": "tags/serverless/index.html",
+      "bytes": 28523,
+      "sha256": "9a96db7db40dbc1ccaa4b1ee619ac3e9f852e4e18e93244345cc1c03c4f3099a"
+    },
+    {
+      "path": "/tags/sqlite/",
+      "kind": "tag",
+      "file": "tags/sqlite/index.html",
+      "bytes": 27218,
+      "sha256": "e10317a38712bfae01e8784be3a237606b6a0b451e5372205a6cd02745fa67c1"
+    },
+    {
+      "path": "/tags/static-site-generation/",
+      "kind": "tag",
+      "file": "tags/static-site-generation/index.html",
+      "bytes": 28540,
+      "sha256": "8122a0de60398bfff9b65a9e8207d09e059d26eff0ec135e82fc7001b3fd1ec9"
+    },
+    {
+      "path": "/tags/static-site-generator/",
+      "kind": "tag",
+      "file": "tags/static-site-generator/index.html",
+      "bytes": 28537,
+      "sha256": "da6d7cdb62f1f1395cce65beb716be409f83d864fc5c55e1e8610f50f42e39d0"
+    },
+    {
+      "path": "/tags/system-tuning/",
+      "kind": "tag",
+      "file": "tags/system-tuning/index.html",
+      "bytes": 27243,
+      "sha256": "1b5b7afc83bc27e36cace61c0801b6b152c0e2dfb4a7ad9dbd6663e7fa7a66ed"
+    },
+    {
+      "path": "/tags/tailwindcss/",
+      "kind": "tag",
+      "file": "tags/tailwindcss/index.html",
+      "bytes": 27229,
+      "sha256": "55b592dbf8902d630627a94be09da3332ebbee7c9e0002f868c6484cfa3f4f36"
+    },
+    {
+      "path": "/tags/tcp-over-tcp/",
+      "kind": "tag",
+      "file": "tags/tcp-over-tcp/index.html",
+      "bytes": 27445,
+      "sha256": "cd971dae8d39ab869712dc95f9eec95b561f14aa9c4b0d01899ad79b6f7810d4"
+    },
+    {
+      "path": "/tags/transparent-proxy/",
+      "kind": "tag",
+      "file": "tags/transparent-proxy/index.html",
+      "bytes": 27342,
+      "sha256": "5462aa17983285c610819b2659c5c8836c58925016310a9f85f461b39a3bf2d2"
+    },
+    {
+      "path": "/tags/vscode/",
+      "kind": "tag",
+      "file": "tags/vscode/index.html",
+      "bytes": 27205,
+      "sha256": "2c4c6291ac0fbe33353a45fb7e6a4f2dce16cfeeca58a95d4d0ff7595ad9f677"
+    },
+    {
+      "path": "/tags/web-architecture/",
+      "kind": "tag",
+      "file": "tags/web-architecture/index.html",
+      "bytes": 28541,
+      "sha256": "fd87b95e836ca6700a83d3f20a56aa80930d001ef435e2796de26613d9c49e22"
+    },
+    {
+      "path": "/tags/web-development/",
+      "kind": "tag",
+      "file": "tags/web-development/index.html",
+      "bytes": 32674,
+      "sha256": "c99d6902d85509303ab79c836c25c96cf59ede1a2635eac0561f872f207f206e"
+    },
+    {
+      "path": "/tags/zettelkasten/",
+      "kind": "tag",
+      "file": "tags/zettelkasten/index.html",
+      "bytes": 27267,
+      "sha256": "cd0fc5b7938d2e1ae308133de6c946a2cebaf33b855e2ff41701edfed6289b5b"
+    }
+  ]
+}

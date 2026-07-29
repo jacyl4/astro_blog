@@ -54,7 +54,7 @@
 - [x] 7.1 输出 root 和 Cloudflare 项目的依赖/audit 基线
 - [x] 7.2 按生产运行、构建、开发和不可达路径分类
 - [x] 7.3 将 Wrangler 固定到已验证的 4.114.0 并执行 schema/types/dry-run
-- [ ] 7.4 分组升级 PWA/Workbox 和 Swup 工具链
+- [x] 7.4 分组升级 PWA/Workbox 和 Swup 工具链
 - [x] 7.5 为 Astro 主版本升级创建单独 OpenSpec change
 - [ ] 7.6 每组升级运行完整 staging 回归并保留回滚 commit
 

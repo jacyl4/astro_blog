@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-07-29T10:01:29Z",
+  "command": "npm run build:prepared",
+  "node": "24.15.0",
+  "astro": "7.1.5",
+  "astroReportedBuildSeconds": 2.24,
+  "wallSeconds": 12.621,
+  "routeCount": 86,
+  "assetCount": 92,
+  "serviceWorkerPrecacheEntries": 155,
+  "audit": {
+    "critical": 0,
+    "high": 17,
+    "moderate": 0,
+    "low": 0
+  },
+  "lockfileSha256": "ee477c160cf88ffa5b23d9fd82bd3f4eb36eaa40995046528e0f694b5c01d8bc",
+  "note": "Single local warm-cache measurement; retained as migration evidence, not a performance benchmark."
+}

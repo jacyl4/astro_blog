@@ -11,6 +11,11 @@ import {
   routePathFromHtml,
   type RouteManifest,
 } from '../../tools/release/manifest';
+import {
+  assessMainContentBaseline,
+  normalizeMainContent,
+  type MainContentBaseline,
+} from '../../tools/release/html-baseline';
 
 describe('route manifest', () => {
   it('normalizes Astro directory output routes', () => {
@@ -91,5 +96,34 @@ describe('route manifest', () => {
       approvedRedirects: ['/posts/old/'],
       unapprovedRemovals: [],
     });
+  });
+
+  it('ignores Astro scoped-style IDs but preserves semantic main content', () => {
+    const first = '<main id="swup"><article data-astro-cid-abc123>Same</article></main>';
+    const second = '<main id="swup"><article data-astro-cid-xyz789>Same</article></main>';
+    const changed = '<main id="swup"><article data-astro-cid-xyz789>Changed</article></main>';
+
+    expect(normalizeMainContent(first)).toBe(normalizeMainContent(second));
+    expect(normalizeMainContent(first)).not.toBe(normalizeMainContent(changed));
+  });
+
+  it('accepts only the exact reviewed HTML difference hash', () => {
+    const baseline: MainContentBaseline = {
+      schemaVersion: 1,
+      pageCount: 1,
+      pages: [{ file: 'posts/a/index.html', sha256: 'old' }],
+    };
+    const candidate: MainContentBaseline = {
+      schemaVersion: 1,
+      pageCount: 1,
+      pages: [{ file: 'posts/a/index.html', sha256: 'new' }],
+    };
+
+    expect(assessMainContentBaseline(baseline, candidate, {
+      'posts/a/index.html': { sha256: 'new', reason: 'reviewed' },
+    })).toEqual({ missing: [], changed: [], approved: ['posts/a/index.html'] });
+    expect(assessMainContentBaseline(baseline, candidate, {
+      'posts/a/index.html': { sha256: 'other', reason: 'stale' },
+    }).changed).toEqual(['posts/a/index.html']);
   });
 });

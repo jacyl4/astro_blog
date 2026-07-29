@@ -3,8 +3,9 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import swup from '@swup/astro';
 import SwupMorphPlugin from 'swup-morph-plugin';
-import { VitePWA } from 'vite-plugin-pwa';
 import icon from 'astro-icon';
+import { unified } from '@astrojs/markdown-remark';
+import nativePwa from './tools/pwa/integration.ts';
 
 // Markdown/HTML processing plugins
 import rehypeSlug from 'rehype-slug';
@@ -38,6 +39,9 @@ const IGNORE_REMOTE_IMPORTS_WARNING = (
 // https://astro.build/config
 export default defineConfig({
   outDir: './dist',
+  // Preserve Astro 5 whitespace semantics; Astro 7 defaults to JSX-style
+  // compression, which strips significant spacing around inline metadata.
+  compressHTML: true,
   integrations: [
     icon({
       include: {
@@ -48,6 +52,7 @@ export default defineConfig({
       containers: ['#swup'],
       plugins: [new SwupMorphPlugin()],
     }),
+    nativePwa(),
   ],
   server: {
     host: true,
@@ -56,35 +61,6 @@ export default defineConfig({
   vite: {
     plugins: [
       tailwindcss(),
-      VitePWA({
-        registerType: 'autoUpdate',
-        injectRegister: 'auto',
-        strategies: 'injectManifest',
-        srcDir: 'src',
-        filename: 'sw.ts',
-        manifest: {
-          name: 'Astro Blog',
-          short_name: 'AstroBlog',
-          description: 'My awesome Astro blog with PWA!',
-          theme_color: '#ffffff',
-          icons: [
-            {
-              src: 'pwa-192x192.png',
-              sizes: '192x192',
-              type: 'image/png',
-            },
-            {
-              src: 'pwa-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-            },
-          ],
-        },
-        workbox: {
-          // workbox options for injectManifest
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
-        },
-      }),
     ],
     build: {
       assetsInlineLimit: 4096, // 4KB
@@ -108,44 +84,46 @@ export default defineConfig({
       theme: 'gruvbox-dark-medium',
       wrap: true,
     },
-    smartypants: true,
-    remarkPlugins: [
-      remarkFootnotes,
-      remarkGfm, // GFM: tables, task lists, autolinks, strikethrough
-      remarkBreaks, // Treat single line breaks as <br> (lenient handling of loose newlines)
-      remarkUnwrapImages, // Remove <p> wrapper around images to simplify styling
-      remarkMath, // Support $ inline / $$ block math
-      [
-        remarkWikiLink,
-        {
-          aliasDivider: '|',
-          pageResolver: (name) => [slugifyTrans(name, { lowercase: true, separator: '-' })],
-          hrefTemplate: (permalink) => `/posts/${permalink}/`,
-        },
-      ],
-      remarkCallouts, // Parse Obsidian-style callouts like > [!note]
-    ],
-    rehypePlugins: [
-      // Order: first process raw HTML, then apply sanitization
-      rehypeRaw,
-      [
-        rehypeSanitize,
-        {
-          ...defaultSchema,
-          attributes: {
-            ...defaultSchema.attributes,
-            '*': [
-              ...(defaultSchema.attributes && defaultSchema.attributes['*'] ? defaultSchema.attributes['*'] : []),
-              'className',
-              'style',
-              ['data-*', true],
-            ],
+    processor: unified({
+      smartypants: true,
+      remarkPlugins: [
+        remarkFootnotes,
+        remarkGfm, // GFM: tables, task lists, autolinks, strikethrough
+        remarkBreaks, // Treat single line breaks as <br> (lenient handling of loose newlines)
+        remarkUnwrapImages, // Remove <p> wrapper around images to simplify styling
+        remarkMath, // Support $ inline / $$ block math
+        [
+          remarkWikiLink,
+          {
+            aliasDivider: '|',
+            pageResolver: (name) => [slugifyTrans(name, { lowercase: true, separator: '-' })],
+            hrefTemplate: (permalink) => `/posts/${permalink}/`,
           },
-        },
+        ],
+        remarkCallouts, // Parse Obsidian-style callouts like > [!note]
       ],
-      rehypeSlug, // Generate id attributes for headings
-      rehypeKatex, // Render remark-math using KaTeX
-    ],
+      rehypePlugins: [
+        // Order: first process raw HTML, then apply sanitization
+        rehypeRaw,
+        [
+          rehypeSanitize,
+          {
+            ...defaultSchema,
+            attributes: {
+              ...defaultSchema.attributes,
+              '*': [
+                ...(defaultSchema.attributes && defaultSchema.attributes['*'] ? defaultSchema.attributes['*'] : []),
+                'className',
+                'style',
+                ['data-*', true],
+              ],
+            },
+          },
+        ],
+        rehypeSlug, // Generate id attributes for headings
+        rehypeKatex, // Render remark-math using KaTeX
+      ],
+    }),
   },
 
   cacheDir: './.astro/', // Add cache directory

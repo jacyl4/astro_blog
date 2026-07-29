@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-07-29T10:01:08Z",
+  "command": "npm run build:prepared",
+  "node": "24.15.0",
+  "astro": "5.18.2",
+  "astroReportedBuildSeconds": 3.33,
+  "wallSeconds": 13.954,
+  "note": "Single local warm-cache measurement; retained as migration evidence, not a performance benchmark."
+}
