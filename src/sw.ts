@@ -17,8 +17,12 @@ const STATIC_CACHE = `${CACHE_PREFIX}-static-${RELEASE_ID}`;
 const ACTIVE_CACHES = new Set([PRECACHE, PAGE_CACHE, IMAGE_CACHE, STATIC_CACHE]);
 
 function pathnameToDocument(pathname: string): string {
-  if (pathname === '/') return '/index.html';
-  if (pathname.endsWith('/')) return `${pathname}index.html`;
+  if (pathname === '/index.html') return '/';
+  if (pathname.endsWith('/index.html')) {
+    return pathname.slice(0, -'index.html'.length);
+  }
+  if (pathname.endsWith('/')) return pathname;
+  if (!pathname.split('/').at(-1)?.includes('.')) return `${pathname}/`;
   return pathname;
 }
 

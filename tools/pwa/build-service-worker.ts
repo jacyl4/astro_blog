@@ -21,6 +21,14 @@ export interface PrecacheEntry {
   revision: string;
 }
 
+function publicUrl(relativeFile: string): string {
+  if (relativeFile === 'index.html') return '/';
+  if (relativeFile.endsWith('/index.html')) {
+    return `/${relativeFile.slice(0, -'index.html'.length)}`;
+  }
+  return `/${relativeFile}`;
+}
+
 export async function createPrecacheEntries(distDir: string): Promise<PrecacheEntry[]> {
   const files = await walkFiles(distDir);
   const entries: PrecacheEntry[] = [];
@@ -28,8 +36,9 @@ export async function createPrecacheEntries(distDir: string): Promise<PrecacheEn
     if (path.basename(file) === 'sw.js' || !PRECACHE_EXTENSIONS.has(path.extname(file))) {
       continue;
     }
+    const relativeFile = toPosixPath(path.relative(distDir, file));
     entries.push({
-      url: `/${toPosixPath(path.relative(distDir, file))}`,
+      url: publicUrl(relativeFile),
       revision: sha256(await readFile(file)),
     });
   }
