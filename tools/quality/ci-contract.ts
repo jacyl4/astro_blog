@@ -19,6 +19,7 @@ type CiConfig = {
   };
   default?: {
     interruptible?: boolean;
+    before_script?: unknown;
   };
   [key: string]: unknown;
 };
@@ -62,6 +63,18 @@ export function verifyCiContract(source: string): string[] {
     'new commits cancel interruptible pipelines',
   );
   assert(config.default?.interruptible === true, 'verification jobs are interruptible by default');
+  const bootstrap = scriptText(config.default?.before_script);
+  requireMatch(
+    bootstrap,
+    /export PATH="\$NODE_HOME\/bin:\$PATH"/,
+    'CI does not always select the pinned Node distribution',
+  );
+  requireMatch(
+    bootstrap,
+    /NODE_DIST_SHA256.*sha256sum --check/,
+    'CI does not verify the pinned Node distribution checksum',
+  );
+  checks.push('CI always selects the checksum-verified pinned Node distribution');
 
   for (const [name, value] of Object.entries(config)) {
     if (RESERVED_KEYS.has(name) || !value || typeof value !== 'object') {

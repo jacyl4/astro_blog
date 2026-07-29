@@ -20,23 +20,24 @@ default:
   interruptible: true
   before_script:
     - &node-bootstrap |
-      if ! command -v npm >/dev/null 2>&1; then
-        NODE_HOME="$CI_PROJECT_DIR/.ci-tools/node-v${NODE_VERSION}-linux-x64"
-        if [[ ! -x "$NODE_HOME/bin/node" ]]; then
-          mkdir -p "$CI_PROJECT_DIR/.ci-tools"
-          curl --fail --silent --show-error --location \
-            "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
-            --output "$CI_PROJECT_DIR/.ci-tools/node.tar.xz"
-          tar -xJf "$CI_PROJECT_DIR/.ci-tools/node.tar.xz" \
-            -C "$CI_PROJECT_DIR/.ci-tools"
-        fi
-        export PATH="$NODE_HOME/bin:$PATH"
+      NODE_HOME="$CI_PROJECT_DIR/.ci-tools/node-v${NODE_VERSION}-linux-x64"
+      if [[ ! -x "$NODE_HOME/bin/node" ]]; then
+        mkdir -p "$CI_PROJECT_DIR/.ci-tools"
+        curl --fail --silent --show-error --location \
+          "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
+          --output "$CI_PROJECT_DIR/.ci-tools/node.tar.xz"
+        echo "${NODE_DIST_SHA256}  $CI_PROJECT_DIR/.ci-tools/node.tar.xz" | sha256sum --check
+        tar -xJf "$CI_PROJECT_DIR/.ci-tools/node.tar.xz" \
+          -C "$CI_PROJECT_DIR/.ci-tools"
       fi
+      export PATH="$NODE_HOME/bin:$PATH"
+      hash -r
       node --version
       npm --version
 
 variables:
   NODE_VERSION: "24.15.0"
+  NODE_DIST_SHA256: "472655581fb851559730c48763e0c9d3bc25975c59d518003fc0849d3e4ba0f6"
   NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
   PLAYWRIGHT_BROWSERS_PATH: "$CI_PROJECT_DIR/.cache/ms-playwright"
   CONTENT_WORKTREE: "$CI_PROJECT_DIR/.work/content-source"
