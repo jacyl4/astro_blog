@@ -23,11 +23,14 @@ export function loadConfig(
   const explicitSource = readOption(argv, 'source');
   const sourceBase = env.CONTENT_SOURCE_PATH;
   const contentSubdir = env.CONTENT_SUBDIR || 'Blog';
+  if (!explicitSource && !sourceBase) {
+    throw new Error(
+      'Content source is required. Set CONTENT_SOURCE_PATH or pass --source.',
+    );
+  }
   const sourceDir = explicitSource
     ? path.resolve(explicitSource)
-    : sourceBase
-      ? path.resolve(sourceBase, contentSubdir)
-      : path.resolve('src/content/blog');
+    : path.resolve(sourceBase as string, contentSubdir);
 
   return {
     command: command as CompilerConfig['command'],

@@ -37,11 +37,11 @@ tags:
 ## 本地命令
 
 ```bash
-CONTENT_SOURCE_PATH=/path/to/obsidian-digital \
-CONTENT_SUBDIR=Blog \
-CONTENT_COMPILER_MODE=strict \
-npm run content:validate
+export CONTENT_CLONE_URL=/path/to/obsidian-digital
+npm run content:prepare
+npm run check
 
+# 仅调试编译器时也可显式指定已检出的源目录
 CONTENT_SOURCE_PATH=/path/to/obsidian-digital \
 CONTENT_SUBDIR=Blog \
 CONTENT_COMPILER_MODE=strict \
@@ -49,5 +49,4 @@ npm run content:compile
 ```
 
 输出位于 `.build/content/blog`、`.build/content-manifest.json` 和
-`.build/diagnostics/`。缺少外部内容源时，普通开发默认使用仓库内 legacy
-内容；它仅用于观察期回退，不可作为生产发布来源。
+`.build/diagnostics/`。缺少显式内容源时编译器会失败，不会回退到应用仓库。

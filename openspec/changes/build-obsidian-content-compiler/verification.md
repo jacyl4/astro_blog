@@ -28,12 +28,14 @@
 
 ## Actual Results
 
-- content SHA：`c925ad442b8389376728e792c4a8dc31bf365227`
+- content SHA：`7a5b1257016953877aaf62409db75f981469f7fe`
 - strict compile：11 articles，0 warning，0 error
 - manifest hash：`678015d9529d28efd760bf0a56d90f82177e89ebea67777ac6516ce483a65f6d`
 - unit：Content Compiler 8 tests passed
 - route/static：86 routes，static smoke passed
-- 时间门：三次真实内容提交后删除 legacy adapter 尚未满足
+- 新 trigger 已完成三次真实 production；legacy adapter 和应用仓内容镜像已在
+  候选中删除，完整本地 verify 与 Playwright `11/11` 通过。
+- 最终删除提交仍需完成 GitLab staging/production，之后关闭 8.4。
 
 ## Exceptions
 

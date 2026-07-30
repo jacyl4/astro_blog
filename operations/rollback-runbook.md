@@ -21,8 +21,8 @@
 ## 数据与内容
 
 静态发布不包含数据库迁移。若问题来自内容提交，创建新的内容仓库修复提交并触发
-新 pipeline；不得 force-push 或重新使用错误 SHA。若需临时回到 legacy 内容，
-只能构建一个明确标记 `BLOG_CONTENT_SOURCE=legacy` 的候选并走完整 staging。
+新 pipeline；不得 force-push 或重新使用错误 SHA。内容适配层清理后不再恢复
+应用仓库镜像；若编译器故障，回退上一稳定 app SHA 与 content SHA 组合。
 
 ## 证据
 

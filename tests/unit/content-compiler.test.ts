@@ -49,7 +49,15 @@ describe('content compiler', () => {
 
   it('requires explicit identity in strict mode and suggests it in compat mode', async () => {
     const temp = await mkdtemp(path.join(os.tmpdir(), 'content-compiler-'));
-    const source = path.resolve('src/content/blog');
+    const source = path.join(temp, 'Blog');
+    await mkdir(source, { recursive: true });
+    await writeFile(path.join(source, 'legacy.md'), `---
+title: Legacy identity
+created: 2026-01-01
+tags: []
+---
+Legacy body
+`);
     const strict = await compileContent(config(source, path.join(temp, 'strict'), 'strict'));
     const compat = await compileContent(config(source, path.join(temp, 'compat'), 'compat'));
 

@@ -5,6 +5,8 @@
 
 - [ADR-001：统一客户端生命周期](ADR-001-client-lifecycle.md)
 - [内容作者与编译规范](content-authoring.md)
+- [Legacy 内容适配层清理计划](legacy-content-removal-plan.md)
+- [内容 Trigger 迁移与连续发布证据](content-trigger-migration-evidence-2026-07-30.md)
 - [发布手册](release-runbook.md)
 - [回滚手册](rollback-runbook.md)
 - [内容故障手册](content-incident-runbook.md)

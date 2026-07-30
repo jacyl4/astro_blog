@@ -1,7 +1,7 @@
 {
   "projectPath": "jacyl4/obsidian-digital",
   "subdir": "Blog",
-  "sha": "c925ad442b8389376728e792c4a8dc31bf365227",
+  "sha": "7a5b1257016953877aaf62409db75f981469f7fe",
   "mode": "strict",
-  "note": "Pinned to the validated content identity and GitLab pipeline migration commit."
+  "note": "Pinned after three successful immutable content-triggered production releases."
 }

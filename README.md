@@ -28,7 +28,7 @@ astro_blog/
 │   ├── client/               # 统一页面生命周期与浏览器控制器
 │   ├── styles/               # 全局与模块化样式
 │   ├── utils/                # 工具函数（日期格式化、字符串处理等）
-│   └── content/              # legacy 回退内容与独立页面内容
+│   └── content/pages/        # 独立页面内容；文章不存放在应用仓库
 ├── tools/content-compiler/   # 外部 Obsidian Blog/ 内容编译器
 ├── tools/release/            # 路由、资产、构建清单及质量验证
 ├── astro.config.mjs          # Astro + Vite 配置
@@ -38,12 +38,15 @@ astro_blog/
 ```
 
 > 发布内容的唯一来源是外部仓库 `jacyl4/obsidian-digital` 的 `Blog/`。
-> `src/content/blog` 只在显式设置 `BLOG_CONTENT_SOURCE=legacy` 时作为观察期回退，不参与正常发布。
+> Astro 只读取 prepare 阶段生成的 `.build/content/blog`；应用仓库不保存文章镜像。
 
 ## 🚀 快速开始
 ```bash
 # 安装依赖
 npm ci
+
+# 指向有权读取内容仓库的本地路径或 Git URL
+export CONTENT_CLONE_URL=/path/to/obsidian-digital
 
 # 启动开发服务器
 npm run dev
@@ -70,6 +73,8 @@ npx playwright install chromium
 npm run test:browser
 ```
 
+`dev`、`build` 和 `check` 会先按 `content-source.lock.json` 执行
+`content:prepare`。CI 使用 job token；本地必须设置 `CONTENT_CLONE_URL`。
 候选清单和证据写入 `.build/`。构建产物中的
 `dist/_meta/build-manifest.json` 记录应用 SHA、内容 SHA、lockfile、路由和
 资产清单哈希。

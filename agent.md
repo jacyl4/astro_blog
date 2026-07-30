@@ -9,7 +9,9 @@
 - PWA：`vite-plugin-pwa` 以 InjectManifest 模式注册 `src/sw.ts`。
 
 ## 关键约束
-- **禁止修改** `src/content/blog` 下的 Markdown 文件 —— 该目录由外部同步更新。
+- 文章只存在于 `jacyl4/obsidian-digital:Blog/`；应用仓库不得新建内容镜像。
+- 本地运行 `dev`、`build` 或 `check` 前设置 `CONTENT_CLONE_URL`，prepare 会检出
+  `content-source.lock.json` 固定的不可变内容提交。
 - 如果新增图标，记得同步更新 `astro.config.mjs` 中 `icon` 集成的白名单。
 - 修改 `BlogService` 后，如需重新读取内容，可调用 `resetBlogCache()` 清空缓存（在同一进程内）。
 
@@ -24,7 +26,6 @@
 - 构建后建议访问 `npm run preview`，确认 PWA 与页面转场正常；`sw.ts` 为 InjectManifest，需要重新构建才能看见更新。
 
 ## 其他备注
-- `src/services/BlogService.ts` 维护分类、标签、归档缓存；如需新增聚合逻辑，请复用现有缓存结构或记得清理。
+- `src/modules/blog` 维护文章查询边界；新增聚合逻辑应通过其公开入口实现。
 - 目录组件 `TableOfContents` 依赖 `astro:page-load` / `astro:after-swap` 事件，修改时请确认 Swup 兼容性。
 - 代码风格倾向于简洁注释，避免过度说明显而易见的逻辑。
-

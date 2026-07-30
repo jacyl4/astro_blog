@@ -2,14 +2,10 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-const blogBase = process.env.BLOG_CONTENT_SOURCE === 'legacy'
-  ? './src/content/blog'
-  : './.build/content/blog';
-
 const blogCollection = defineCollection({
   loader: glob({
     pattern: '**/*.{md,mdx}',
-    base: blogBase,
+    base: './.build/content/blog',
   }),
   schema: z.object({
     id: z.string().optional(),

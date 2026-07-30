@@ -49,8 +49,8 @@
 
 - [x] 7.1 新旧链路用同一 app/content SHA 生成产物并比较
 - [x] 7.2 测试删除文章没有残留
-- [ ] 7.3 快速连续提交两个内容版本并验证部署顺序
-- [ ] 7.4 短时冻结内容并切换到新 trigger
-- [ ] 7.5 禁用旧 rsync/commit/push job，撤销其长期 OAuth token，并保留七天受控回退说明
-- [ ] 7.6 三次成功内容发布后删除旧同步 job 和目标仓库内容镜像提交约定
+- [x] 7.3 快速连续提交两个内容版本并验证部署顺序
+- [x] 7.4 短时冻结内容并切换到新 trigger
+- [x] 7.5 禁用旧 rsync/commit/push job，撤销其长期 OAuth token，并保留七天受控回退说明
+- [x] 7.6 三次成功内容发布后删除旧同步 job 和目标仓库内容镜像提交约定
 - [ ] 7.7 执行 `/opsx:verify replace-obsidian-sync-pipeline` 并归档
