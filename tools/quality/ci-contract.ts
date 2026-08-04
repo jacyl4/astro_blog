@@ -98,8 +98,12 @@ export function verifyCiContract(source: string): string[] {
     'dependency audit has no bounded retry for registry outages',
   );
   checks.push('dependency audit retries transient registry outages');
+  requireMatch(verify, /npx astro check/, 'verify does not run the single CI Astro type check');
+  checks.push('verify owns the single CI Astro type check');
 
   const build = scriptText(job(config, 'build').script);
+  requireMatch(build, /npm run build:ci/, 'build does not use the CI-only Astro build command');
+  assert(!/build:prepared|astro check/.test(build), 'build does not duplicate the verify Astro check');
   requireMatch(
     build,
     /package-artifact\.sh upload "\$RELEASE_PACKAGE_NAME" "\$\{CI_PIPELINE_ID\}-\$\{CI_COMMIT_SHA\}"/,

@@ -191,12 +191,11 @@ prepare、verify、build、browser、staging 和 production 不依赖 Runner 本
 - release 包版本：
   `407-2fe43ad7ad0f2d40757ff725227632a36c27c3db`
 
-GitLab 19.1 的 Job Artifacts upload endpoint 曾在成功 job 结束时返回 HTTP
-500。该服务端存储故障的底层原因无法从项目级日志确定，且本轮没有修改
-GitLab 服务器。发布链路已移除对此 endpoint 和 pipeline-scoped Runner
-cache 的依赖，改用 GitLab 支持的 Generic Package Registry 作为持久、
-不可变的制品通道。因此 Job Artifacts 服务本身仍需平台管理员另行排查，
-但不再阻断本博客的 CI 发布。
+GitLab 19.1 的 Job Artifacts upload endpoint 曾因服务端 artifact 目录 UID/GID
+漂移返回 HTTP 500。该宿主机问题已于 2026-07-28 修复，并由 Job `#644` 的上传
+`201` 与下载 `200` 验证。博客发布链路仍按架构决策使用 Generic Package Registry
+承载不可变 release/evidence，不再依赖 Job Artifacts 或 pipeline-scoped Runner
+cache；服务恢复不改变这一边界。
 
 Pipeline `#407` 首次 staging 尝试还暴露了第二个独立问题：
 GitLab 中原 `CLOUDFLARE_API_TOKEN` 已失效，Wrangler 返回 Cloudflare
@@ -269,18 +268,20 @@ production 公开 build manifest 固定：
 
 执行期原始证据位于 `.build/evidence/`，不会提交到仓库。
 
-## 9. 已知差异与待办
+## 9. 已知差异与收口状态
 
 1. Pages 对无尾斜杠路径返回 `308`，Workers Static Assets 返回 `307`；
    最终 URL 和页面内容一致。该平台差异已在生产切换中接受；为了保持纯
    Static Assets，没有加入 Worker 入口脚本。
-2. Pages 项目与 `blog-4la.pages.dev` 按计划保留七天作为受控回退入口。
-3. production 回滚版本演练、观察窗口、三次真实内容发布和旧链路最终删除仍
-   属于上线后任务。
+2. Pages 项目与 `blog-4la.pages.dev` 已完成七天保留窗口；项目无 Git source、
+   无生产自定义域名，现为冻结人工回退源站。受控演练见
+   `operations/pages-fallback-validation-2026-07-30.md`。
+3. production 版本恢复、三次真实内容发布、旧链路删除和快速质量体系验收均已
+   完成；最终 OpenSpec 归档与默认分支发布作为本轮收口动作执行。
 4. 当前依赖审计存在 22 个 high，均未达到 critical 阻断阈值；不得使用
    `npm audit fix --force` 无差别升级。
-5. 自托管 GitLab Job Artifacts upload endpoint 的 HTTP 500 尚未在服务器
-   层修复；博客发布已经切换到 Generic Package Registry，不再依赖该端点。
+5. 自托管 GitLab Job Artifacts 服务端 UID/GID 故障已修复；博客发布继续使用
+   Generic Package Registry，以保持不可变 package 和 retry-safe evidence 契约。
 
 ## 10. 生产切换门
 

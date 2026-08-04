@@ -120,7 +120,7 @@ build:
     - mkdir -p .build
     - bash tools/ci/package-artifact.sh download "$CONTENT_PACKAGE_NAME" "${CI_PIPELINE_ID}-${CI_COMMIT_SHA}" .build/content.tar.gz
     - tar -xzf .build/content.tar.gz -C .build
-    - APP_SHA="$CI_COMMIT_SHA" npm run build:prepared
+    - APP_SHA="$CI_COMMIT_SHA" npm run build:ci
     - npm run routes:verify
     - npm run html-baseline:verify
     - npm run smoke:static

@@ -7,11 +7,11 @@
 将最初八个活动 change 从“核心实现已上线、部分任务未登记或未完成”推进到：
 
 1. 每项 requirement 都能定位到自动测试或人工证据；
-2. 所有非观察期任务完成并通过严格验证；
+2. 所有施工与快速质量确认任务完成并通过严格验证；
 3. Astro 从 5 升级到 7，保持纯静态交付、86 条公开路由和既有页面语义；
 4. staging、回滚和 production 发布证据完整；
 5. 只有满足 `program/09-definition-of-done.md` 的 change 才归档；
-6. 三次内容发布、七天 Pages 保留和两周 CI 观察等时间门不得提前伪造。
+6. 三次内容发布与七天 Pages 保留不得提前伪造；质量体系以完整发现能力验证收口。
 
 ## 2. 当前事实（2026-07-30 00:06 CST）
 
@@ -175,16 +175,21 @@ npm run cf:dry-run -- --env staging
 4. 执行 OpenSpec verify/strict validation。
 5. 仅归档所有任务完成或明确移出范围的 change。
 
-## 5. 时间门
+## 5. 时间门与质量确认
 
 以下任务必须保持未完成，直到真实条件满足：
 
 - 三次成功内容提交；
 - Pages 七天回退观察期；
-- CI 两周观察窗口；
 - production 发布后的约定观察窗口。
 
-这些任务应记录开始时间、累计样本和最早可关闭时间，不能用单次 smoke 替代。
+前三项以真实日期、发布和线上证据关闭，不能伪造。2026-08-04 用户明确要求质量
+体系确认生效后快速结束，不再为低频个人博客等待固定两周；质量门改为以下组合：
+
+- 一次完整默认分支 prepare → verify → build → browser → staging → production；
+- 确定性 fault injection 证明关键门禁有发现能力；
+- retry-safe evidence、部署身份收敛和真实版本回滚证明故障恢复能力；
+- 删除一次确认的重复 Astro check，并由 CI contract 防止回归。
 
 ## 5.1 基础设施门
 
@@ -219,4 +224,4 @@ npm run cf:dry-run -- --env staging
 - staging/production Cloudflare version；
 - 回滚演练记录；
 - GitLab pipeline/job 链接或 ID；
-- 仍保留的 Pages 回退入口及其停止条件。
+- 冻结 Pages 回退入口、DNS Write 预检和安全中止条件。

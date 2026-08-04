@@ -6,6 +6,7 @@
     "dev": "npm run content:prepare && astro dev",
     "build": "npm run content:prepare && npm run build:prepared",
     "build:prepared": "astro check && astro build",
+    "build:ci": "astro build",
     "check": "npm run content:prepare && npm run check:prepared",
     "check:prepared": "astro check && npm run test:unit",
     "preview": "astro preview",

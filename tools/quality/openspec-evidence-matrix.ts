@@ -39,16 +39,16 @@ const mappings: Record<string, EvidenceMapping> = {
     evidence: '`npm run assets:verify`；`tools/quality/fault-injection.sh`；`operations/performance-budget.md`',
   },
   'harden-quality-and-operations/specs/continuous-quality-gates/spec.md': {
-    status: '待验证',
-    evidence: '`.gitlab-ci.yml`；JUnit/Playwright trace；本矩阵的 `npm run openspec:evidence:check`',
+    status: '已验证',
+    evidence: '`.gitlab-ci.yml`；fault injection；Pipeline `#442`；单次 Astro check CI contract',
   },
   'harden-quality-and-operations/specs/operational-observability/spec.md': {
     status: '已验证',
     evidence: '`wrangler.jsonc` observability；release evidence；`operations/staging-rollback-evidence-2026-07-29.md`',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md': {
-    status: '待验证',
-    evidence: '`operations/rollback-runbook.md`；Worker version rollback 已验证；Pages 平台级回退待演练',
+    status: '已验证',
+    evidence: '`operations/rollback-runbook.md`；Worker version rollback；`operations/pages-fallback-validation-2026-07-30.md`',
   },
   'migrate-cloudflare-static-deployment/specs/cloudflare-static-delivery/spec.md': {
     status: '已验证',
@@ -128,6 +128,10 @@ const scenarioMappings: Record<string, EvidenceMapping> = {
   'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#新版本路由异常': {
     status: '已验证',
     evidence: '`05193450-… → cc7a9a1e-… → 05193450-…`；两端 `86 + 3` HTTP sweep；恢复后 Playwright `11/11`',
+  },
+  'migrate-cloudflare-static-deployment/specs/cloudflare-release-rollback/spec.md#Worker 回滚不可用': {
+    status: '已验证',
+    evidence: '`operations/pages-fallback-validation-2026-07-30.md`；Pages `86 + 3`；DNS Write 安全预检；Worker 恢复 `86 + 3`',
   },
   'replace-obsidian-sync-pipeline/specs/atomic-cross-repo-release/spec.md#旧 Pipeline 排队后内容分支继续前进': {
     status: '已验证',

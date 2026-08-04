@@ -49,3 +49,15 @@ production job 都运行部署身份等待、完整 HTTP sweep 和性能预算�
 5. 删除旧内容同步长期变量。
 
 最终应用提交仍需通过独立 GitLab staging/production 后，才算 legacy 清理上线。
+
+## Legacy 清理最终发布
+
+- app commit：`24f97e05c595c7d13e2ded1cb5642a910d7c2a72`
+- 功能分支 Pipeline `#441`：prepare/verify/build/browser 全部成功，manual staging
+  Job `#769` 成功。
+- 默认分支 Pipeline `#442`：Jobs `#770`～`#775` 全部成功，其中 staging
+  `#774`、production `#775`。
+- production manifest：app `24f97e05…` / content `7a5b1257…`，
+  86 routes、92 assets。
+- 发布后外部 `86 + 3` HTTP sweep 通过，production Playwright `11/11` 通过。
+- 86 个公开 route 的 console/pageerror/requestfailed 扫描为 0。

@@ -9,7 +9,7 @@ import { verifyCiContract } from '../../tools/quality/ci-contract';
 describe('GitLab CI release contract', () => {
   it('keeps package transport, staging, and production safety explicit', async () => {
     const source = await readFile('.gitlab-ci.yml', 'utf8');
-    expect(verifyCiContract(source).length).toBeGreaterThanOrEqual(14);
+    expect(verifyCiContract(source).length).toBeGreaterThanOrEqual(16);
   });
 
   it('accepts the current deployment ref and rejects stale candidates', async () => {

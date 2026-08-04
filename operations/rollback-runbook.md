@@ -15,7 +15,8 @@
 3. 等待根 HTML、build manifest 和根 HTML 引用的 runtime asset 连续三次指向
    目标 app SHA；在收敛前不得开始 smoke。
 4. 重新执行关键路径和全路由 HTTP sweep。
-5. 若 Worker 回滚不可用，将自定义域名恢复到保留的 Pages 项目。
+5. 若 Worker 回滚不可用，先完成 DNS Write、Pages 直连 sweep 和 Worker 恢复信息
+   预检，再将自定义域名恢复到保留的 Pages 项目；预检失败时不得解除健康 Worker。
 6. 清理或更新 Service Worker 缓存只作为后续措施，不得用它掩盖错误 artifact。
 
 ## 数据与内容
@@ -56,6 +57,10 @@ HTTP sweep。不得用固定 sleep 代替 `deployment:wait`：Cloudflare 版本�
 
 若 Wrangler rollback 失败，保留失败输出并按发布手册恢复 Pages 自定义域名，
 不得用重新构建代替版本回滚。
+
+Pages 回退的受控演练、`CNAME record not set` 安全中止和 Worker 恢复证据见
+`operations/pages-fallback-validation-2026-07-30.md`。最终域名切换必须使用具备
+目标 zone DNS Write 的受批准凭据；Pages/Workers Write 不能替代 DNS 权限。
 
 ## 维护周期
 

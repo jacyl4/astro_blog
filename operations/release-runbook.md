@@ -59,8 +59,24 @@ production evidence 使用 `CI_PIPELINE_ID-CI_COMMIT_SHA-CI_JOB_ID`，使 job re
 3. 在低流量窗口执行受保护的 production job。
 4. 域名切换后立即执行首页、文章、分类、标签、归档、about、404 和全路由 sweep。
 5. 保存 [发布证据模板](release-evidence-template.md)。
-6. 旧 Pages 入口保留七天；完成三次内容发布和观察期后再移除旧 Action。
+6. 旧 Pages 直连入口在有限观察期内保留；观察期结束后冻结项目并停止所有自动
+   部署。当前项目没有 Git source，仅保留 `blog-4la.pages.dev` 作为人工回退源站。
 7. production invocation logs 采样率为 10%，traces 为 1%；需要临时提高时必须记录
    开始/结束时间并在调查结束后恢复。
 
 任何 production 部署、域名切换或资源删除都必须在执行点取得明确确认。
+
+## Pages 平台级应急回退
+
+在解除 Worker 自定义域名前必须依次通过以下预检：
+
+1. 当前凭据具备目标 zone 的 DNS Write；只读或 Workers/Pages Write 不足以完成
+   自定义域名恢复。
+2. `https://blog-4la.pages.dev` 的公开 manifest 指向已知稳定双 SHA，完整 HTTP
+   sweep 通过。
+3. 已记录当前 Worker version、DNS 记录和恢复 Worker 的命令。
+
+预检任一项失败时保持 Worker 绑定并中止。通过后，将 `blog.seso.icu` 添加到 Pages
+项目 `blog`，把 CNAME 指向 `blog-4la.pages.dev`，等待域名状态 active，再执行身份
+收敛、86 + 3 HTTP sweep 和浏览器 smoke。演练记录见
+[Pages 平台回退验证](pages-fallback-validation-2026-07-30.md)。
